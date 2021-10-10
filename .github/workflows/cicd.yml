@@ -1,0 +1,81 @@
+name: CI/CD
+on:
+  workflow_dispatch:
+  push:
+    # should only run on feature branches
+    # only merge to main via pull request
+    branches-ignore: [main]
+
+concurrency:
+  group: tests
+  cancel-in-progress: true
+
+jobs:
+
+  detect-changes:
+    name: Detect Changes
+    if: ${{ false }} # simulate skip
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo "TODO"
+
+  backend-tests:
+    name: Backend Tests
+    if: ${{ false }} # simulate skip
+    needs: [detect-changes]
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo "TODO"
+        
+  frontend-tests:
+    name: Frontend Tests
+    if: ${{ false }} # simulate skip
+    needs: [detect-changes]
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo "TODO"
+
+  backend-dev:
+    name: Deploy Backend DEV
+    if: ${{ false }} # simulate skip
+    needs: [backend-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo "TODO"
+
+  frontend-dev:
+    name: Deploy Frontend DEV
+    if: ${{ false }} # simulate skip
+    needs: [frontend-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo "TODO"
+
+  e2e-tests:
+    name: End-to-End Tests
+    needs: [backend-dev, frontend-dev]
+    # always run if either frontend/backend succeed and neither failed
+    if: always() && (needs.backend-dev.result == 'success' || needs.frontend-dev.result == 'success') && (needs.frontend-dev.result != 'failure' && needs.frontend-dev.result != 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo "TODO"
+
+  create-pr:
+    name: Create PR
+    if: ${{ false }} # simulate skip
+    needs: [e2e-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: TODO
+        run: echo "TODO"
+      
+  # TODO: job for waiting approval
+  # TODO: job when approved, deploy to production
+
+  
