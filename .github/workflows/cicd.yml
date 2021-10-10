@@ -68,21 +68,15 @@ jobs:
     steps:
       - name: TODO
         run: echo "TODO"
-
-  create-pr:
-    name: Create PR
-    if: ${{ false }} # simulate skip
-    needs: [e2e-tests]
-    runs-on: ubuntu-latest
-    steps:
-      - name: TODO
-        run: echo "TODO"
+      - name: "TODO: CREATE PR"
+        run: echo 'If all e2e tests succeeded, create pr'
 
   backend-production: # requires approval
+    needs: [e2e-tests]
     # this should always run even if create-pr is skipped
     # as long as it matched -> pull_request:main:closed && merged == true
-    if: always() && github.event.pull_request.merged == 'true'
-    needs: [create-pr]
+    # and end-to-end tests succeeded
+    if: always() && github.event.pull_request.merged == 'true' && needs.e2e-tests.result == 'success'
     name: Deploy Backend PRODUCTION
     runs-on: ubuntu-latest
     environment:
@@ -93,10 +87,10 @@ jobs:
         run: echo "TODO"
 
   frontend-production:
+    needs: [e2e-tests]
     # this should always run even if create-pr is skipped
     # as long as it matched -> pull_request:main:closed && merged == true
-    if: always() && github.event.pull_request.merged == 'true'
-    needs: [create-pr]
+    if: always() && github.event.pull_request.merged == 'true' && needs.e2e-tests.result == 'success'
     name: Deploy Frontend PRODUCTION
     runs-on: ubuntu-latest
     environment:
