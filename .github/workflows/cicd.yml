@@ -1,6 +1,9 @@
 name: CI/CD
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [closed]
   push:
     # should only run on feature branches
     # only merge to main via pull request
@@ -74,8 +77,33 @@ jobs:
     steps:
       - name: TODO
         run: echo "TODO"
-      
-  # TODO: job for waiting approval
-  # TODO: job when approved, deploy to production
+
+  backend-production: # requires approval
+    # this should always run even if create-pr is skipped
+    # as long as it matched -> pull_request:main:closed && merged == true
+    if: always() && github.event.pull_request.merged == 'true'
+    needs: [create-pr]
+    name: Deploy Backend PRODUCTION
+    runs-on: ubuntu-latest
+    environment:
+      name: "backend PRODUCTION"
+      url: https://offguard.herokuapp.com
+    steps:
+      - name: TODO
+        run: echo "TODO"
+
+  frontend-production:
+    # this should always run even if create-pr is skipped
+    # as long as it matched -> pull_request:main:closed && merged == true
+    if: always() && github.event.pull_request.merged == 'true'
+    needs: [create-pr]
+    name: Deploy Frontend PRODUCTION
+    runs-on: ubuntu-latest
+    environment:
+      name: "frontend PRODUCTION"
+      url: https://offguard.vercel.app
+    steps:
+      - name: TODO
+        run: echo "TODO"
 
   
