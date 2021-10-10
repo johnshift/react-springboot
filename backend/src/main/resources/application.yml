@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: dev1
+    password: pass1
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            "[non_contextual_creation]": true # ignore hibernate-postgres warnings on start
+    hibernate:
+      ddl-auto: update # provided at @Sql in IT tests
+    show-sql: true
