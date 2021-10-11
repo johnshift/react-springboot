@@ -15,23 +15,36 @@ jobs:
     name: echo
     runs-on: ubuntu-latest
     steps:
-      - name: echo github.event.pull_request
+      - name: event.action
+        run: echo "github.event.action == `${{ github.event.pull_request.action }}`"
+      - name: pull_request.action
+        run: echo "github.event.pull_request.action == `${{ github.event.pull_request.action }}`"
+      - name:  github.event.pull_request
         run: echo "github.event.pull_request = `${{ github.event.pull_request }}`"
-      - name: echo github.event.pull_request.merged
+      - name:  github.event.pull_request.merged
         run: echo "github.event.pull_request.merged = `${{ github.event.pull_request.merged }}`"
-      - name: echo github.event.ref
+      - name:  github.event.ref
         run: echo "github.event.ref = `${{ github.event.ref }}`"
-      - name: echo github.ref
+      - name:  github.ref
         run: echo "github.ref = `${{ github.ref }}`"
-      - name: echo github.head_ref
+      - name:  github.head_ref
         run: echo "github.head_ref = `${{ github.head_ref }}`"
+      - name: check 
+        run: |
+          echo "github.event.pull_request.merged           : $MERGED_RAW"
+          echo "github.event.pull_request.merged == 'true' : $MERGED_TRUE_STR"
+          echo "github.event.pull_request.merged  == true  : $MERGED_TRUE_BOOL"
+        env:
+          MERGED_RAW: ${{ github.event.pull_request.merged }}
+          MERGED_TRUE_STR: ${{ github.event.pull_request.merged == 'true' }}
+          MERGED_TRUE_BOOL: ${{ github.event.pull_request.merged == true }}
 
   backend-production: # requires approval
     name: Deploy Backend PRODUCTION
     # this should always run even if create-pr is skipped
     # as long as it matched -> pull_request:main:closed && merged == true
     # and end-to-end tests succeeded
-    if: github.event.pull_request.merged == 'true' && github.ref == '/main'
+    if: github.event.pull_request.merged == 'true' && github.ref == 'main'
     runs-on: ubuntu-latest
     environment:
       name: backend PRODUCTION
@@ -63,7 +76,7 @@ jobs:
   frontend-production:
     # this should always run even if create-pr is skipped
     # as long as it matched -> pull_request:main:closed && merged == true
-    if: github.event.pull_request.merged == 'true' && github.ref == '/main'
+    if: github.event.pull_request.merged == 'true' && github.ref == 'main'
     name: Deploy Frontend PRODUCTION
     runs-on: ubuntu-latest
     environment:
