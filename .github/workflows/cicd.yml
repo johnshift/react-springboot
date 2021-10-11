@@ -185,7 +185,6 @@ jobs:
           #       The "HD_" string will be stripped when the app starts. 
           #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.  
           HD_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
-          MAVEN_CUSTOM_GOALS: "clean install"
 
   frontend-dev:
     name: Deploy Frontend DEV
