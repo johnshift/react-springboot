@@ -261,6 +261,15 @@ jobs:
           working-directory: ./e2e-tests
           install: false # already installed
           command: pnpm test
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          git_config_global: true
       - name: pull-request
         id: create-pull-request
         uses: repo-sync/pull-request@v2
