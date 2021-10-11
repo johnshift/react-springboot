@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   pull_request:
     # branches: [main]
-    types: [closed, opened, edited, synchronize]
+    types: [closed]
 
 concurrency:
   group: deploy-production
@@ -26,66 +26,66 @@ jobs:
       - name: echo github.head_ref
         run: echo "github.head_ref = `${{ github.head_ref }}`"
 
-  # backend-production: # requires approval
-  #   name: Deploy Backend PRODUCTION
-  #   # this should always run even if create-pr is skipped
-  #   # as long as it matched -> pull_request:main:closed && merged == true
-  #   # and end-to-end tests succeeded
-  #   if: github.event.pull_request.merged && github.event.ref == 'refs/heads/main'
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: backend PRODUCTION
-  #     url: https://offguard.herokuapp.com
-  #   steps:
-  #     # - name: Extract branch name
-  #     #   shell: bash
-  #     #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #     #   id: extract-branch
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       # with:
-  #       #   ref: ${{ steps.extract-branch.outputs.branch }}
-  #     - name: Deploy to Heroku
-  #       uses: akhileshns/heroku-deploy@v3.12.12
-  #       with:
-  #         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-  #         heroku_email: ${{ secrets.HEROKU_EMAIL }}
-  #         heroku_app_name: offguard
-  #         appdir: backend
-  #         branch: ${{ steps.extract-branch.outputs.branch }}
-  #       env:
-  #         # note: "HD_" is needed to specify what to include in the deployed heroku app.
-  #         #       However, it is only needed to differentiate from other environment variables.
-  #         #       The "HD_" string will be stripped when the app starts. 
-  #         #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.  
-  #         HD_FRONTEND_URL: https://offguard.vercel.app/
+  backend-production: # requires approval
+    name: Deploy Backend PRODUCTION
+    # this should always run even if create-pr is skipped
+    # as long as it matched -> pull_request:main:closed && merged == true
+    # and end-to-end tests succeeded
+    if: github.event.pull_request.merged == 'true' && github.ref == '/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: backend PRODUCTION
+      url: https://offguard.herokuapp.com
+    steps:
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        # with:
+        #   ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_app_name: offguard
+          appdir: backend
+          branch: ${{ steps.extract-branch.outputs.branch }}
+        env:
+          # note: "HD_" is needed to specify what to include in the deployed heroku app.
+          #       However, it is only needed to differentiate from other environment variables.
+          #       The "HD_" string will be stripped when the app starts. 
+          #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.  
+          HD_FRONTEND_URL: https://offguard.vercel.app/
 
-  # frontend-production:
-  #   # this should always run even if create-pr is skipped
-  #   # as long as it matched -> pull_request:main:closed && merged == true
-  #   if: github.event.pull_request.merged && github.event.ref == 'refs/heads/main'
-  #   name: Deploy Frontend PRODUCTION
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: frontend PRODUCTION
-  #     url: https://offguard.vercel.app/
-  #   steps:
-  #     # - name: Extract branch name
-  #     #   shell: bash
-  #     #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #     #   id: extract-branch
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       # with:
-  #       #   ref: ${{ steps.extract-branch.outputs.branch }}
-  #     - name: "Deploy vercel"
-  #       id: deploy
-  #       uses: amondnet/vercel-action@v20
-  #       with:
-  #         vercel-token: ${{ secrets.VERCEL_TOKEN }}
-  #         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-  #         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-  #         scope: ${{ secrets.VERCEL_ORG_ID }} 
-  #         vercel-args: '--prod'
+  frontend-production:
+    # this should always run even if create-pr is skipped
+    # as long as it matched -> pull_request:main:closed && merged == true
+    if: github.event.pull_request.merged == 'true' && github.ref == '/main'
+    name: Deploy Frontend PRODUCTION
+    runs-on: ubuntu-latest
+    environment:
+      name: frontend PRODUCTION
+      url: https://offguard.vercel.app/
+    steps:
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        # with:
+        #   ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: "Deploy vercel"
+        id: deploy
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }} 
+          vercel-args: '--prod'
 
   
