@@ -32,7 +32,7 @@ const App = (): JSX.Element => {
           <Image src={logo} alt="" h="40vmin" />
         </motion.div>
         <Text fontSize={textFontSizes}>
-          Hello Vite + React + Typescript + Chakra UI! + change #8
+          Hello Vite + React + Typescript + Chakra UI!
         </Text>
         <Button
           colorScheme="blue"
