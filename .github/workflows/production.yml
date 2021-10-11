@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   pull_request:
     # branches: [main]
-    # types: [closed]
+    types: [closed, opened, edited, synchronize]
 
 concurrency:
   group: deploy-production
