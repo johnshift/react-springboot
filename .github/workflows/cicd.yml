@@ -276,11 +276,11 @@ jobs:
         id: find-pr
 
   backend-production:
-    # =========================================================
-    # ======================= !NOTICE! ========================
-    # =========================================================
-    # - - - - - - MERGE PR FIRST BEFORE APPROVAL! - - - - - -
-    # =======================================================
+    # =================================================================
+    # ========================= !NOTICE! ==============================
+    # =================================================================
+    # - - - RESOLVE REBASE MERGE CONFLICTS FIRST BEFORE APPROVAL! - - -
+    # =================================================================
     needs: [e2e-tests]
     # if: github.event.pull_request.merged && github.ref == 'main'
     name: "Backend PRODUCTION PR #${{ needs.e2e-tests.outputs.pr-number }}"
@@ -289,10 +289,14 @@ jobs:
       name: backend PRODUCTION
       url: https://offguard.herokuapp.com
     steps:
-      - name: echo PR number
-        run: echo "PR number = ${{ needs.e2e-tests.outputs.pr-number }}"
-      - name: Checkout
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout feature branch
         uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -309,11 +313,11 @@ jobs:
           HD_FRONTEND_URL: https://offguard.vercel.app/
 
   frontend-production:
-    # =========================================================
-    # ======================= !NOTICE! ========================
-    # =========================================================
-    # - - - - - - MERGE PR FIRST BEFORE APPROVAL! - - - - - -
-    # =======================================================
+    # =================================================================
+    # ========================= !NOTICE! ==============================
+    # =================================================================
+    # - - - RESOLVE REBASE MERGE CONFLICTS FIRST BEFORE APPROVAL! - - -
+    # =================================================================
     needs: [e2e-tests]
     # if: github.event.pull_request.merged && github.ref == 'main'
     name: "Frontend PRODUCTION PR #${{ needs.e2e-tests.outputs.pr-number }}"
@@ -326,8 +330,14 @@ jobs:
       #   shell: bash
       #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       #   id: extract-branch
-      - name: Checkout
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout feature branch
         uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
       - name: "Deploy vercel"
         id: deploy
         uses: amondnet/vercel-action@v20
