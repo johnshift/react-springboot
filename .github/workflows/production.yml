@@ -56,8 +56,8 @@ jobs:
       #   id: extract-branch
       - name: Checkout
         uses: actions/checkout@v2
-        # with:
-        #   ref: ${{ steps.extract-branch.outputs.branch }}
+        with:
+          ref: 'main'
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -89,8 +89,8 @@ jobs:
       #   id: extract-branch
       - name: Checkout
         uses: actions/checkout@v2
-        # with:
-        #   ref: ${{ steps.extract-branch.outputs.branch }}
+        with:
+          ref: 'main'
       - name: "Deploy vercel"
         id: deploy
         uses: amondnet/vercel-action@v20
