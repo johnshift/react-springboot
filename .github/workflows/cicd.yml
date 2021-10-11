@@ -62,25 +62,21 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ steps.extract-branch.outputs.branch }}
-      - name: Check if repo env variables included
+      - name: Setup PostgreSQL
         run: |
-          echo "DATASOURCE_URL = $DATASOURCE_URL"
-          echo "with brackets = ${DATASOURCE_URL}"
-      # - name: Setup PostgreSQL
-      #   run: |
-      #     sudo service postgresql start
-      #     sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DATASOURCE_DB_NAME }}"
-      #     sudo -u postgres psql -c "CREATE USER ${{ secrets.DATASOURCE_USERNAME }} WITH ENCRYPTED PASSWORD '${{ secrets.DATASOURCE_PASSWORD }}'"
-      #     sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.DATASOURCE_DB_NAME }} TO ${{ secrets.DATASOURCE_USERNAME }}"          
-      # - name: Setup Java
-      #   uses: actions/setup-java@v2
-      #   with:
-      #     distribution: 'adopt'
-      #     java-version: '11'
-      #     cache: 'maven'
-      # - name: Run Unit + Integration Tests
-      #   working-directory: ./backend
-      #   run: 'mvn clean verify'
+          sudo service postgresql start
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DATASOURCE_DB_NAME }}"
+          sudo -u postgres psql -c "CREATE USER ${{ secrets.DATASOURCE_USERNAME }} WITH ENCRYPTED PASSWORD '${{ secrets.DATASOURCE_PASSWORD }}'"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.DATASOURCE_DB_NAME }} TO ${{ secrets.DATASOURCE_USERNAME }}"          
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: 'maven'
+      - name: Run Unit + Integration Tests
+        working-directory: ./backend
+        run: 'mvn clean verify'
         
   frontend-tests:
     name: Frontend Tests
