@@ -44,8 +44,8 @@ jobs:
       backend: ${{ steps.check-backend.outputs.any_changed }}
       frontend: ${{ steps.check-frontend.outputs.any_changed }}
 
-  backend-tests:
-    name: Backend Tests
+  backend-unit-tests:
+    name: Backend Unit Tests
     needs: [detect-changes]
     if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
@@ -76,7 +76,43 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
           cache: 'maven'
-      - name: Run Unit + Integration Tests
+      - name: Run Unit Tests
+        working-directory: ./backend
+        run: 'mvn clean test'
+
+  backend-integration-tests:
+    name: Backend Integration Tests
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: backend DEV
+    env:
+      DATASOURCE_URL: ${{ secrets.DATASOURCE_URL }}
+      DATASOURCE_USERNAME: ${{ secrets.DATASOURCE_USERNAME }}
+      DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Setup PostgreSQL
+        run: |
+          sudo service postgresql start
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DATASOURCE_DB_NAME }}"
+          sudo -u postgres psql -c "CREATE USER ${{ secrets.DATASOURCE_USERNAME }} WITH ENCRYPTED PASSWORD '${{ secrets.DATASOURCE_PASSWORD }}'"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.DATASOURCE_DB_NAME }} TO ${{ secrets.DATASOURCE_USERNAME }}"          
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: 'maven'
+      - name: Run Integration Tests
         working-directory: ./backend
         run: 'mvn clean test-compile failsafe:integration-test'
         
@@ -113,7 +149,7 @@ jobs:
   backend-dev:
     name: Deploy Backend DEV
     if: ${{ false }} # simulate skip
-    needs: [backend-tests]
+    needs: [backend-unit-tests, backend-integration-tests]
     runs-on: ubuntu-latest
     steps:
       - name: TODO
