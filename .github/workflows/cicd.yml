@@ -267,6 +267,8 @@ jobs:
     name: Create Pull Request
     runs-on: ubuntu-latest
     # needs: [e2e-tests]
+    # only create pull request if not on main branch
+    if: github.ref != 'main'
     steps:
       - name: Extract branch name
         shell: bash
@@ -299,6 +301,29 @@ jobs:
       name: backend PRODUCTION
       url: https://offguard.herokuapp.com
     steps:
+      - name: event.action
+        run: echo "github.event.action == `${{ github.event.pull_request.action }}`"
+      - name: pull_request.action
+        run: echo "github.event.pull_request.action == `${{ github.event.pull_request.action }}`"
+      - name:  github.event.pull_request
+        run: echo "github.event.pull_request = `${{ github.event.pull_request }}`"
+      - name:  github.event.pull_request.merged
+        run: echo "github.event.pull_request.merged = `${{ github.event.pull_request.merged }}`"
+      - name:  github.event.ref
+        run: echo "github.event.ref = `${{ github.event.ref }}`"
+      - name:  github.ref
+        run: echo "github.ref = `${{ github.ref }}`"
+      - name:  github.head_ref
+        run: echo "github.head_ref = `${{ github.head_ref }}`"
+      - name: check 
+        run: |
+          echo "github.event.pull_request.merged           : $MERGED_RAW"
+          echo "github.event.pull_request.merged == 'true' : $MERGED_TRUE_STR"
+          echo "github.event.pull_request.merged  == true  : $MERGED_TRUE_BOOL"
+        env:
+          MERGED_RAW: ${{ github.event.pull_request.merged }}
+          MERGED_TRUE_STR: ${{ github.event.pull_request.merged == 'true' }}
+          MERGED_TRUE_BOOL: ${{ github.event.pull_request.merged == true }}
       # - name: Extract branch name
       #   shell: bash
       #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
