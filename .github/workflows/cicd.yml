@@ -215,6 +215,8 @@ jobs:
     # always run if either frontend/backend succeed and neither failed
     if: always() && (needs.backend-dev.result == 'success' || needs.frontend-dev.result == 'success') && (needs.frontend-dev.result != 'failure' && needs.frontend-dev.result != 'failure')
     runs-on: ubuntu-latest
+    outputs:
+      pr-number: ${{steps.create-pull-request.outputs.pr_number}}
     steps:
       - name: Extract branch name
         shell: bash
@@ -260,6 +262,7 @@ jobs:
           install: false # already installed
           command: pnpm test
       - name: pull-request
+        id: create-pull-request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "main"                      
@@ -271,12 +274,15 @@ jobs:
           pr_label: "pull-request"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  backend-production: # requires approval
-    # this should always run even if create-pr is skipped
-    # only PR to main should trigger this job
+  backend-production:
+    # =========================================================
+    # ======================= !NOTICE! ========================
+    # =========================================================
+    # - - - - - - MERGE PR FIRST BEFORE APPROVAL! - - - - - -
+    # =======================================================
     needs: [e2e-tests]
-    if: github.event.pull_request.merged && github.ref == 'main'
-    name: Deploy Backend PRODUCTION
+    # if: github.event.pull_request.merged && github.ref == 'main'
+    name: "Backend PRODUCTION PR #${{ needs.e2e-tests.outputs.pr-number }}"
     runs-on: ubuntu-latest
     environment:
       name: backend PRODUCTION
@@ -300,11 +306,14 @@ jobs:
           HD_FRONTEND_URL: https://offguard.vercel.app/
 
   frontend-production:
-    # this should always run even if create-pr is skipped
-    # only PR to main should trigger this job
+    # =========================================================
+    # ======================= !NOTICE! ========================
+    # =========================================================
+    # - - - - - - MERGE PR FIRST BEFORE APPROVAL! - - - - - -
+    # =======================================================
     needs: [e2e-tests]
-    if: github.event.pull_request.merged && github.ref == 'main'
-    name: Deploy Frontend PRODUCTION
+    # if: github.event.pull_request.merged && github.ref == 'main'
+    name: "Frontend PRODUCTION PR #${{ needs.e2e-tests.outputs.pr-number }}"
     runs-on: ubuntu-latest
     environment:
       name: frontend PRODUCTION
