@@ -14,263 +14,112 @@ concurrency:
 
 jobs:
 
-  # detect-changes:
-  #   name: Detect Changes
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Extract branch name
-  #       shell: bash
-  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #       id: extract-branch  
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ steps.extract-branch.outputs.branch }}
-  #         fetch-depth: 0
-  #     - name: Check changes on backend
-  #       id: check-backend
-  #       uses: tj-actions/changed-files@v10
-  #       with:
-  #         files: |
-  #           backend
-  #     - name: Check changes on frontend
-  #       id: check-frontend
-  #       uses: tj-actions/changed-files@v10
-  #       with:
-  #         files: |
-  #           frontend
-  #   outputs:
-  #     backend: ${{ steps.check-backend.outputs.any_changed }}
-  #     frontend: ${{ steps.check-frontend.outputs.any_changed }}
-
-  # backend-unit-tests:
-  #   name: Backend Unit Tests
-  #   needs: [detect-changes]
-  #   if: needs.detect-changes.outputs.backend == 'true'
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: backend DEV
-  #   env:
-  #     DATASOURCE_URL: ${{ secrets.DATASOURCE_URL }}
-  #     DATASOURCE_USERNAME: ${{ secrets.DATASOURCE_USERNAME }}
-  #     DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
-  #   steps:
-  #     - name: Extract branch name
-  #       shell: bash
-  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #       id: extract-branch
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ steps.extract-branch.outputs.branch }}
-  #     - name: Setup PostgreSQL
-  #       run: |
-  #         sudo service postgresql start
-  #         sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DATASOURCE_DB_NAME }}"
-  #         sudo -u postgres psql -c "CREATE USER ${{ secrets.DATASOURCE_USERNAME }} WITH ENCRYPTED PASSWORD '${{ secrets.DATASOURCE_PASSWORD }}'"
-  #         sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.DATASOURCE_DB_NAME }} TO ${{ secrets.DATASOURCE_USERNAME }}"          
-  #     - name: Setup Java
-  #       uses: actions/setup-java@v2
-  #       with:
-  #         distribution: 'adopt'
-  #         java-version: '11'
-  #         cache: 'maven'
-  #     - name: Run Unit Tests
-  #       working-directory: ./backend
-  #       run: 'mvn clean test'
-
-  # backend-integration-tests:
-  #   name: Backend Integration Tests
-  #   needs: [detect-changes]
-  #   if: needs.detect-changes.outputs.backend == 'true'
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: backend DEV
-  #   env:
-  #     DATASOURCE_URL: ${{ secrets.DATASOURCE_URL }}
-  #     DATASOURCE_USERNAME: ${{ secrets.DATASOURCE_USERNAME }}
-  #     DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
-  #   steps:
-  #     - name: Extract branch name
-  #       shell: bash
-  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #       id: extract-branch
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ steps.extract-branch.outputs.branch }}
-  #     - name: Setup PostgreSQL
-  #       run: |
-  #         sudo service postgresql start
-  #         sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DATASOURCE_DB_NAME }}"
-  #         sudo -u postgres psql -c "CREATE USER ${{ secrets.DATASOURCE_USERNAME }} WITH ENCRYPTED PASSWORD '${{ secrets.DATASOURCE_PASSWORD }}'"
-  #         sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.DATASOURCE_DB_NAME }} TO ${{ secrets.DATASOURCE_USERNAME }}"          
-  #     - name: Setup Java
-  #       uses: actions/setup-java@v2
-  #       with:
-  #         distribution: 'adopt'
-  #         java-version: '11'
-  #         cache: 'maven'
-  #     - name: Run Integration Tests
-  #       working-directory: ./backend
-  #       run: 'mvn clean test-compile failsafe:integration-test'
-        
-  # frontend-tests:
-  #   name: Frontend Tests
-  #   needs: [detect-changes]
-  #   if: needs.detect-changes.outputs.frontend == 'true'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Extract branch name
-  #       shell: bash
-  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #       id: extract-branch
-  #     - name: Checkout feature branch
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ steps.extract-branch.outputs.branch }}
-  #     - name: Install pnpm
-  #       working-directory: ./frontend
-  #       run: sudo npm i -g pnpm
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '14'
-  #         cache: 'pnpm'
-  #         cache-dependency-path: ./frontend/pnpm-lock.yaml
-  #     - name: Build
-  #       working-directory: ./frontend
-  #       run: pnpm i --frozen-lockfile
-  #     - name: Run Tests
-  #       working-directory: ./frontend
-  #       run: "pnpm test:ci"
-
-  # backend-dev:
-  #   name: Deploy Backend DEV
-  #   needs: [backend-unit-tests, backend-integration-tests]
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: backend DEV
-  #     url: https://offguard-dev.herokuapp.com
-  #   steps:
-  #     - name: Extract branch name
-  #       shell: bash
-  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #       id: extract-branch
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ steps.extract-branch.outputs.branch }}
-  #     - name: Deploy to Heroku
-  #       uses: akhileshns/heroku-deploy@v3.12.12
-  #       with:
-  #         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-  #         heroku_email: ${{ secrets.HEROKU_EMAIL }}
-  #         heroku_app_name: offguard-dev
-  #         appdir: backend
-  #         branch: ${{ steps.extract-branch.outputs.branch }}
-  #       env:
-  #         # note: "HD_" is needed to specify what to include in the deployed heroku app.
-  #         #       However, it is only needed to differentiate from other environment variables.
-  #         #       The "HD_" string will be stripped when the app starts. 
-  #         #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.  
-  #         HD_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
-
-  # frontend-dev:
-  #   name: Deploy Frontend DEV
-  #   needs: [frontend-tests]
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: frontend DEV
-  #     url: ${{ steps.deploy.outputs.preview-url }}
-  #   outputs:
-  #     preview-url: ${{ steps.deploy.outputs.preview-url }}
-  #   steps:
-  #     - name: Extract branch name
-  #       shell: bash
-  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #       id: extract-branch
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ steps.extract-branch.outputs.branch }}
-  #     - name: "Deploy vercel preview"
-  #       id: deploy
-  #       uses: amondnet/vercel-action@v20
-  #       with:
-  #         vercel-token: ${{ secrets.VERCEL_TOKEN }}
-  #         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-  #         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-  #         scope: ${{ secrets.VERCEL_ORG_ID }} 
-  #     - name: Update vercel url in secrets
-  #       uses: hmanzur/actions-set-secret@v2.0.0
-  #       with:
-  #         name: 'FRONTEND_DEV_URL'
-  #         value: ${{ steps.deploy.outputs.preview-url }}
-  #         token: ${{ secrets.PAT }}
-
-  # e2e-tests:
-  #   name: End-to-End Tests 
-  #   needs: [backend-dev, frontend-dev]
-  #   # always run if either frontend/backend succeed and neither failed
-  #   if: always() && (needs.backend-dev.result == 'success' || needs.frontend-dev.result == 'success') && (needs.frontend-dev.result != 'failure' && needs.frontend-dev.result != 'failure')
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Extract branch name
-  #       shell: bash
-  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #       id: extract-branch
-  #     - name: Checkout feature branch
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ steps.extract-branch.outputs.branch }}
-
-  #     - name: Install pnpm
-  #       uses: pnpm/action-setup@v2.0.1
-  #       with:
-  #         version: 6.16.1
-
-  #     - name: Cache Cypress
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: ~/.cache/Cypress
-  #         # we use the exact restore key to avoid Cypress binary snowballing
-  #         # https://glebbahmutov.com/blog/do-not-let-cypress-cache-snowball/
-  #         key: cypress-${{ runner.os }}-cypress-${{ github.ref }}-${{ hashFiles('**/package.json') }}
-  #         restore-keys: |
-  #           cypress-${{ runner.os }}-cypress-${{ github.ref }}-${{ hashFiles('**/package.json') }}
-  
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '14'
-  #         cache: 'pnpm'
-  #         cache-dependency-path: ./e2e-tests/pnpm-lock.yaml
-
-  #     - name: Build
-  #       working-directory: ./e2e-tests
-  #       run: pnpm i --frozen-lockfile
-
-  #     - name: Run End-to-End Tests
-  #       id: run-e2e-tests
-  #       uses: cypress-io/github-action@v2
-  #       env:
-  #         CYPRESS_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
-  #       with:
-  #         wait-on: ${{ secrets.FRONTEND_DEV_URL }}
-  #         wait-on-timeout: 30
-  #         browser: chrome
-  #         headless: true
-  #         working-directory: ./e2e-tests
-  #         install: false # already installed
-  #         command: pnpm test
-
-  create-pull-request:
-    name: Create Pull Request
+  detect-changes:
+    name: Detect Changes
     runs-on: ubuntu-latest
-    # needs: [e2e-tests]
-    # only create pull request if not on main branch
-    if: github.ref != 'main'
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch  
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+          fetch-depth: 0
+      - name: Check changes on backend
+        id: check-backend
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            backend
+      - name: Check changes on frontend
+        id: check-frontend
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            frontend
+    outputs:
+      backend: ${{ steps.check-backend.outputs.any_changed }}
+      frontend: ${{ steps.check-frontend.outputs.any_changed }}
+
+  backend-unit-tests:
+    name: Backend Unit Tests
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: backend DEV
+    env:
+      DATASOURCE_URL: ${{ secrets.DATASOURCE_URL }}
+      DATASOURCE_USERNAME: ${{ secrets.DATASOURCE_USERNAME }}
+      DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Setup PostgreSQL
+        run: |
+          sudo service postgresql start
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DATASOURCE_DB_NAME }}"
+          sudo -u postgres psql -c "CREATE USER ${{ secrets.DATASOURCE_USERNAME }} WITH ENCRYPTED PASSWORD '${{ secrets.DATASOURCE_PASSWORD }}'"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.DATASOURCE_DB_NAME }} TO ${{ secrets.DATASOURCE_USERNAME }}"          
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: 'maven'
+      - name: Run Unit Tests
+        working-directory: ./backend
+        run: 'mvn clean test'
+
+  backend-integration-tests:
+    name: Backend Integration Tests
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: backend DEV
+    env:
+      DATASOURCE_URL: ${{ secrets.DATASOURCE_URL }}
+      DATASOURCE_USERNAME: ${{ secrets.DATASOURCE_USERNAME }}
+      DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Setup PostgreSQL
+        run: |
+          sudo service postgresql start
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DATASOURCE_DB_NAME }}"
+          sudo -u postgres psql -c "CREATE USER ${{ secrets.DATASOURCE_USERNAME }} WITH ENCRYPTED PASSWORD '${{ secrets.DATASOURCE_PASSWORD }}'"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${{ secrets.DATASOURCE_DB_NAME }} TO ${{ secrets.DATASOURCE_USERNAME }}"          
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: 'maven'
+      - name: Run Integration Tests
+        working-directory: ./backend
+        run: 'mvn clean test-compile failsafe:integration-test'
+        
+  frontend-tests:
+    name: Frontend Tests
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
     steps:
       - name: Extract branch name
         shell: bash
@@ -280,6 +129,136 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Install pnpm
+        working-directory: ./frontend
+        run: sudo npm i -g pnpm
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'pnpm'
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
+      - name: Build
+        working-directory: ./frontend
+        run: pnpm i --frozen-lockfile
+      - name: Run Tests
+        working-directory: ./frontend
+        run: "pnpm test:ci"
+
+  backend-dev:
+    name: Deploy Backend DEV
+    needs: [backend-unit-tests, backend-integration-tests]
+    runs-on: ubuntu-latest
+    environment:
+      name: backend DEV
+      url: https://offguard-dev.herokuapp.com
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_app_name: offguard-dev
+          appdir: backend
+          branch: ${{ steps.extract-branch.outputs.branch }}
+        env:
+          # note: "HD_" is needed to specify what to include in the deployed heroku app.
+          #       However, it is only needed to differentiate from other environment variables.
+          #       The "HD_" string will be stripped when the app starts. 
+          #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.  
+          HD_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
+
+  frontend-dev:
+    name: Deploy Frontend DEV
+    needs: [frontend-tests]
+    runs-on: ubuntu-latest
+    environment:
+      name: frontend DEV
+      url: ${{ steps.deploy.outputs.preview-url }}
+    outputs:
+      preview-url: ${{ steps.deploy.outputs.preview-url }}
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: "Deploy vercel preview"
+        id: deploy
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }} 
+      - name: Update vercel url in secrets
+        uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+          name: 'FRONTEND_DEV_URL'
+          value: ${{ steps.deploy.outputs.preview-url }}
+          token: ${{ secrets.PAT }}
+
+  e2e-tests:
+    name: End-to-End Tests 
+    needs: [backend-dev, frontend-dev]
+    # always run if either frontend/backend succeed and neither failed
+    if: always() && (needs.backend-dev.result == 'success' || needs.frontend-dev.result == 'success') && (needs.frontend-dev.result != 'failure' && needs.frontend-dev.result != 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout feature branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.16.1
+      - name: Cache Cypress
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/Cypress
+          # we use the exact restore key to avoid Cypress binary snowballing
+          # https://glebbahmutov.com/blog/do-not-let-cypress-cache-snowball/
+          key: cypress-${{ runner.os }}-cypress-${{ github.ref }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-cypress-${{ github.ref }}-${{ hashFiles('**/package.json') }}
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'pnpm'
+          cache-dependency-path: ./e2e-tests/pnpm-lock.yaml
+      - name: Build
+        working-directory: ./e2e-tests
+        run: pnpm i --frozen-lockfile
+      - name: Run End-to-End Tests
+        id: run-e2e-tests
+        uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
+        with:
+          wait-on: ${{ secrets.FRONTEND_DEV_URL }}
+          wait-on-timeout: 30
+          browser: chrome
+          headless: true
+          working-directory: ./e2e-tests
+          install: false # already installed
+          command: pnpm test
       - name: pull-request
         uses: repo-sync/pull-request@v2
         with:
@@ -293,47 +272,18 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   backend-production: # requires approval
-    name: Deploy Backend PRODUCTION
     # this should always run even if create-pr is skipped
     # only PR to main should trigger this job
-    needs: [create-pull-request]
-    if: always() && github.event.pull_request.merged && github.ref == 'main'
+    needs: [e2e-tests]
+    if: github.event.pull_request.merged && github.ref == 'main'
+    name: Deploy Backend PRODUCTION
     runs-on: ubuntu-latest
     environment:
       name: backend PRODUCTION
       url: https://offguard.herokuapp.com
     steps:
-      - name: event.action
-        run: echo "github.event.action == `${{ github.event.pull_request.action }}`"
-      - name: pull_request.action
-        run: echo "github.event.pull_request.action == `${{ github.event.pull_request.action }}`"
-      - name:  github.event.pull_request
-        run: echo "github.event.pull_request = `${{ github.event.pull_request }}`"
-      - name:  github.event.pull_request.merged
-        run: echo "github.event.pull_request.merged = `${{ github.event.pull_request.merged }}`"
-      - name:  github.event.ref
-        run: echo "github.event.ref = `${{ github.event.ref }}`"
-      - name:  github.ref
-        run: echo "github.ref = `${{ github.ref }}`"
-      - name:  github.head_ref
-        run: echo "github.head_ref = `${{ github.head_ref }}`"
-      - name: check 
-        run: |
-          echo "github.event.pull_request.merged           : $MERGED_RAW"
-          echo "github.event.pull_request.merged == 'true' : $MERGED_TRUE_STR"
-          echo "github.event.pull_request.merged  == true  : $MERGED_TRUE_BOOL"
-        env:
-          MERGED_RAW: ${{ github.event.pull_request.merged }}
-          MERGED_TRUE_STR: ${{ github.event.pull_request.merged == 'true' }}
-          MERGED_TRUE_BOOL: ${{ github.event.pull_request.merged == true }}
-      # - name: Extract branch name
-      #   shell: bash
-      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      #   id: extract-branch
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: 'main'
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -349,32 +299,31 @@ jobs:
           #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.  
           HD_FRONTEND_URL: https://offguard.vercel.app/
 
-  # frontend-production:
-  #   # this should always run even if create-pr is skipped
-  #   # as long as it matched -> pull_request:main:closed && merged == true
-  #   if: github.event.pull_request.merged && github.ref == 'main'
-  #   name: Deploy Frontend PRODUCTION
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: frontend PRODUCTION
-  #     url: https://offguard.vercel.app/
-  #   steps:
-  #     # - name: Extract branch name
-  #     #   shell: bash
-  #     #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #     #   id: extract-branch
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: 'main'
-  #     - name: "Deploy vercel"
-  #       id: deploy
-  #       uses: amondnet/vercel-action@v20
-  #       with:
-  #         vercel-token: ${{ secrets.VERCEL_TOKEN }}
-  #         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-  #         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-  #         scope: ${{ secrets.VERCEL_ORG_ID }} 
-  #         vercel-args: '--prod'
+  frontend-production:
+    # this should always run even if create-pr is skipped
+    # only PR to main should trigger this job
+    needs: [e2e-tests]
+    if: github.event.pull_request.merged && github.ref == 'main'
+    name: Deploy Frontend PRODUCTION
+    runs-on: ubuntu-latest
+    environment:
+      name: frontend PRODUCTION
+      url: https://offguard.vercel.app/
+    steps:
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: "Deploy vercel"
+        id: deploy
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }} 
+          vercel-args: '--prod'
 
   
