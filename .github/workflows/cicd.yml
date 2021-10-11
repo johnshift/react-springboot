@@ -1,8 +1,6 @@
 name: CI/CD
 on:
   workflow_dispatch:
-  pull_request:
-    types: [closed]
   push:
     # should only run on feature branches
     # only merge to main via pull request
