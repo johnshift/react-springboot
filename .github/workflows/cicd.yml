@@ -270,7 +270,7 @@ jobs:
           pr_body: |
             Automated PR
           pr_assignee: "johnshift"
-          pr_label: "pull-request"
+          pr_label: "pull-request, automerge"
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: jwalton/gh-find-current-pr@v1
         id: find-pr
