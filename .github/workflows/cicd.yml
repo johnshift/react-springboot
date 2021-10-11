@@ -1,10 +1,12 @@
 name: CI/CD
 on:
   workflow_dispatch:
+  pull_request:
+    types: [closed]
   push:
     # should only run on feature branches
     # only merge to main via pull request
-    # branches-ignore: [main]
+    branches-ignore: [main]
 
 concurrency:
   group: tests
@@ -295,7 +297,7 @@ jobs:
     # this should always run even if create-pr is skipped
     # only PR to main should trigger this job
     needs: [create-pull-request]
-    if: always() && github.ref == 'main'
+    if: always() && github.event.pull_request.merged && github.ref == 'main'
     runs-on: ubuntu-latest
     environment:
       name: backend PRODUCTION
