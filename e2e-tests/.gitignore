@@ -5,4 +5,4 @@ dist-ssr
 *.local
 
 // remove this if you want access to screenshots
-cypress
+cypress/screenshots
