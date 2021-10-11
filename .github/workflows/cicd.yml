@@ -67,6 +67,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Install pnpm
+        working-directory: ./frontend
+        run: sudo npm i -g pnpm
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
