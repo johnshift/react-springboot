@@ -253,6 +253,7 @@ jobs:
         run: pnpm i --frozen-lockfile
 
       - name: Run End-to-End Tests
+        id: run-e2e-tests
         uses: cypress-io/github-action@v2
         env:
           CYPRESS_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
@@ -264,6 +265,19 @@ jobs:
           working-directory: ./e2e-tests
           install: false # already installed
           command: pnpm test
+
+      - name: pull-request
+        if: steps.run-e2e-tests.outcome == 'success'
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "main"                      
+          pr_title: "[PR] main <- ${{ steps.extract-branch.outputs.branch }}"
+          pr_body: |
+            Automated PR:
+            - close <issue_#_link>
+          pr_assignee: "johnshift"
+          pr_label: "pull request"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
   backend-production: # requires approval
     needs: [e2e-tests]
