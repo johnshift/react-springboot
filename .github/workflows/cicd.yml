@@ -216,7 +216,7 @@ jobs:
     if: always() && (needs.backend-dev.result == 'success' || needs.frontend-dev.result == 'success') && (needs.frontend-dev.result != 'failure' && needs.frontend-dev.result != 'failure')
     runs-on: ubuntu-latest
     outputs:
-      pr-number: ${{steps.create-pull-request.outputs.pr_number}}
+      pr-number: ${{ steps.find-pr.outputs.pr }}
     steps:
       - name: Extract branch name
         shell: bash
@@ -268,11 +268,12 @@ jobs:
           destination_branch: "main"                      
           pr_title: "[PR] main <- ${{ steps.extract-branch.outputs.branch }}"
           pr_body: |
-            Automated PR:
-            - close <issue_#_link>
+            Automated PR
           pr_assignee: "johnshift"
           pr_label: "pull-request"
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: jwalton/gh-find-current-pr@v1
+        id: find-pr
 
   backend-production:
     # =========================================================
@@ -288,6 +289,8 @@ jobs:
       name: backend PRODUCTION
       url: https://offguard.herokuapp.com
     steps:
+      - name: echo PR number
+        run: echo "PR number = ${{ needs.e2e-tests.outputs.pr-number }}"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Deploy to Heroku
