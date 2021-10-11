@@ -75,7 +75,7 @@ jobs:
         with:
           node-version: '14'
           cache: 'pnpm'
-          cache-dependency-path: ./frontend/pnpm-lock.json
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
       - name: Build
         working-directory: ./frontend
         run: pnpm i --frozen-lockfile
