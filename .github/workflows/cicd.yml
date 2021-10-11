@@ -49,6 +49,8 @@ jobs:
     needs: [detect-changes]
     if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
+    environment:
+      name: backend DEV
     steps:
       - name: Extract branch name
         shell: bash
