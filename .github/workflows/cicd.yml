@@ -270,7 +270,7 @@ jobs:
           pr_body: |
             Automated PR
           pr_assignee: "johnshift"
-          pr_label: "pull-request, automerge"
+          pr_label: "pull-request,automerge"
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: jwalton/gh-find-current-pr@v1
         id: find-pr
@@ -283,7 +283,7 @@ jobs:
     # =================================================================
     needs: [e2e-tests]
     # if: github.event.pull_request.merged && github.ref == 'main'
-    name: "Backend PRODUCTION PR #${{ needs.e2e-tests.outputs.pr-number }}"
+    name: "Backend PRODUCTION pr:${{ needs.e2e-tests.outputs.pr-number }}"
     runs-on: ubuntu-latest
     environment:
       name: backend PRODUCTION
@@ -320,7 +320,7 @@ jobs:
     # =================================================================
     needs: [e2e-tests]
     # if: github.event.pull_request.merged && github.ref == 'main'
-    name: "Frontend PRODUCTION PR #${{ needs.e2e-tests.outputs.pr-number }}"
+    name: "Frontend PRODUCTION pr:${{ needs.e2e-tests.outputs.pr-number }}"
     runs-on: ubuntu-latest
     environment:
       name: frontend PRODUCTION
