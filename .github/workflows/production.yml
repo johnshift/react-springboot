@@ -15,20 +15,20 @@ jobs:
     # this should always run even if create-pr is skipped
     # as long as it matched -> pull_request:main:closed && merged == true
     # and end-to-end tests succeeded
-    # if: github.event.pull_request.merged == 'true'
+    if: github.event.pull_request.merged == 'true'
     runs-on: ubuntu-latest
     environment:
       name: backend PRODUCTION
       url: https://offguard.herokuapp.com
     steps:
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract-branch
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract-branch
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.extract-branch.outputs.branch }}
+        # with:
+        #   ref: ${{ steps.extract-branch.outputs.branch }}
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -47,21 +47,21 @@ jobs:
   frontend-production:
     # this should always run even if create-pr is skipped
     # as long as it matched -> pull_request:main:closed && merged == true
-    # if: github.event.pull_request.merged == 'true'
+    if: github.event.pull_request.merged == 'true'
     name: Deploy Frontend PRODUCTION
     runs-on: ubuntu-latest
     environment:
       name: frontend PRODUCTION
       url: https://offguard.vercel.app/
     steps:
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract-branch
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract-branch
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.extract-branch.outputs.branch }}
+        # with:
+        #   ref: ${{ steps.extract-branch.outputs.branch }}
       - name: "Deploy vercel"
         id: deploy
         uses: amondnet/vercel-action@v20
