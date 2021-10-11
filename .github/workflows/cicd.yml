@@ -148,12 +148,43 @@ jobs:
 
   backend-dev:
     name: Deploy Backend DEV
-    if: ${{ false }} # simulate skip
     needs: [backend-unit-tests, backend-integration-tests]
     runs-on: ubuntu-latest
+    environment:
+      name: backend DEV
+      url: https://offguard-dev.herokuapp.com
     steps:
-      - name: TODO
-        run: echo "TODO"
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: 'maven'
+      - name: Build Backend
+        working-directory: ./backend
+        run: mvn clean install -DskipTests
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_app_name: offguard-dev
+          appdir: backend
+          branch: ${{ steps.extract-branch.outputs.branch }}
+        env:
+          # note: "HD_" is needed to specify what to include in the deployed heroku app.
+          #       However, it is only needed to differentiate from other environment variables.
+          #       The "HD_" string will be stripped when the app starts. 
+          #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.  
+          HD_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
 
   frontend-dev:
     name: Deploy Frontend DEV
