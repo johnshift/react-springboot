@@ -94,12 +94,36 @@ jobs:
 
   frontend-dev:
     name: Deploy Frontend DEV
-    if: ${{ false }} # simulate skip
     needs: [frontend-tests]
     runs-on: ubuntu-latest
+    environment:
+      name: frontend DEV
+      url: ${{ steps.deploy.outputs.preview-url }}
+    outputs:
+      preview-url: ${{ steps.deploy.outputs.preview-url }}
     steps:
-      - name: TODO
-        run: echo "TODO"
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: "Deploy vercel preview"
+        id: deploy
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }} 
+      - name: Update vercel url in secrets
+        uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+          name: 'FRONTEND_DEV_URL'
+          value: ${{ steps.deploy.outputs.preview-url }}
+          token: ${{ secrets.PAT }}
 
   e2e-tests:
     name: End-to-End Tests
