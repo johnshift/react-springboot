@@ -17,11 +17,32 @@ jobs:
 
   detect-changes:
     name: Detect Changes
-    if: ${{ false }} # simulate skip
     runs-on: ubuntu-latest
     steps:
-      - name: TODO
-        run: echo "TODO"
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch  
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+          fetch-depth: 0
+      - name: Check changes on backend
+        id: check-backend
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            backend
+      - name: Check changes on frontend
+        id: check-frontend
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            frontend
+    outputs:
+      backend: ${{ steps.check-backend.outputs.any_changed }}
+      frontend: ${{ steps.check-frontend.outputs.any_changed }}
 
   backend-tests:
     name: Backend Tests
