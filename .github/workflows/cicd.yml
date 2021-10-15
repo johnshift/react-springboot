@@ -149,7 +149,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: backend DEV
-      url: https://offguard-dev.herokuapp.com
+      url: https://veils-dev.herokuapp.com
     steps:
       - name: Extract branch name
         shell: bash
@@ -164,7 +164,7 @@ jobs:
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          heroku_app_name: offguard-dev
+          heroku_app_name: veils-dev
           appdir: backend
           branch: ${{ steps.extract-branch.outputs.branch }}
         env:
