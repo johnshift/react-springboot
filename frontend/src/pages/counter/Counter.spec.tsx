@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { render, fireEvent, screen, waitFor } from '@testing-library/preact';
 
-import Counter from './Counter';
+import Counter from '.';
 
 describe('Counter', () => {
   test('should display initial count', () => {
