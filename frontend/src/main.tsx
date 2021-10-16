@@ -1,17 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import 'virtual:windi.css';
 
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import { Router, Route } from 'preact-router';
+import AsyncRoute from 'preact-async-route';
+import { render } from 'preact';
 
-import App from './App';
-import theme from './theme';
+import Home from './pages/Home';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <App />
-    </ChakraProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+const Main = () => (
+  <Router>
+    <Route path="/" component={Home} />
+    <AsyncRoute
+      path="/counter"
+      getComponent={() => import('./pages/Counter').then((module) => module.default)}
+      loading={() => <div>loading....</div>}
+    />
+  </Router>
 );
+
+render(<Main />, document.getElementById('app')!);

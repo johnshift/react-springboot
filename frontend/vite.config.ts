@@ -1,8 +1,12 @@
-import { defineConfig } from 'vite';
-import reactRefresh from '@vitejs/plugin-react-refresh';
-import reactJsx from 'vite-react-jsx';
+import { defineConfig } from 'vite'
+import preact from '@preact/preset-vite'
+import WindiCSS from 'vite-plugin-windicss'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [reactRefresh(), reactJsx()],
-});
+  esbuild: {
+    jsxFactory: 'h',
+    jsxFragment: 'Fragment',
+  },
+  plugins: [preact(), WindiCSS()],
+})
