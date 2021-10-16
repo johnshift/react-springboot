@@ -257,7 +257,7 @@ jobs:
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "main"
-          pr_title: "[PR] :tada: ${{ steps.extract-branch.outputs.branch }} :tada:"
+          pr_title: ":sparkles: PR :sparkles: :arrow_right: :tada: ${{ steps.extract-branch.outputs.branch }} :tada:"
           pr_body: |
             Automated PR
           pr_assignee: "johnshift"
