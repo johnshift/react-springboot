@@ -9,14 +9,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
   backend-production:
     if: github.event.pull_request.merged
     name: Backend PRODUCTION
     runs-on: ubuntu-latest
     environment:
       name: backend PRODUCTION
-      url: https://offguard.herokuapp.com
+      url: https://veils.herokuapp.com
     steps:
       - name: Extract branch name
         shell: bash
@@ -31,15 +30,15 @@ jobs:
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          heroku_app_name: offguard
+          heroku_app_name: veils
           appdir: backend
           branch: ${{ steps.extract-branch.outputs.branch }}
         env:
           # note: "HD_" is needed to specify what to include in the deployed heroku app.
           #       However, it is only needed to differentiate from other environment variables.
-          #       The "HD_" string will be stripped when the app starts. 
-          #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.  
-          HD_FRONTEND_URL: https://offguard.vercel.app/
+          #       The "HD_" string will be stripped when the app starts.
+          #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.
+          HD_FRONTEND_URL: https://veils.vercel.app/
 
   frontend-production:
     if: github.event.pull_request.merged
@@ -47,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: frontend PRODUCTION
-      url: https://offguard.vercel.app/
+      url: https://veils.vercel.app/
     steps:
       # - name: Extract branch name
       #   shell: bash
@@ -68,7 +67,5 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          scope: ${{ secrets.VERCEL_ORG_ID }} 
-          vercel-args: '--prod'
-
-  
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-args: "--prod"
