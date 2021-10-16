@@ -12,7 +12,7 @@ const Main = () => (
     <AsyncRoute
       path="/counter"
       getComponent={() => import('./pages/Counter').then((module) => module.default)}
-      loading={() => <div>loading....</div>}
+      loading={() => <div>loading...</div>}
     />
   </Router>
 );
