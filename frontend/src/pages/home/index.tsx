@@ -1,12 +1,8 @@
 import Landing from '../landing';
+import { loggedIn } from '../../store/auth';
 
-type Props = {
-  loggedIn: boolean;
-  path: string;
-};
-
-const Home = ({ loggedIn }: Props) => {
-  if (!loggedIn) {
+const Home = () => {
+  if (!loggedIn()) {
     return <Landing />;
   }
 
