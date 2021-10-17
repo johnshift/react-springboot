@@ -1,5 +1,7 @@
-import Landing from '../landing';
 import { loggedIn } from '../../store/auth';
+
+import Landing from '../landing';
+import PageCenter from '../../components/PageCenter';
 
 const Home = () => {
   if (!loggedIn()) {
@@ -7,9 +9,9 @@ const Home = () => {
   }
 
   return (
-    <div class="flex container mx-auto h-screen justify-center items-center">
+    <PageCenter>
       <h1 class="text-6xl">Home Page</h1>
-    </div>
+    </PageCenter>
   );
 };
 

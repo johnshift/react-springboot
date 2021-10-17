@@ -4,6 +4,9 @@ import { Router, Route } from 'preact-router';
 import { render } from 'preact';
 import AsyncRoute from 'preact-async-route';
 
+import { loggedIn } from './store/auth';
+
+import Nav from './components/Nav';
 import Home from './pages/home';
 import PageLoader from './components/PageLoader';
 import NotFound from './pages/notfound';
@@ -11,6 +14,7 @@ import NotFound from './pages/notfound';
 const Main = () => {
   return (
     <>
+      {loggedIn() && <Nav />}
       <Router>
         <Route path="/" component={Home} />
         <AsyncRoute
