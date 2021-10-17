@@ -2,43 +2,35 @@ import 'virtual:windi.css';
 
 import { Router, Route } from 'preact-router';
 import { render } from 'preact';
-import AsyncRoute from 'preact-async-route';
 
 import { loggedIn } from './store/auth';
 
 import Nav from './components/Nav';
 import Home from './pages/home';
-import PageLoader from './components/PageLoader';
 import NotFound from './pages/notfound';
+import Profile from './pages/profile';
+import Alias from './pages/alias';
+import Group from './pages/group';
+import Counter from './pages/counter';
 
 const Main = () => {
   return (
     <>
       {loggedIn() && <Nav />}
-      <Router>
-        <Route path="/" component={Home} />
-        <AsyncRoute
-          path="/profile"
-          getComponent={() => import('./pages/profile').then((module) => module.default)}
-          loading={() => <PageLoader />}
-        />
-        <AsyncRoute
-          path="/alias"
-          getComponent={() => import('./pages/alias').then((module) => module.default)}
-          loading={() => <PageLoader />}
-        />
-        <AsyncRoute
-          path="/group"
-          getComponent={() => import('./pages/group').then((module) => module.default)}
-          loading={() => <PageLoader />}
-        />
-        <AsyncRoute
-          path="/counter"
-          getComponent={() => import('./pages/counter').then((module) => module.default)}
-          loading={() => <PageLoader />}
-        />
-        <Route component={NotFound} default />
-      </Router>
+      {/* <Nav /> */}
+      <div
+        class="
+        border-2 pt-25 w-full mx-auto md:w-9/10 lg:w-8/10 xl:w-50/100 z-1"
+      >
+        <Router>
+          <Route path="/" component={Home} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/alias" component={Alias} />
+          <Route path="/group" component={Group} />
+          <Route path="/counter" component={Counter} />
+          <Route component={NotFound} default />
+        </Router>
+      </div>
     </>
   );
 };
