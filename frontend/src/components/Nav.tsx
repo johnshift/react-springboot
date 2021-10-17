@@ -1,10 +1,10 @@
 import Center from './Center';
 
 const Nav = () => (
-  <div class="w-full shadow-md fixed">
+  <div className="w-full shadow-md fixed bg-light-50 z-3">
     <div
       class="
-      flex h-20
+      flex h-20 z-60
       xl:mx-auto xl:w-1100px
     "
     >

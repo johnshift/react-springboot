@@ -14,7 +14,6 @@ specifiers:
   identity-obj-proxy: ^3.0.0
   jest: ^27.2.5
   preact: ^10.5.13
-  preact-async-route: ^2.2.1
   preact-router: ^3.2.1
   prettier: ^2.4.1
   ts-jest: ^27.0.6
@@ -27,7 +26,6 @@ dependencies:
   '@preact/preset-vite': 2.1.4_preact@10.5.15+vite@2.6.7
   cross-env: 7.0.3
   preact: 10.5.15
-  preact-async-route: 2.2.1
   preact-router: 3.2.1_preact@10.5.15
   vite: 2.6.7
   vite-plugin-windicss: 1.4.11_vite@2.6.7
@@ -3538,10 +3536,6 @@ packages:
       nanoid: 3.1.30
       picocolors: 0.2.1
       source-map-js: 0.6.2
-    dev: false
-
-  /preact-async-route/2.2.1:
-    resolution: {integrity: sha512-8bg1007akXs3YDmzYT4McaTe6ji2FIzcc0/NTlu+vjJaKPNQ8lNG/HQ6LP+FoIxQ4m/KH5vvJCHJN5ADp2iNGA==}
     dev: false
 
   /preact-router/3.2.1_preact@10.5.15:
