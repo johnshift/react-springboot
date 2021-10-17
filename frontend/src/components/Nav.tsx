@@ -1,3 +1,4 @@
+import { Link } from 'preact-router/match';
 import Center from './Center';
 
 const Nav = () => (
@@ -10,9 +11,9 @@ const Nav = () => (
     >
       <div class="w-8/24 md:w-12/24 xl:w-6/10">
         <div class="flex h-full justify-self-start items-center pl-5">
-          <a href="#" class="text-3xl font-bold">
-            veils
-          </a>
+          <Link href="/">
+            <span class="text-3xl font-bold">veils</span>
+          </Link>
         </div>
       </div>
       <div class="w-12/24 md:w-9/24 xl:w-3/10">
