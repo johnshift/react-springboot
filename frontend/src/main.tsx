@@ -20,7 +20,7 @@ const Main = () => {
       {/* <Nav /> */}
       <div
         class="
-        border-2 pt-25 w-full mx-auto md:w-9/10 lg:w-8/10 xl:w-50/100 z-1"
+        pt-25 w-full mx-auto md:w-9/10 lg:w-8/10 xl:w-50/100 z-1"
       >
         <Router>
           <Route path="/" component={Home} />
