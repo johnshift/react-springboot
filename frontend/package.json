@@ -2,7 +2,7 @@
   "name": "preact-vite",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "cross-env NODE_ENV=production vite build",
     "serve": "vite preview",
     "pretty": "prettier -w -u src/**",
