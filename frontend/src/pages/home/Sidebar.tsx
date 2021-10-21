@@ -16,12 +16,12 @@ const UpperSidebar = () => (
       </Link>
       <Link href="/someveil">
         <button class="border-2 border-red-500 h-18 w-full hover:bg-light-700">
-          <span>Veil Profile</span>
+          <span>Veil</span>
         </button>
       </Link>
       <Link href="/somegroup">
         <button class="border-2 border-red-500 h-18 w-full hover:bg-light-700">
-          <span>Group</span>
+          <span>Groups</span>
         </button>
       </Link>
     </div>

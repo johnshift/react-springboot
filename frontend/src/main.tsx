@@ -12,6 +12,7 @@ import Counter from './pages/counter';
 import Signup from './pages/signup';
 import Match from 'preact-router/match';
 import PrettyRoute from './pages/pretty_routes';
+import Settings from './pages/settings';
 
 const Main = () => {
   return (
@@ -21,6 +22,7 @@ const Main = () => {
         <Route path="/" component={Home} />
         <Route path="/signup" component={Signup} />
         <Route path="/counter" component={Counter} />
+        <Route path="/settings" component={Settings} />
         <Match path="/:something">
           {({ path }: { path: string }) => {
             return <PrettyRoute path={path} />;
