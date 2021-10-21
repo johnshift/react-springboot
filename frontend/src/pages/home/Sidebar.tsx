@@ -9,10 +9,26 @@ const UpperSidebar = () => (
             fixed space-y-2
           "
     >
+      <Link href="/">
+        <button
+          type="button"
+          class="w-full h-14 text-gray-700 hover:bg-pink-900 hover:text-gray-100 text-lg px-5  py-4 text-center inline-flex justify-start items-center mr-3 focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+          </svg>
+          <span class="pl-2">Home</span>
+        </button>
+      </Link>
       <Link href="/someuser">
         <button
           type="button"
-          class="w-full h-18 text-gray-700 hover:bg-pink-900 hover:text-gray-100 text-lg px-5  py-4 text-center inline-flex justify-start items-center mr-3 focus:outline-none"
+          class="w-full h-14 text-gray-700 hover:bg-pink-900 hover:text-gray-100 text-lg px-5  py-4 text-center inline-flex justify-start items-center mr-3 focus:outline-none"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +48,7 @@ const UpperSidebar = () => (
       <Link href="/someveil">
         <button
           type="button"
-          class="w-full h-18 text-gray-700 hover:bg-pink-900 hover:text-gray-100 text-lg px-5  py-4 text-center inline-flex justify-start items-center mr-3 focus:outline-none"
+          class="w-full h-14 text-gray-700 hover:bg-pink-900 hover:text-gray-100 text-lg px-5  py-4 text-center inline-flex justify-start items-center mr-3 focus:outline-none"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +68,7 @@ const UpperSidebar = () => (
       <Link href="/somegroup">
         <button
           type="button"
-          class="w-full h-18 text-gray-700 hover:bg-pink-900 hover:text-gray-100 text-lg px-5  py-4 text-center inline-flex justify-start items-center mr-3 focus:outline-none"
+          class="w-full h-14 text-gray-700 hover:bg-pink-900 hover:text-gray-100 text-lg px-5  py-4 text-center inline-flex justify-start items-center mr-3 focus:outline-none"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
