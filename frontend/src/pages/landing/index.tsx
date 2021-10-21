@@ -1,25 +1,5 @@
 import Center from '../../components/Center';
 
-const Hero = () => (
-  <div
-    class="
-      sm:h-12/20 w-full
-      md:w-14/20
-  "
-  >
-    <Center>
-      <div
-        class="
-        flex bg-pink-900 justify-center items-center
-        h-full w-full md:h-7/10 md:w-8/10 text-white
-      "
-      >
-        <h1>Hero</h1>
-      </div>
-    </Center>
-  </div>
-);
-
 const Login = () => (
   <div>
     <input
@@ -46,11 +26,31 @@ const Login = () => (
   </div>
 );
 
+const Hero = () => (
+  <div
+    class="
+      sm:h-12/20 sm:w-full
+      md:w-14/20
+  "
+  >
+    <Center>
+      <div
+        class="
+        flex bg-pink-900 justify-center items-center
+        h-full w-full md:h-7/10 md:w-8/10 text-white
+      "
+      >
+        <h1>Hero</h1>
+      </div>
+    </Center>
+  </div>
+);
+
 const LandingForm = () => {
   return (
     <div
       class="
-      sm:h-8/20 w-full
+      sm:h-8/20 sm:w-full
       md:w-6/20
   "
     >
