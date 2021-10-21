@@ -212,14 +212,14 @@ jobs:
     if: always() && (needs.backend-dev.result == 'success' || needs.frontend-dev.result == 'success') && (needs.frontend-dev.result != 'failure' && needs.frontend-dev.result != 'failure')
     runs-on: ubuntu-latest
     steps:
-      # - name: Extract branch name
-      #   shell: bash
-      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      #   id: extract-branch
-      # - name: Checkout feature branch
-      #   uses: actions/checkout@v2
-      #   with:
-      #     ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout feature branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
       # - name: Install pnpm
       #   run: sudo npm i -g pnpm
       # - name: Cache Cypress
