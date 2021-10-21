@@ -1,9 +1,9 @@
 export default {
   theme: {
     screens: {
-      sm: { max: '1022px' },
-      md: { min: '1023px' },
-      lg: { min: '1280px' },
+      sm: { max: '767px' },
+      md: { min: '768px' },
+      lg: { min: '1366px' },
       xl: { min: '1500px' },
     },
   },
