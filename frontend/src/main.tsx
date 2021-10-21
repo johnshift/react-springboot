@@ -8,11 +8,10 @@ import { loggedIn } from './store/auth';
 import Nav from './components/Nav';
 import Home from './pages/home';
 import NotFound from './pages/notfound';
-import ProfileUser from './pages/profile_user';
-import ProfileVeil from './pages/profile_veil';
-import Group from './pages/group';
 import Counter from './pages/counter';
 import Register from './pages/register';
+import Match from 'preact-router/match';
+import PrettyRoute from './pages/pretty_routes';
 
 const Main = () => {
   return (
@@ -20,11 +19,13 @@ const Main = () => {
       {loggedIn() && <Nav />}
       <Router>
         <Route path="/" component={Home} />
-        <Route path="/profile" component={ProfileUser} />
-        <Route path="/alias" component={ProfileVeil} />
-        <Route path="/group" component={Group} />
         <Route path="/register" component={Register} />
         <Route path="/counter" component={Counter} />
+        <Match path="/:something">
+          {({ path }: { path: string }) => {
+            return <PrettyRoute path={path} />;
+          }}
+        </Match>
         <Route component={NotFound} default />
       </Router>
     </div>
