@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <div
       class="
-        pt-25 w-full mx-auto md:w-9/10 lg:w-8/10 xl:w-50/100 z-1"
+        pt-25 w-full mx-auto md:w-9/10 lg:w-7/10 xl:w-55/100 z-1"
     >
       <div class="flex top-20px content-start justify-around sm:mx-auto px-3">
         <Sidebar />
