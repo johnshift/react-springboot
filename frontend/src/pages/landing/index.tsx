@@ -21,7 +21,7 @@ const Login = () => (
       Login
     </button>
     <div class="text-center mt-5 text-pink-900">
-      <a href="/register">Dont have account?</a>
+      <a href="/signup">Dont have an account?</a>
     </div>
   </div>
 );

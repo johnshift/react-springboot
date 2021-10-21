@@ -9,7 +9,7 @@ import Nav from './components/Nav';
 import Home from './pages/home';
 import NotFound from './pages/notfound';
 import Counter from './pages/counter';
-import Register from './pages/register';
+import Signup from './pages/signup';
 import Match from 'preact-router/match';
 import PrettyRoute from './pages/pretty_routes';
 
@@ -19,7 +19,7 @@ const Main = () => {
       {loggedIn() && <Nav />}
       <Router>
         <Route path="/" component={Home} />
-        <Route path="/register" component={Register} />
+        <Route path="/signup" component={Signup} />
         <Route path="/counter" component={Counter} />
         <Match path="/:something">
           {({ path }: { path: string }) => {
