@@ -42,7 +42,7 @@ const Name = () => (
       text-2xl md:text-3xl lg:text-4xl
     "
     >
-      Juan de la Cruz
+      Anonymous Veil X
     </span>
   </div>
 );

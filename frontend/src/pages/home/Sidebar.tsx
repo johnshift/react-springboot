@@ -9,17 +9,17 @@ const UpperSidebar = () => (
             fixed space-y-2
           "
     >
-      <Link href="/profile">
+      <Link href="/someuser">
         <button class="border-2 border-red-500 h-18 w-full hover:bg-light-700">
           <span>Profile</span>
         </button>
       </Link>
-      <Link href="/alias">
+      <Link href="/someveil">
         <button class="border-2 border-red-500 h-18 w-full hover:bg-light-700">
-          <span>Alias</span>
+          <span>Veil Profile</span>
         </button>
       </Link>
-      <Link href="/group">
+      <Link href="/somegroup">
         <button class="border-2 border-red-500 h-18 w-full hover:bg-light-700">
           <span>Group</span>
         </button>
