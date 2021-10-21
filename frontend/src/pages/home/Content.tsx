@@ -4,9 +4,9 @@ import CreatePost from './CreatePost';
 const Content = () => (
   <div
     class="
-        border-500-blue h-1200px
+        h-1200px
         w-full
-        md:w-12/20 lg:w-12/20 xl:w-12/20
+        md:w-12/20 lg:w-12/20 xl:w-13/20
       "
   >
     <CreatePost />
