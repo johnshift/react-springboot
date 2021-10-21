@@ -212,8 +212,6 @@ jobs:
     if: always() && (needs.backend-dev.result == 'success' || needs.frontend-dev.result == 'success') && (needs.frontend-dev.result != 'failure' && needs.frontend-dev.result != 'failure')
     runs-on: ubuntu-latest
     steps:
-      - name: Skip
-        run: echo "skipping ..."
       # - name: Extract branch name
       #   shell: bash
       #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
@@ -255,13 +253,13 @@ jobs:
       #     working-directory: ./e2e-tests
       #     install: false # already installed
       #     command: pnpm test
-      # - name: pull-request
-      #   uses: repo-sync/pull-request@v2
-      #   with:
-      #     destination_branch: "main"
-      #     pr_title: ":tada: ${{ steps.extract-branch.outputs.branch }} :tada:"
-      #     pr_body: |
-      #       Automated PR
-      #     pr_assignee: "johnshift"
-      #     pr_label: "auto-pr"
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: pull-request
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "main"
+          pr_title: ":tada: ${{ steps.extract-branch.outputs.branch }} :tada:"
+          pr_body: |
+            Automated PR
+          pr_assignee: "johnshift"
+          pr_label: "auto-pr"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
