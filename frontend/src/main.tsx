@@ -1,4 +1,5 @@
 import 'virtual:windi.css';
+import './index.css';
 
 import { Router, Route } from 'preact-router';
 import { render } from 'preact';

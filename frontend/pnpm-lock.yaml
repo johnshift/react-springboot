@@ -8,6 +8,7 @@ specifiers:
   '@types/node': ^16.11.0
   '@typescript-eslint/parser': ^5.0.0
   cross-env: ^7.0.3
+  emoji-picker-react: ^3.4.8
   eslint: ^8.0.1
   eslint-config-preact: ^1.1.4
   eslint-config-prettier: ^8.3.0
@@ -25,6 +26,7 @@ specifiers:
 dependencies:
   '@preact/preset-vite': 2.1.4_preact@10.5.15+vite@2.6.7
   cross-env: 7.0.3
+  emoji-picker-react: 3.4.8
   preact: 10.5.15
   preact-router: 3.2.1_preact@10.5.15
   vite: 2.6.7
@@ -1597,6 +1599,10 @@ packages:
     resolution: {integrity: sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==}
     engines: {node: '>=10'}
     dev: true
+
+  /emoji-picker-react/3.4.8:
+    resolution: {integrity: sha512-HsKsompl0zThl1jhLaRPHnn0MdPVs9AxJRa5KM7OVnteoCx/tNr9iMipC2rI2vAMkKstlkedirswUwKAu2AsDg==}
+    dev: false
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}

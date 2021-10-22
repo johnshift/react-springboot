@@ -12,6 +12,7 @@
   "dependencies": {
     "@preact/preset-vite": "^2.0.0",
     "cross-env": "^7.0.3",
+    "emoji-picker-react": "^3.4.8",
     "preact": "^10.5.13",
     "preact-router": "^3.2.1",
     "vite": "^2.6.4",
