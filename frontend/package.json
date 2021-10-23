@@ -7,7 +7,7 @@
     "serve": "vite preview",
     "pretty": "prettier -w -u src/**",
     "lint": "eslint --ext .ts,tsx src/** --fix",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "dependencies": {
     "@preact/preset-vite": "^2.0.0",

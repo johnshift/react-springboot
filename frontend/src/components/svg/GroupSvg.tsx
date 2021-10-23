@@ -1,4 +1,4 @@
-const Group = () => {
+const GroupSvg = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,4 +11,4 @@ const Group = () => {
   );
 };
 
-export default Group;
+export default GroupSvg;
