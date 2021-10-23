@@ -1,7 +1,7 @@
 import { route } from 'preact-router';
 import { Link } from 'preact-router/match';
 import Center from './Center';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 
 const Brand = () => (
   <div class="w-8/24 md:w-12/24 xl:w-6/10">
@@ -213,6 +213,20 @@ const MenuOptions = ({ setShow }: MenuProps) => (
 
 const Menu = () => {
   const [show, setShow] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const pathname = window.location.pathname;
+
+  const handleResize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // always show on sm devices
+  // for other devices, show only when not in homepage
 
   return (
     <div class="md:w-3/24 w-4/24 xl:w-1/10">
@@ -231,7 +245,7 @@ const Menu = () => {
           "
           tabIndex={-1}
         >
-          <div class="md:hidden">
+          <div class={screenWidth > 767 && pathname != '/' ? 'visible' : 'md:hidden'}>
             <MobileSidebar setShow={setShow} />
           </div>
           <MenuOptions setShow={setShow} />
