@@ -1,4 +1,4 @@
-const Menu = () => {
+const MenuSvg = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -15,4 +15,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default MenuSvg;

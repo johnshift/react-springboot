@@ -15,6 +15,8 @@ import Match from 'preact-router/match';
 import PrettyRoute from './pages/pretty_routes';
 import Settings from './pages/settings';
 
+import TestPage from './pages/test_page';
+
 const Main = () => {
   return (
     <div class="bg-light-500">
@@ -24,6 +26,7 @@ const Main = () => {
         <Route path="/signup" component={Signup} />
         <Route path="/counter" component={Counter} />
         <Route path="/settings" component={Settings} />
+        <Route path="/test" component={TestPage} />
         <Match path="/:something">
           {({ path }: { path: string }) => {
             return <PrettyRoute path={path} />;

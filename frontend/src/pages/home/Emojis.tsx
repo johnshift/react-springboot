@@ -1,3 +1,5 @@
+import IconButton from '../../components/reusable/IconButton';
+
 type EmojisProps = {
   text: string;
   setText: Function;
@@ -24,21 +26,32 @@ const Emojis = ({ text, setText, setShowEmojis }: EmojisProps) => (
       style={{ overflowY: 'scroll', maxHeight: '100%' }}
       tabIndex={-1}
     >
-      {/* <div class="flex flex-wrap justify-around items-center"> */}
       <div class="grid grid-cols-5">
         {emojis.map((emoji, i) => {
           return (
-            <button
+            <IconButton
               key={i}
-              type="button"
-              class="bg-white hover:bg-light-500 rounded-full p-2 outline-none focus:outline-none"
+              icon={emoji.symbol}
+              label={emoji.label}
               onClick={() => {
-                setText(`${text} ${emoji}`);
+                setText(`${text}${emoji.symbol}`);
                 setShowEmojis(false);
+                console.log('emoji: ', emoji);
               }}
-            >
-              {emoji}
-            </button>
+            />
+            // <button
+            //   key={i}
+            //   type="button"
+            //   aria-label={emoji.label}
+            //   class="bg-white hover:bg-light-500 rounded-full p-2 outline-none focus:outline-none"
+            //   onClick={() => {
+            //     setText(`${text}${emoji.symbol}`);
+            //     setShowEmojis(false);
+            //     console.log('emoji: ', emoji);
+            //   }}
+            // >
+            //   {emoji.symbol}
+            // </button>
           );
         })}
       </div>
@@ -47,96 +60,6 @@ const Emojis = ({ text, setText, setShowEmojis }: EmojisProps) => (
 );
 export default Emojis;
 
-export const emojis = [
-  '🙂',
-  '😆',
-  '🤣',
-  '😅',
-  '😁',
-  '😊',
-  '😳',
-  '🤭',
-  '😚',
-  '🤗',
-  '😘',
-  '🥰',
-  '😍',
-  '🤩',
-  '😇',
-  '🤫',
-  '🥲',
-  '😉',
-  '😝',
-  '🤪',
-  '🤤',
-  '😎',
-  '😲',
-  '🤯',
-  '🥳',
-  '🤔',
-  '🤨',
-  '😐',
-  '😒',
-  '🙄',
-  '😔',
-  '😟',
-  '🤧',
-  '😷',
-  '🤮',
-  '😫',
-  '😭',
-  '😨',
-  '😱',
-  '😖',
-  '😠',
-  '😤',
-  '😡',
-  '🤬',
-  '😈',
-  '💖',
-  '💔',
-  '💕',
-  '💞',
-  '💓',
-  '💩',
-  '🤡',
-  '🍆',
-  '💤',
-  '💦',
-  '👉',
-  '👌',
-  '👍',
-  '🤝',
-  '🙏',
-  '✌',
-  '🤘',
-  '👎',
-  '🤞',
-  '👊',
-  '✨',
-  '🎉',
-  '🎊',
-  '🏅',
-  '🏆',
-  '🐷',
-  '🐽',
-  '🔥',
-  '📷',
-  '🔞',
-  '👄',
-  '👅',
-  '💧',
-  '❓',
-  '❗',
-  '🤦',
-  '🤷‍♂️',
-  '🤷‍♀️',
-  '🙅‍♂️',
-  '🙅‍♀️',
-];
-
-/**
-import Emoji from 'a11y-react-emoji';
 export const emojis = [
   {
     symbol: '🙂',
@@ -479,4 +402,91 @@ export const emojis = [
     label: 'woman gesturing NO',
   },
 ];
- */
+
+// export const emojis = [
+//   '🙂',
+//   '😆',
+//   '🤣',
+//   '😅',
+//   '😁',
+//   '😊',
+//   '😳',
+//   '🤭',
+//   '😚',
+//   '🤗',
+//   '😘',
+//   '🥰',
+//   '😍',
+//   '🤩',
+//   '😇',
+//   '🤫',
+//   '🥲',
+//   '😉',
+//   '😝',
+//   '🤪',
+//   '🤤',
+//   '😎',
+//   '😲',
+//   '🤯',
+//   '🥳',
+//   '🤔',
+//   '🤨',
+//   '😐',
+//   '😒',
+//   '🙄',
+//   '😔',
+//   '😟',
+//   '🤧',
+//   '😷',
+//   '🤮',
+//   '😫',
+//   '😭',
+//   '😨',
+//   '😱',
+//   '😖',
+//   '😠',
+//   '😤',
+//   '😡',
+//   '🤬',
+//   '😈',
+//   '💖',
+//   '💔',
+//   '💕',
+//   '💞',
+//   '💓',
+//   '💩',
+//   '🤡',
+//   '🍆',
+//   '💤',
+//   '💦',
+//   '👉',
+//   '👌',
+//   '👍',
+//   '🤝',
+//   '🙏',
+//   '✌',
+//   '🤘',
+//   '👎',
+//   '🤞',
+//   '👊',
+//   '✨',
+//   '🎉',
+//   '🎊',
+//   '🏅',
+//   '🏆',
+//   '🐷',
+//   '🐽',
+//   '🔥',
+//   '📷',
+//   '🔞',
+//   '👄',
+//   '👅',
+//   '💧',
+//   '❓',
+//   '❗',
+//   '🤦',
+//   '🤷‍♂️',
+//   '🤷‍♀️',
+//   '🙅‍♂️',
+//   '🙅‍♀️',
+// ];
