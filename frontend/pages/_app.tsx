@@ -1,27 +1,19 @@
+import type { ReactElement, ReactNode } from "react";
+import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import { ChakraProvider } from "@chakra-ui/react";
 
-import { extendTheme } from "@chakra-ui/react";
-import { createBreakpoints } from "@chakra-ui/theme-tools";
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
-import Nav from "../components/Nav";
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
 
-const breakpoints = createBreakpoints({
-  sm: "48em", // tab
-  md: "62em", // small screen
-  lg: "85em", // laptop common
-  xl: "96em", // hd
-});
+const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const getLayout = Component.getLayout ?? ((page) => page);
 
-const theme = extendTheme({ breakpoints });
-
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <ChakraProvider theme={theme}>
-      <Nav />
-      <Component {...pageProps} />{" "}
-    </ChakraProvider>
-  );
-}
+  return getLayout(<Component {...pageProps} />);
+};
 
 export default MyApp;
