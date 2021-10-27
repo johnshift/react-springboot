@@ -55,6 +55,8 @@ const ConfirmRequests = () => (
 
 const Sidebar = () => (
   <div
+    aria-label="sidebar"
+    role="navigation"
     class="
         sm:hidden
         md:w-7/20 lg:w-8/20 xl:w-7/20

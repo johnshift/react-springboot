@@ -3,21 +3,19 @@ import IconButton from '../../components/reusable/IconButton';
 type EmojisProps = {
   text: string;
   setText: Function;
-  setShowEmojis: Function;
+  setShowEmojiSelection: Function;
 };
 
-const Emojis = ({ text, setText, setShowEmojis }: EmojisProps) => (
+const Emojis = ({ text, setText, setShowEmojiSelection }: EmojisProps) => (
   <div
     class="
-            -mt-5
-          left-22 
-          md:right-20
-          lg:left-998px lg:mr-15
-          xl:left-1295px  xl:mr-80
-          "
+      -mt-5
+      left-22 
+      md:right-20
+      lg:left-998px lg:mr-15
+      xl:left-1295px  xl:mr-80
+    "
   >
-    <div class="fixed top-0 left-0 h-screen w-screen z-1" onClick={() => setShowEmojis(false)} />
-
     <div
       class="
           absolute mt-6 w-40 rounded-md shadow-lg bg-white focus:outline-none z-2 text-left
@@ -35,27 +33,19 @@ const Emojis = ({ text, setText, setShowEmojis }: EmojisProps) => (
               label={emoji.label}
               onClick={() => {
                 setText(`${text}${emoji.symbol}`);
-                setShowEmojis(false);
+                setShowEmojiSelection(false);
                 console.log('emoji: ', emoji);
               }}
             />
-            // <button
-            //   key={i}
-            //   type="button"
-            //   aria-label={emoji.label}
-            //   class="bg-white hover:bg-light-500 rounded-full p-2 outline-none focus:outline-none"
-            //   onClick={() => {
-            //     setText(`${text}${emoji.symbol}`);
-            //     setShowEmojis(false);
-            //     console.log('emoji: ', emoji);
-            //   }}
-            // >
-            //   {emoji.symbol}
-            // </button>
           );
         })}
       </div>
     </div>
+    <div
+      class="fixed top-0 left-0 h-screen w-screen z-1"
+      onClick={() => setShowEmojiSelection(false)}
+      tabIndex={-1}
+    />
   </div>
 );
 export default Emojis;

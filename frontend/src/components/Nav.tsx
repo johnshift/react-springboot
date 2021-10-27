@@ -1,4 +1,3 @@
-import { Link } from 'preact-router/match';
 import Center from './Center';
 import { useState, useEffect } from 'preact/hooks';
 
@@ -11,13 +10,19 @@ import NavLink from './reusable/NavLink';
 import UserSvg from './svg/UserSvg';
 import VeilSvg from './svg/VeilSvg';
 import GroupSvg from './svg/GroupSvg';
+import IconButton from './reusable/IconButton';
 
 const Brand = () => (
   <div class="w-8/24 md:w-12/24 xl:w-6/10">
     <div class="flex h-full justify-self-start items-center pl-5">
-      <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <a
+        type="button"
+        aria-label="veils brand"
+        href="/"
+        style={{ textDecoration: 'none', color: 'inherit' }}
+      >
         <span class="text-3xl font-bold">veils</span>
-      </Link>
+      </a>
     </div>
   </div>
 );
@@ -66,9 +71,10 @@ const Menu = () => {
   return (
     <div class="md:w-3/24 w-4/24 xl:w-1/10">
       <Center>
-        <button class="outline-none focus:outline-none z-2" onClick={() => setShow(!show)}>
+        {/* <button class="outline-none focus:outline-none z-2">
           <MenuSvg />
-        </button>
+        </button> */}
+        <IconButton icon={<MenuSvg />} label="Menu Options" onClick={() => setShow(!show)} />
       </Center>
 
       <div class={show ? 'visible' : 'hidden'}>

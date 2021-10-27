@@ -24,6 +24,7 @@ const PostAsOptions = ({ setShow, setAsUser }: PostAsProps) => (
     {/* USER */}
     <button
       type="button"
+      aria-label="Post As"
       onClick={() => {
         setShow(false);
         setAsUser(true);
