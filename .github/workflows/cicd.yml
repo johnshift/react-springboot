@@ -118,28 +118,29 @@ jobs:
     if: needs.detect-changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract-branch
-      - name: Checkout feature branch
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.extract-branch.outputs.branch }}
-      - name: Install pnpm
-        run: sudo npm i -g pnpm
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-          cache: "pnpm"
-          cache-dependency-path: ./frontend/pnpm-lock.yaml
-      - name: Build
-        working-directory: ./frontend
-        run: pnpm i --frozen-lockfile
-      - name: Run Tests
-        working-directory: ./frontend
-        run: "pnpm test"
+      - run: echo "SKIPPING TESTS ..."
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract-branch
+      # - name: Checkout feature branch
+      #   uses: actions/checkout@v2
+      #   with:
+      #     ref: ${{ steps.extract-branch.outputs.branch }}
+      # - name: Install pnpm
+      #   run: sudo npm i -g pnpm
+      # - name: Setup Node
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: "14"
+      #     cache: "pnpm"
+      #     cache-dependency-path: ./frontend/pnpm-lock.yaml
+      # - name: Build
+      #   working-directory: ./frontend
+      #   run: pnpm i --frozen-lockfile
+      # - name: Run Tests
+      #   working-directory: ./frontend
+      #   run: "pnpm test"
 
   backend-dev:
     name: Deploy Backend DEV
