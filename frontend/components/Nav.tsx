@@ -50,7 +50,7 @@ const Nav = () => {
             icon={<HamburgerIcon />}
             variant="outline"
           />
-          <MenuList bg={bg} color={color}>
+          <MenuList>
             <MenuItem>One</MenuItem>
             <MenuItem>Two</MenuItem>
             <MenuItem>Three</MenuItem>
