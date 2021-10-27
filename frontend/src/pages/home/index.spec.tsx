@@ -3,41 +3,35 @@ import { render, screen } from '@testing-library/preact';
 
 import Home from './index';
 
-describe('Home page components visibility', () => {
-  test('Home button by label should be visible', () => {
+describe('HomePage sidebar', () => {
+  test('Sidebar should be visible', () => {
     render(<Home />);
 
-    expect(screen.getByLabelText('home sidebar')).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: /^sidebar$/i })).toBeInTheDocument();
   });
 
-  test('Home button should be visible', () => {
+  test('Home navlink should be visible', () => {
     render(<Home />);
 
-    expect(screen.getByRole('button', { name: /home sidebar/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /^home$/i })).toBeInTheDocument();
   });
 
-  test('Profile button by label should be visible', () => {
+  test('Profile navlink should be visible', () => {
     render(<Home />);
 
-    expect(screen.getByLabelText('profile-link')).toBeInTheDocument();
-    // expect(screen.getByRole('button', { name: /profile sidebar/i })).toBeInTheDocument();
-  });
-  test('Profile button by role should be visible', () => {
-    render(<Home />);
-
-    expect(screen.getByRole('link', { name: /profile-link/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /^profile$/i })).toBeInTheDocument();
   });
 
-  test('Veil button should be visible', () => {
+  test('Veil navlink should be visible', () => {
     render(<Home />);
 
-    expect(screen.getByRole('button', { name: /veil sidebar/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /^veil$/i })).toBeInTheDocument();
   });
 
-  test('Groups button should be visible', () => {
+  test('Groups navlink should be visible', () => {
     render(<Home />);
 
-    expect(screen.getByRole('button', { name: /groups sidebar/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /^groups$/i })).toBeInTheDocument();
   });
 
   test('Recent Activity should be visible', () => {
@@ -50,5 +44,49 @@ describe('Home page components visibility', () => {
     render(<Home />);
 
     expect(screen.getByText(/Confirm Requests/)).toBeInTheDocument();
+  });
+});
+
+describe('HomePage create post', () => {
+  test('Profile Picture should be visible', () => {
+    render(<Home />);
+
+    expect(screen.getByRole('link', { name: /^profile picture$/i })).toBeInTheDocument();
+  });
+
+  test('Textarea should be visible', () => {
+    render(<Home />);
+
+    expect(screen.getByRole('textbox', { name: /^share your secrets$/i })).toBeInTheDocument();
+  });
+
+  test('Emoji Selection should be visible', () => {
+    render(<Home />);
+
+    expect(screen.getByRole('button', { name: /^select emoji$/i })).toBeInTheDocument();
+  });
+
+  test('Mention Selection should be visible', () => {
+    render(<Home />);
+
+    expect(screen.getByRole('button', { name: /^mention a person$/i })).toBeInTheDocument();
+  });
+
+  test('Schedule option should be visible', () => {
+    render(<Home />);
+
+    expect(screen.getByRole('button', { name: /^schedule when to post$/i })).toBeInTheDocument();
+  });
+
+  test('Create Post button should be visible', () => {
+    render(<Home />);
+
+    expect(screen.getByRole('button', { name: /^create post$/i })).toBeInTheDocument();
+  });
+
+  test('PostAs button should be visible', () => {
+    render(<Home />);
+
+    expect(screen.getByRole('button', { name: /^Post As$/i })).toBeInTheDocument();
   });
 });
