@@ -1,9 +1,10 @@
 import { ReactElement } from "react";
+import { Box } from "@chakra-ui/react";
 
-import Layout from "./layout";
+import Layout from "../components/Layout";
 
 const Page = () => {
-  return <h1>Home</h1>;
+  return <Box>Home</Box>;
 };
 export default Page;
 
