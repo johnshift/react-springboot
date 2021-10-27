@@ -1,4 +1,4 @@
-import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { extendTheme } from "@chakra-ui/react";
 
 import {
   createBreakpoints,
@@ -27,6 +27,23 @@ const theme = extendTheme({
     }),
   },
   components: {
+    Menu: {
+      parts: ["menu", "list", "item"],
+      baseStyle: (props: Dict<any> | StyleFunctionProps) => ({
+        menu: {
+          bg: mode("black", "white")(props),
+          color: mode("white", "black")(props),
+        },
+        item: {
+          bg: mode("black", "white")(props),
+          color: mode("white", "black")(props),
+        },
+        list: {
+          bg: mode("black", "white")(props),
+          color: mode("white", "black")(props),
+        },
+      }),
+    },
     Button: {
       baseStyle: (props: Dict<any> | StyleFunctionProps) => ({
         bg: mode("black", "white")(props),
