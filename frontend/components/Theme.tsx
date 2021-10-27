@@ -28,19 +28,39 @@ const theme = extendTheme({
   },
   components: {
     Menu: {
-      parts: ["menu", "list", "item"],
+      parts: ["list", "item"],
       baseStyle: (props: Dict<any> | StyleFunctionProps) => ({
-        menu: {
-          bg: mode("black", "white")(props),
-          color: mode("white", "black")(props),
-        },
         item: {
           bg: mode("black", "white")(props),
           color: mode("white", "black")(props),
+          transitionProperty: "background",
+          transitionDuration: "ultra-fast",
+          transitionTimingFunction: "ease-in",
+          py: "10px",
+          _focus: {
+            bg: mode("blackhl", "whitehl")(props),
+          },
+          // _active: {
+          //   bg: mode("gray.200", "whiteAlpha.200")(props),
+          // },
+          // _expanded: {
+          //   bg: mode("gray.100", "whiteAlpha.100")(props),
+          // },
+          // _disabled: {
+          //   opacity: 0.4,
+          //   cursor: "not-allowed",
+          // },
         },
         list: {
           bg: mode("black", "white")(props),
           color: mode("white", "black")(props),
+          boxShadow: mode("sm", "dark-lg")(props),
+          // minW: "3xs",
+          py: "1",
+          zIndex: 1,
+          // borderRadius: "md",
+          borderWidth: "0px",
+          borderRadius: "lg",
         },
       }),
     },
@@ -59,6 +79,8 @@ const theme = extendTheme({
   colors: {
     black: "#2b2c2e",
     white: "#f2f2f2",
+    blackhl: "#343538",
+    whitehl: "#e6e7e8",
   },
 });
 export default theme;
