@@ -5,7 +5,12 @@ import { useColorMode } from "@chakra-ui/color-mode";
 const Nav = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
-    <Flex shadow="md" p={3} pt={4}>
+    <Flex
+      shadow="md"
+      p={3}
+      align="center"
+      px={["5px", "50px", "15%", "20%", "25%"]}
+    >
       <Box>
         <Heading size="2xl">veils</Heading>
       </Box>
