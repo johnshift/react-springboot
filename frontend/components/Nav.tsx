@@ -1,4 +1,14 @@
-import { Box, Flex, Heading, Spacer, IconButton } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Spacer,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from "@chakra-ui/react";
 import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { useColorMode, useColorModeValue } from "@chakra-ui/color-mode";
 
@@ -6,6 +16,7 @@ const Nav = () => {
   const { toggleColorMode } = useColorMode();
 
   const bg = useColorModeValue("black", "white");
+  const color = useColorModeValue("white", "black");
   const icon = useColorModeValue(<SunIcon />, <MoonIcon />);
 
   return (
@@ -26,18 +37,25 @@ const Nav = () => {
       <Spacer />
       <Box>
         <IconButton
-          // variant="outline"
+          variant="outline"
           aria-label="dark mode"
           icon={icon}
-          // icon={<MoonIcon />}
           mr={2}
           onClick={toggleColorMode}
         />
-        <IconButton
-          // variant="outline"
-          aria-label="menu"
-          icon={<HamburgerIcon />}
-        />
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="menu"
+            icon={<HamburgerIcon />}
+            variant="outline"
+          />
+          <MenuList bg={bg} color={color}>
+            <MenuItem>One</MenuItem>
+            <MenuItem>Two</MenuItem>
+            <MenuItem>Three</MenuItem>
+          </MenuList>
+        </Menu>
       </Box>
     </Flex>
   );
