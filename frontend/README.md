@@ -7,3 +7,8 @@
 - `Code Splitting`: only send needed files :+1:
 - `Eslint` + `Prettier`: neat code :ok_hand:
 - `Jest + @testing-library/preact`: testing best practices :+1:
+
+## Code Practices
+
+- visibility tests on page level
+- functionality tests on component level
