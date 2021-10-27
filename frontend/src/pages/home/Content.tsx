@@ -1,5 +1,6 @@
 import Center from '../../components/Center';
-import CreatePost from './CreatePost';
+// import CreatePost from './CreatePost';
+import CreatePost from '../../components/create_post';
 
 const Content = () => (
   <div

@@ -20,13 +20,7 @@ const NavLink = ({ text, icon, path, label, onClick }: Props) => {
   }
 
   return (
-    <a
-      type="button"
-      aria-label={`Link to ${label || text}`}
-      href={path}
-      class={className}
-      onClick={onClick}
-    >
+    <a type="button" aria-label={label || text} href={path} class={className} onClick={onClick}>
       {icon}
       <span class="pl-2">{text}</span>
     </a>
