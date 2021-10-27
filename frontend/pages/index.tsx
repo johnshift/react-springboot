@@ -1,7 +1,12 @@
-import type { NextPage } from "next";
+import { ReactElement } from "react";
 
-const Home: NextPage = () => {
-  return <h1></h1>;
+import Layout from "./layout";
+
+const Page = () => {
+  return <h1>Home</h1>;
 };
+export default Page;
 
-export default Home;
+Page.getLayout = function getLayout(page: ReactElement) {
+  return <Layout showNav>{page}</Layout>;
+};
