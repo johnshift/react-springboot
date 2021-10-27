@@ -1,14 +1,9 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Button,
-  Spacer,
-  IconButton,
-} from "@chakra-ui/react";
-import { MoonIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { Box, Flex, Heading, Spacer, IconButton } from "@chakra-ui/react";
+import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { useColorMode } from "@chakra-ui/color-mode";
 
 const Nav = () => {
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Flex shadow="md" p={3} pt={4}>
       <Box>
@@ -19,8 +14,9 @@ const Nav = () => {
         <IconButton
           variant="outline"
           aria-label="dark mode"
-          icon={<MoonIcon />}
+          icon={colorMode == "light" ? <MoonIcon /> : <SunIcon />}
           mr={2}
+          onClick={toggleColorMode}
         />
         <IconButton
           variant="outline"
