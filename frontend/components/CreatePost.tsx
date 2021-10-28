@@ -18,8 +18,9 @@ import { IoMdHeart, IoIosAt, IoIosCalendar } from "react-icons/io";
 
 const CreatePostImage = () => (
   <GridItem
+    ml={1}
     rowSpan={6}
-    colSpan={[3, 3, 2]}
+    colSpan={[2, 3, 2]}
     // bg="teal.200"
   >
     <Center>
@@ -30,10 +31,11 @@ const CreatePostImage = () => (
 
 const CreatePostInput = () => (
   <GridItem
-    px={[1, 2]}
+    px={[3, 2]}
+    pr={1}
     pb={2}
     rowSpan={4}
-    colSpan={[9, 9, 10]}
+    colSpan={[10, 9, 10]}
     // bg="blue.200"
     // border="1px solid teal"
   >
@@ -94,7 +96,7 @@ const CreatePostButton = () => {
   return (
     <GridItem
       rowSpan={2}
-      colSpan={[4, 4, 4]}
+      colSpan={[5, 4, 4]}
       // bg="pink.100"
       // border="1px solid teal"
       mr={[1, 2]}
