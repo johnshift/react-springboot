@@ -9,21 +9,13 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import { MoonIcon, SunIcon, HamburgerIcon } from "@chakra-ui/icons";
-import { useColorMode, useColorModeValue } from "@chakra-ui/color-mode";
+import { SearchIcon, HamburgerIcon } from "@chakra-ui/icons";
 
 const Nav = () => {
-  const { toggleColorMode } = useColorMode();
-
-  const bg = useColorModeValue("black", "white");
-  const color = useColorModeValue("white", "black");
-  const icon = useColorModeValue(<SunIcon />, <MoonIcon />);
-
   return (
     <Flex
       position="fixed"
       top={0}
-      bg={bg}
       w="100%"
       shadow="md"
       p={3}
@@ -37,18 +29,17 @@ const Nav = () => {
       <Spacer />
       <Box>
         <IconButton
-          variant="outline"
+          variant="ghost"
           aria-label="dark mode"
-          icon={icon}
+          icon={<SearchIcon />}
           mr={2}
-          onClick={toggleColorMode}
         />
         <Menu>
           <MenuButton
             as={IconButton}
             aria-label="menu"
             icon={<HamburgerIcon />}
-            variant="outline"
+            variant="ghost"
           />
           <MenuList>
             <MenuItem>One</MenuItem>
