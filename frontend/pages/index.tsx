@@ -2,9 +2,21 @@ import { ReactElement } from "react";
 import { Box } from "@chakra-ui/react";
 
 import Layout from "../components/Layout";
+import CreatePost from "../components/CreatePost";
+
+const Feed = () => (
+  <Box border="1px solid tomato" h="2100px">
+    Feed
+  </Box>
+);
 
 const Page = () => {
-  return <Box>Home</Box>;
+  return (
+    <>
+      <CreatePost />
+      <Feed />
+    </>
+  );
 };
 export default Page;
 
