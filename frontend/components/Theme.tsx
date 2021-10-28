@@ -1,17 +1,28 @@
 import { extendTheme } from "@chakra-ui/react";
 
-import {
-  createBreakpoints,
-  mode,
-  StyleFunctionProps,
-} from "@chakra-ui/theme-tools";
-import { Dict } from "@chakra-ui/utils";
+import { createBreakpoints } from "@chakra-ui/theme-tools";
+
+const Button = {
+  baseStyle: {
+    _focus: {
+      boxShadow: "none",
+    },
+  },
+  variants: {
+    link: {
+      color: "blackt",
+    },
+    ghost: {
+      _hover: {
+        bg: "whitehl",
+      },
+    },
+  },
+  sizes: {},
+  defaultProps: {},
+};
 
 const theme = extendTheme({
-  config: {
-    initialColorMode: "light",
-    useSystemColorMode: false,
-  },
   breakpoints: createBreakpoints({
     sm: "48em", // tab
     md: "62em", // small screen
@@ -20,9 +31,14 @@ const theme = extendTheme({
   }),
   colors: {
     black: "#2b2c2e",
+    blackt: "#5f6161",
     white: "#f2f2f2",
+    whiter: "#fcfcfc",
     blackhl: "#343538",
     whitehl: "#e6e7e8",
+  },
+  components: {
+    Button,
   },
 });
 export default theme;

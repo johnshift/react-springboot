@@ -22,12 +22,14 @@ const Layout = ({ children, showNav }: LayoutProps) => {
       <Flex
         h="200vh"
         mt="80px"
-        mx={["5px", "5%", "17%", "22%", "26%"]}
-        border="1px solid green"
+        mx={["5px", "10%", "20%", "25%", "30%"]}
+        // border="1px solid green"
       >
         {/* <Box bg="teal.300" flex={3} hidden={showSidebar}></Box> */}
         {showSidebar && <Sidebar />}
-        <Box bg="blue.500" flex={9}>
+        {showSidebar && <Box flex={3} />}
+
+        <Box flex={7} p={[1, 8]} mr={[0, 3]}>
           {children}
         </Box>
       </Flex>
