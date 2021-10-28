@@ -6,6 +6,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Nav from "./Nav";
 
 import useMediaQuery from "../components/useMediaQuery";
+import Sidebar from "./Sidebar";
 
 type LayoutProps = {
   children: ReactNode;
@@ -25,7 +26,7 @@ const Layout = ({ children, showNav }: LayoutProps) => {
         border="1px solid green"
       >
         {/* <Box bg="teal.300" flex={3} hidden={showSidebar}></Box> */}
-        {showSidebar && <Box bg="teal.300" flex={3}></Box>}
+        {showSidebar && <Sidebar />}
         <Box bg="blue.500" flex={9}>
           {children}
         </Box>
