@@ -21,6 +21,7 @@ import { useState } from "react";
 import { MdPerson } from "react-icons/md";
 import { GiDoubleFaceMask } from "react-icons/gi";
 import { IoMdHeart, IoIosAt, IoIosCalendar } from "react-icons/io";
+import Link from "next/link";
 
 import EmojiSelector from "./EmojiSelector";
 
@@ -32,7 +33,11 @@ const CreatePostImage = () => (
     // bg="teal.200"
   >
     <Center>
-      <Avatar size="lg" />
+      <Link href="/user_1">
+        <a>
+          <Avatar size="lg" />
+        </a>
+      </Link>
     </Center>
   </GridItem>
 );
@@ -109,9 +114,9 @@ const CreatePostOptions = () => {
           blockScrollOnMount={false}
         >
           <ModalOverlay />
-          <ModalContent w="300px">
+          <ModalContent w="300px" maxH="300px">
             <ModalHeader textAlign="center">Select Emoji</ModalHeader>
-            <ModalBody maxH="300px">
+            <ModalBody>
               <EmojiSelector />
             </ModalBody>
           </ModalContent>
@@ -146,10 +151,10 @@ const CreatePostButton = () => {
               setAsVeil(!asVeil);
               toast.closeAll();
               toast({
-                title: asVeil ? "Post using Veil Profile" : "Post as John Doe",
+                title: asVeil ? "Posting as your Veil" : "Post as John Doe",
                 description: asVeil
-                  ? "Other users will not identify you"
-                  : "Your profile will be seen in public",
+                  ? "Only your veil profile will be visible in your post"
+                  : "Your public profile will be visible in your post",
                 position: "top",
                 status: "info",
               });
