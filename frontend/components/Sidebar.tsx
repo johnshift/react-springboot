@@ -5,7 +5,7 @@ import { Box, Button, Icon, Flex } from "@chakra-ui/react";
 
 const Sidebar = () => {
   return (
-    <Box position="fixed" flex={3} p={5}>
+    <Box position="fixed" flex={3} p={5} display={["none", "block"]}>
       <Flex direction="column" align="start">
         <Button
           my={4}
