@@ -10,11 +10,19 @@ import {
   Button,
   ButtonGroup,
   useToast,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdPerson } from "react-icons/md";
 import { GiDoubleFaceMask } from "react-icons/gi";
 import { IoMdHeart, IoIosAt, IoIosCalendar } from "react-icons/io";
+
+import EmojiSelector from "./EmojiSelector";
 
 const CreatePostImage = () => (
   <GridItem
@@ -50,44 +58,69 @@ const CreatePostInput = () => (
   </GridItem>
 );
 
-const CreatePostOptions = () => (
-  <GridItem
-    rowSpan={2}
-    colSpan={[5, 5, 6]}
-    // bg="cyan.200"
-    // border="1px solid teal"
-    ml={[-1, 1]}
-  >
-    {/* <Center h="100%"> */}
-    <Flex align="center" justify="start" h="100%">
-      <IconButton
-        color="blackt"
-        variant="outline"
-        border="none"
-        aria-label="select emoji"
-        icon={<Icon as={IoMdHeart} w={6} h={6} />}
-        isRound
-      />
-      <IconButton
-        color="blackt"
-        variant="outline"
-        border="none"
-        aria-label="mention someone"
-        icon={<Icon as={IoIosAt} w={6} h={6} />}
-        isRound
-      />
-      <IconButton
-        color="blackt"
-        variant="outline"
-        border="none"
-        aria-label="dark mode"
-        icon={<Icon as={IoIosCalendar} w={6} h={6} />}
-        isRound
-      />
-    </Flex>
-    {/* </Center> */}
-  </GridItem>
-);
+const CreatePostOptions = () => {
+  const {
+    isOpen: isOpenEmoji,
+    onOpen: onOpenEmoji,
+    onClose: onCloseEmoji,
+  } = useDisclosure();
+
+  return (
+    <GridItem
+      rowSpan={2}
+      colSpan={[5, 5, 6]}
+      // bg="cyan.200"
+      // border="1px solid teal"
+      ml={[-1, 1]}
+    >
+      {/* <Center h="100%"> */}
+      <Flex align="center" justify="start" h="100%">
+        <IconButton
+          color="blackt"
+          variant="outline"
+          border="none"
+          aria-label="select emoji"
+          icon={<Icon as={IoMdHeart} w={6} h={6} />}
+          isRound
+          onClick={onOpenEmoji}
+        />
+        <IconButton
+          color="blackt"
+          variant="outline"
+          border="none"
+          aria-label="mention someone"
+          icon={<Icon as={IoIosAt} w={6} h={6} />}
+          isRound
+        />
+        <IconButton
+          color="blackt"
+          variant="outline"
+          border="none"
+          aria-label="dark mode"
+          icon={<Icon as={IoIosCalendar} w={6} h={6} />}
+          isRound
+        />
+
+        <Modal
+          isOpen={isOpenEmoji}
+          onClose={onCloseEmoji}
+          isCentered
+          scrollBehavior="inside"
+          blockScrollOnMount={false}
+        >
+          <ModalOverlay />
+          <ModalContent w="300px">
+            <ModalHeader textAlign="center">Select Emoji</ModalHeader>
+            <ModalBody maxH="300px">
+              <EmojiSelector />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      </Flex>
+      {/* </Center> */}
+    </GridItem>
+  );
+};
 
 const CreatePostButton = () => {
   const toast = useToast();
