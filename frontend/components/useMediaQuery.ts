@@ -1,9 +1,9 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 
 const useMediaQueryLayout = (query: string) => {
   const [matches, setMatches] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const media = window.matchMedia(query);
     if (media.matches !== matches) {
       setMatches(media.matches);
