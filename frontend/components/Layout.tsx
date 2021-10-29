@@ -5,7 +5,7 @@ import theme from "./Theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import Nav from "./Nav";
 
-import useMediaQuery from "../components/useMediaQuery";
+import useMediaQueryLayout from "./useMediaQueryLayout";
 import Sidebar from "./Sidebar";
 
 type LayoutProps = {
@@ -14,7 +14,7 @@ type LayoutProps = {
 };
 
 const Layout = ({ children, showNav }: LayoutProps) => {
-  const showSidebar = useMediaQuery("(min-width: 768px)");
+  const showSidebar = useMediaQueryLayout("(min-width: 768px)");
 
   return (
     <ChakraProvider theme={theme}>
