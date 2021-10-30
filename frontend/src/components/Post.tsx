@@ -23,7 +23,12 @@ const prettyReactions = (reactions: reactionType[]): string => {
     return reactions[0].owner;
   }
 
-  return reactions[0].owner + " and " + (reactions.length - 1) + " others";
+  let others = " other";
+  if (reactions.length > 2) {
+    others += "s";
+  }
+
+  return reactions[0].owner + " and " + (reactions.length - 1) + others;
 };
 
 const Post = ({
