@@ -40,5 +40,12 @@ const theme = extendTheme({
   components: {
     Button,
   },
+  styles: {
+    global: {
+      body: {
+        color: "blackt",
+      },
+    },
+  },
 });
 export default theme;
