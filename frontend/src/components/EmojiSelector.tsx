@@ -1,5 +1,16 @@
 import { SimpleGrid, Center, Box } from "@chakra-ui/react";
-const EmojiSelector = () => {
+
+type Props = {
+  postBody: string;
+  setPostBody: Function;
+  closeEmojiSelector: Function;
+};
+
+const EmojiSelector = ({
+  postBody,
+  setPostBody,
+  closeEmojiSelector,
+}: Props) => {
   return (
     <SimpleGrid columns={5}>
       {emojis.map((emoji, i) => (
@@ -26,6 +37,10 @@ const EmojiSelector = () => {
             _focus={{
               boxShadow:
                 "0 0 1px 2px rgba(88, 144, 255, .75), 0 1px 1px rgba(0, 0, 0, .15)",
+            }}
+            onClick={() => {
+              setPostBody(postBody + " " + emoji.symbol + " ");
+              closeEmojiSelector();
             }}
           >
             {emoji.symbol}
