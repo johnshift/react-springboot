@@ -9,16 +9,28 @@ import {
   IconButton,
   Button,
   ButtonGroup,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
 } from "@chakra-ui/react";
 import Link from "next/link";
+
+import EmojiSelector from "./EmojiSelector";
 
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { MdOutlineLocalFireDepartment } from "react-icons/md";
 import { FaLaughSquint } from "react-icons/fa";
 
-import { reactionType, PostProps } from "../store";
+import useStore, { reactionType, PostProps } from "../store";
 
 const prettyReactions = (reactions: reactionType[]): string => {
+  if (reactions.length == 0) {
+    return "Be the first to react";
+  }
+
   if (reactions.length == 1) {
     return reactions[0].owner;
   }
@@ -31,14 +43,29 @@ const prettyReactions = (reactions: reactionType[]): string => {
   return reactions[0].owner + " and " + (reactions.length - 1) + others;
 };
 
-const Post = ({
-  comment_count,
-  vote_count,
-  body,
-  owner,
-  created,
-  reactions,
-}: PostProps) => {
+const Post = (post: PostProps) => {
+  const { auth_name, updatePostVote, addReaction } = useStore();
+
+  const {
+    isOpen: isOpenEmoji,
+    onOpen: onOpenEmoji,
+    onClose: onCloseEmoji,
+  } = useDisclosure();
+
+  const onSelectEmoji = (emoji: string) => {
+    console.log("emoji: ", emoji);
+    onCloseEmoji();
+    addReaction(post.id, auth_name, emoji);
+  };
+
+  let own_reaction = "";
+  for (const r of post.reactions) {
+    if (r.owner == auth_name) {
+      own_reaction = r.reaction;
+      break;
+    }
+  }
+
   return (
     <Box
       bg="whiter"
@@ -62,8 +89,8 @@ const Post = ({
           </Center>
         </Box>
         <Box h="100%" w="80%" p={2} pt={3}>
-          <Text fontSize="lg">{owner}</Text>
-          <Text fontSize="sm">{created} ago</Text>
+          <Text fontSize="lg">{post.owner}</Text>
+          <Text fontSize="sm">{post.created}</Text>
         </Box>
       </Flex>
 
@@ -71,13 +98,12 @@ const Post = ({
       <Flex
         w="100%"
         px={5}
-        minH="80px"
-        align="center"
+        // minH="40px"
         justify="start"
         flexDirection="column"
         // border="1px solid gray"
       >
-        {body.split("\n").map((t, i) => (
+        {post.body.split("\n").map((t, i) => (
           <Box key={i} py={1}>
             {t}
           </Box>
@@ -92,7 +118,7 @@ const Post = ({
             w={["40%", "35%"]}
             align="center"
             justify="start"
-            border="1px solid red"
+            // border="1px solid red"
           >
             <ButtonGroup size="xs" isAttached variant="ghost">
               <Button
@@ -105,26 +131,37 @@ const Post = ({
                   />
                 }
               >
-                {vote_count}
+                {post.vote_count}
               </Button>
               <IconButton
                 aria-label="Upvote"
                 icon={<Icon as={IoIosArrowUp} />}
+                onClick={() => {
+                  updatePostVote(post.id, 1);
+                }}
               />
               <IconButton
                 aria-label="Downvote"
                 icon={<Icon as={IoIosArrowDown} />}
+                onClick={() => {
+                  updatePostVote(post.id, -1);
+                }}
               />
             </ButtonGroup>
           </Flex>
           {/* <Spacer /> */}
-          <Flex w="70%" align="center" justify="end" border="1px solid blue">
-            {reactions.map((reaction, i) => (
+          <Flex
+            w="70%"
+            align="center"
+            justify="end"
+            // border="1px solid blue"
+          >
+            {post.reactions.map((reaction, i) => (
               <Text fontSize="sm" mr={1} key={i}>
                 {reaction.reaction}
               </Text>
             ))}
-            <Text fontSize="xs">{prettyReactions(reactions)}</Text>
+            <Text fontSize="xs">{prettyReactions(post.reactions)}</Text>
           </Flex>
         </Flex>
 
@@ -132,7 +169,7 @@ const Post = ({
         <Flex h="60%" w="100%">
           <Flex w="25%" align="center" justify="start">
             <Button size="xs" variant="ghost" h="80%">
-              {comment_count} comments
+              {post.comment_count} comments
             </Button>
           </Flex>
           <Spacer />
@@ -141,11 +178,35 @@ const Post = ({
               size="xs"
               variant="ghost"
               h="80%"
-              leftIcon={<Icon as={FaLaughSquint} w={5} h={5} />}
+              leftIcon={
+                own_reaction === "" ? (
+                  <Icon as={FaLaughSquint} w={5} h={5} />
+                ) : undefined
+              }
+              onClick={onOpenEmoji}
             >
+              <Text fontSize="xl" mr={1}>
+                {own_reaction}
+              </Text>{" "}
               react
             </Button>
           </Flex>
+
+          <Modal
+            isOpen={isOpenEmoji}
+            onClose={onCloseEmoji}
+            isCentered
+            scrollBehavior="inside"
+            blockScrollOnMount={false}
+          >
+            <ModalOverlay />
+            <ModalContent w="300px" maxH="300px">
+              <ModalHeader textAlign="center">Select Emoji</ModalHeader>
+              <ModalBody>
+                <EmojiSelector onSelectEmoji={onSelectEmoji} />
+              </ModalBody>
+            </ModalContent>
+          </Modal>
         </Flex>
       </Flex>
     </Box>
