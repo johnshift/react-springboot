@@ -11,15 +11,19 @@ import {
   Flex,
   FormControl,
   FormHelperText,
+  useToast,
 } from "@chakra-ui/react";
 
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 
-import { LoginInput, LoginError } from "../models/auth";
+import { LoginInput, LoginError, LoginResponse } from "../models/auth";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+
 const LoginForm = () => {
+  const toast = useToast();
+
   const [showPassword, setshowPassword] = useState(false);
 
   const {
@@ -35,8 +39,14 @@ const LoginForm = () => {
         username: data.username,
         password: data.password,
       })
-      .then((res) => {
-        console.log("res: ", res);
+      .then((res: AxiosResponse<LoginResponse>) => {
+        if (res.data) {
+          toast({
+            status: "success",
+            title: "Welcome " + res.data.name,
+            description: "You have successfully logged in",
+          });
+        }
       })
       .catch((err: AxiosError<LoginError>) => {
         if (err.response) {
