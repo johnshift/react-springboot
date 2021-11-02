@@ -9,36 +9,89 @@ import {
   Icon,
   IconButton,
   Flex,
+  FormControl,
+  FormHelperText,
 } from "@chakra-ui/react";
 
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 
+import { LoginInput, LoginError } from "../models/auth";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+import axios, { AxiosError } from "axios";
 const LoginForm = () => {
   const [showPassword, setshowPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<LoginInput>();
+
+  const onSubmit: SubmitHandler<LoginInput> = (data) => {
+    axios
+      .post("/auth", {
+        username: data.username,
+        password: data.password,
+      })
+      .then((res) => {
+        console.log("res: ", res);
+      })
+      .catch((err: AxiosError<LoginError>) => {
+        if (err.response) {
+          const { field, message } = err.response.data;
+          setError(field, { type: "manual", message: message });
+        }
+      });
+  };
 
   return (
     <Box bg="whiter" borderRadius="lg" shadow="md" p={10}>
       <VStack>
-        <Input placeholder="Username or Email" />
-        <InputGroup size="md">
-          <Input
-            pr="4.5rem"
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-          />
-          <InputRightElement>
-            <IconButton
-              aria-label="show password"
-              onClick={() => setshowPassword(!showPassword)}
-              icon={
-                <Icon as={showPassword ? BsFillEyeSlashFill : BsFillEyeFill} />
-              }
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl mb={5}>
+            <Input
+              placeholder="Username or Email"
+              {...register("username", { required: "Username is required" })}
+              isInvalid={errors.username != undefined}
             />
-          </InputRightElement>
-        </InputGroup>
-        <Flex justify="end" w="100%">
-          <Button>Login</Button>
-        </Flex>
+            {errors.username && (
+              <FormHelperText color="red.500" role="alert">
+                {errors.username.message}
+              </FormHelperText>
+            )}
+          </FormControl>
+          <FormControl mb={5}>
+            <InputGroup size="md">
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                {...register("password", { required: "Password is required" })}
+                isInvalid={errors.password != undefined}
+              />
+              <InputRightElement>
+                <IconButton
+                  aria-label="show password"
+                  onClick={() => setshowPassword(!showPassword)}
+                  icon={
+                    <Icon
+                      as={showPassword ? BsFillEyeSlashFill : BsFillEyeFill}
+                    />
+                  }
+                />
+              </InputRightElement>
+            </InputGroup>
+            {errors.password && (
+              <FormHelperText color="red.500" role="alert">
+                {errors.password.message}
+              </FormHelperText>
+            )}
+          </FormControl>
+          <Flex justify="end" w="100%">
+            <Button type="submit">Login</Button>
+          </Flex>
+        </form>
       </VStack>
     </Box>
   );
