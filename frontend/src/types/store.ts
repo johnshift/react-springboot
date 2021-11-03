@@ -8,4 +8,5 @@ export type Store = {
 
   auth_username: string;
   auth_name: string;
+  setAuthName: (name: string) => void;
 };

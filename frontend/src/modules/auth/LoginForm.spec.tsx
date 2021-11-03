@@ -77,9 +77,11 @@ describe("LoginForm", () => {
   });
 
   test("err: username/password required", async () => {
-    await act(async () => render(<LoginForm />));
+    render(<LoginForm />);
+    await act(async () =>
+      userEvent.click(screen.getByRole("button", { name: /^Login$/ }))
+    );
 
-    userEvent.click(screen.getByRole("button", { name: /^Login$/ }));
     await waitFor(() => {
       expect(screen.getByText("Username is required")).toBeInTheDocument();
       expect(screen.getByText("Password is required")).toBeInTheDocument();
@@ -87,33 +89,45 @@ describe("LoginForm", () => {
   });
 
   test("err: username does not exist", async () => {
-    await act(async () => render(<LoginForm />));
+    render(<LoginForm />);
+    await act(async () => {
+      userEvent.type(screen.getByPlaceholderText("Username or Email"), "asdf");
+      userEvent.type(screen.getByPlaceholderText("Password"), "xzcv");
+      userEvent.click(screen.getByRole("button", { name: /^Login$/ }));
+    });
 
-    userEvent.type(screen.getByPlaceholderText("Username or Email"), "asdf");
-    userEvent.type(screen.getByPlaceholderText("Password"), "xzcv");
-    userEvent.click(screen.getByRole("button", { name: /^Login$/ }));
     await waitFor(() => {
       expect(screen.getByText(/^Username does not exist$/)).toBeInTheDocument();
     });
   });
 
   test("err: incorrect password", async () => {
-    await act(async () => render(<LoginForm />));
+    render(<LoginForm />);
+    await act(async () => {
+      userEvent.type(
+        screen.getByPlaceholderText("Username or Email"),
+        "jsmith"
+      );
+      userEvent.type(screen.getByPlaceholderText("Password"), "xzcv");
+      userEvent.click(screen.getByRole("button", { name: /^Login$/ }));
+    });
 
-    userEvent.type(screen.getByPlaceholderText("Username or Email"), "jsmith");
-    userEvent.type(screen.getByPlaceholderText("Password"), "xzcv");
-    userEvent.click(screen.getByRole("button", { name: /^Login$/ }));
     await waitFor(() => {
       expect(screen.getByText(/^Incorrect password$/)).toBeInTheDocument();
     });
   });
 
   test("successful login", async () => {
-    await act(async () => render(<LoginForm />));
+    render(<LoginForm />);
+    await act(async () => {
+      userEvent.type(
+        screen.getByPlaceholderText("Username or Email"),
+        "jsmith"
+      );
+      userEvent.type(screen.getByPlaceholderText("Password"), "pass1");
+      userEvent.click(screen.getByRole("button", { name: /^Login$/ }));
+    });
 
-    userEvent.type(screen.getByPlaceholderText("Username or Email"), "jsmith");
-    userEvent.type(screen.getByPlaceholderText("Password"), "pass1");
-    userEvent.click(screen.getByRole("button", { name: /^Login$/ }));
     await waitFor(() => {
       expect(screen.getByText(/^Welcome John Smith$/)).toBeInTheDocument();
     });

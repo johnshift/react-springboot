@@ -38,10 +38,10 @@ const CreatePostOptions = ({
 
         <Modal
           isOpen={isOpenEmoji}
-          onClose={closeEmoji}
           isCentered
           scrollBehavior="inside"
           blockScrollOnMount={false}
+          onClose={closeEmoji}
           finalFocusRef={finalRef}
         >
           <ModalOverlay />
@@ -68,6 +68,7 @@ const SelectEmojiIcon = ({ openEmoji }: { openEmoji: () => void }) => (
     icon={<Icon as={IoMdHeart} w={6} h={6} />}
     isRound
     onClick={openEmoji}
+    data-testid="select-emoji-icon"
   />
 );
 
