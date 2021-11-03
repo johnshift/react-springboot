@@ -1,11 +1,11 @@
 import { render, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import LoginForm from "../src/components/LoginForm";
+import LoginForm from "./LoginForm";
 
 import { setupServer } from "msw/node";
 import { rest, DefaultRequestBody } from "msw";
-import { LoginResponse, LoginError, LoginInput } from "../src/models/auth";
+import { LoginResponse, LoginError, LoginInput } from "../../types/auth";
 
 const server = setupServer(
   rest.post<DefaultRequestBody, LoginResponse | LoginError>(

@@ -16,7 +16,7 @@ import {
 
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 
-import { LoginInput, LoginError, LoginResponse } from "../models/auth";
+import { LoginInput, LoginError, LoginResponse } from "../../types/auth";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
