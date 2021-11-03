@@ -8,7 +8,7 @@ const CreatePostImage = () => (
     colSpan={[2, 3, 2]}
     // bg="teal.200"
   >
-    <Avatar href="/user_1" />
+    <Avatar href="/user_1" label="user avatar" />
   </GridItem>
 );
 

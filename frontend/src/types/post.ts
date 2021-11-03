@@ -9,3 +9,7 @@ export type Post = {
   comment_count: number;
   reactions: Reaction[];
 };
+
+export type PostInput = {
+  body: string;
+};

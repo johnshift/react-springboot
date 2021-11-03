@@ -6,6 +6,9 @@ import { Store, Post } from "../types";
 const createPostSlice = (set: SetState<Store>, _get: GetState<Store>) => ({
   posts: mockedPosts,
   addPost: (post: Post) => {
+    // NOTE: Obtain id from the backend
+    console.log("add post called");
+    post.id = 999;
     set((state) => ({
       posts: [post, ...state.posts],
     }));

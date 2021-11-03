@@ -37,18 +37,18 @@ const Nav = () => {
           icon={<Icon as={MdOutlineNotifications} w={6} h={6} />}
           mr={2}
         /> */}
-        <Menu>
+        <Menu id="menu">
           <MenuButton
             as={IconButton}
             aria-label="menu"
             icon={<Icon as={MdMenu} w={10} h={10} />}
             variant="ghost"
           />
-          <MenuList>
+          {/* <MenuList>
             <MenuItem>One</MenuItem>
             <MenuItem>Two</MenuItem>
             <MenuItem>Three</MenuItem>
-          </MenuList>
+          </MenuList> */}
         </Menu>
       </Box>
     </Flex>

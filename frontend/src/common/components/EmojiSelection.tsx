@@ -10,7 +10,7 @@ const EmojiSelection = ({ selectEmoji }: Props) => {
       {emojis.map((emoji, i) => (
         <Center key={i} m={1}>
           <Box
-            as="button"
+            role="button"
             h="32px"
             lineHeight="1.2"
             transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
@@ -35,6 +35,7 @@ const EmojiSelection = ({ selectEmoji }: Props) => {
             onClick={() => {
               selectEmoji(emoji.symbol);
             }}
+            data-testid="emoji-selection"
           >
             {emoji.symbol}
           </Box>
