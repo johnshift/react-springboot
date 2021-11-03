@@ -1,8 +1,8 @@
 import { ReactElement } from "react";
 
 import Head from "next/head";
-import Layout from "../src/components/Layout";
-import LoginForm from "../src/components/LoginForm";
+import Layout from "../common/components/Layout";
+import LoginForm from "../modules/auth/LoginForm";
 
 const Page = () => {
   return (
