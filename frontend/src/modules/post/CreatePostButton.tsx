@@ -12,7 +12,6 @@ import { GiDoubleFaceMask } from "react-icons/gi";
 
 import { useState } from "react";
 import useStore from "../../store";
-import { prettyDate } from "../../common/utils";
 import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
 import { PostInput } from "../../types";
 
@@ -36,20 +35,20 @@ const CreatePostButton = ({ getValues, setValue }: Props) => {
       <Flex align="center" justify="end" h="100%">
         <ButtonGroup size="md" isAttached variant="outline" color="blackt">
           <Button
-            onClick={() => {
-              addPost({
-                id: -1, // placeholder to pass typescript Post type
-                comment_count: 0,
-                vote_count: 0,
-                body: getValues("body"),
-                owner: auth_name,
-                created: prettyDate(new Date().toISOString()),
-                reactions: [],
-              });
+            // onClick={() => {
+            //   addPost({
+            //     id: -1, // placeholder to pass typescript Post type
+            //     comment_count: 0,
+            //     vote_count: 0,
+            //     body: getValues("body"),
+            //     owner: auth_name,
+            //     created: prettyDate(new Date().toISOString()),
+            //     reactions: [],
+            //   });
 
-              // clear postbody
-              setValue("body", "");
-            }}
+            //   // clear postbody
+            //   setValue("body", "");
+            // }}
             type="submit"
           >
             Post
@@ -61,6 +60,7 @@ const CreatePostButton = ({ getValues, setValue }: Props) => {
             }
             onClick={() => {
               setAsVeil(!asVeil);
+              setValue("asVeil", asVeil);
               toast.closeAll();
               toast({
                 title: asVeil
