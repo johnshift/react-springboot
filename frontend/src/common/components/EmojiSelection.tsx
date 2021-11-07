@@ -1,47 +1,82 @@
-import { SimpleGrid, Center, Box } from "@chakra-ui/react";
+import {
+  SimpleGrid,
+  Center,
+  Box,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  Flex,
+} from "@chakra-ui/react";
+import { MutableRefObject } from "react";
 
 type Props = {
+  isOpen: boolean;
+  onClose: () => void;
+  finalRef?: MutableRefObject<HTMLTextAreaElement>;
   selectEmoji: (emoji: string) => void;
 };
 
-const EmojiSelection = ({ selectEmoji }: Props) => {
+const EmojiSelection = ({ selectEmoji, isOpen, onClose, finalRef }: Props) => {
   return (
-    <SimpleGrid columns={5}>
-      {emojis.map((emoji, i) => (
-        <Center key={i} m={1}>
-          <Box
-            role="button"
-            h="32px"
-            lineHeight="1.2"
-            transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
-            // border="1px"
-            px="8px"
-            borderRadius="50%"
-            fontSize="14px"
-            fontWeight="semibold"
-            bg="#f5f6f7"
-            borderColor="#ccd0d5"
-            color="#4b4f56"
-            _hover={{ bg: "whitehl" }}
-            _active={{
-              bg: "#dddfe2",
-              transform: "scale(0.98)",
-              borderColor: "#bec3c9",
-            }}
-            _focus={{
-              boxShadow:
-                "0 0 1px 2px rgba(88, 144, 255, .75), 0 1px 1px rgba(0, 0, 0, .15)",
-            }}
-            onClick={() => {
-              selectEmoji(emoji.symbol);
-            }}
-            data-testid="emoji-selection"
-          >
-            {emoji.symbol}
-          </Box>
-        </Center>
-      ))}
-    </SimpleGrid>
+    <Modal
+      isOpen={isOpen}
+      isCentered
+      scrollBehavior="inside"
+      blockScrollOnMount={false}
+      onClose={onClose}
+      finalFocusRef={finalRef}
+      trapFocus={false}
+    >
+      <ModalOverlay />
+      <ModalContent w="300px" maxH="300px">
+        <ModalHeader>Select Emoji</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <SimpleGrid columns={5}>
+            {emojis.map((emoji, i) => (
+              <Center key={i} m={1} align="center" justify="center">
+                <Flex
+                  justify="center"
+                  align="center"
+                  role="button"
+                  // aria-label={emoji.label}
+                  h="32px"
+                  lineHeight="1.2"
+                  transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
+                  // border="1px"
+                  px="8px"
+                  borderRadius="50%"
+                  fontSize="14px"
+                  fontWeight="semibold"
+                  bg="#f5f6f7"
+                  borderColor="#ccd0d5"
+                  color="#4b4f56"
+                  _hover={{ bg: "whitehl" }}
+                  _active={{
+                    bg: "#dddfe2",
+                    transform: "scale(0.98)",
+                    borderColor: "#bec3c9",
+                  }}
+                  _focus={{
+                    boxShadow:
+                      "0 0 1px 2px rgba(88, 144, 255, .75), 0 1px 1px rgba(0, 0, 0, .15)",
+                  }}
+                  onClick={() => {
+                    selectEmoji(emoji.symbol);
+                  }}
+                  data-testid="emoji-selection"
+                >
+                  {emoji.symbol}
+                </Flex>
+              </Center>
+            ))}
+          </SimpleGrid>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 

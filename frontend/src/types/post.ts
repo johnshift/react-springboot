@@ -12,4 +12,5 @@ export type Post = {
 
 export type PostInput = {
   body: string;
+  asVeil: boolean;
 };

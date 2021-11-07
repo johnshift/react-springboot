@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  act,
-  waitFor,
-  fireEvent,
-} from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CreatePost from "./CreatePost";
 import { emojis } from "../../common/components/EmojiSelection";
@@ -82,12 +76,44 @@ describe("CreatePost", () => {
   test("selecting emoji adds to post body", () => {
     render(<CreatePost />);
 
+    const body = "asldfjlsadjfl";
+
+    userEvent.type(screen.getByRole("textbox", { name: "post body" }), body);
+
     userEvent.click(screen.getByRole("button", { name: "select emoji" }));
 
-    userEvent.click(screen.getByRole("button", { name: emojis[0].symbol }));
+    userEvent.click(
+      screen.getByRole("button", { name: "slightly smiling face" })
+    );
 
     expect(screen.getByRole("textbox", { name: "post body" })).toHaveValue(
-      emojis[0].symbol + " "
+      body + " " + emojis[0].symbol + " "
+    );
+  });
+
+  test("appending emoji inbetween works correctly", async () => {
+    render(<CreatePost />);
+
+    // type random string
+    const body = "1234567890";
+    userEvent.type(screen.getByRole("textbox", { name: "post body" }), body);
+
+    // move cursor to left 5 times
+    for (let i = 0; i < 5; i++) {
+      userEvent.type(
+        screen.getByRole("textbox", { name: "post body" }),
+        "{arrowleft}"
+      );
+    }
+
+    userEvent.click(screen.getByRole("button", { name: "select emoji" }));
+
+    userEvent.click(
+      screen.getByRole("button", { name: "slightly smiling face" })
+    );
+
+    expect(screen.getByRole("textbox", { name: "post body" })).toHaveValue(
+      "12345 " + emojis[0].symbol + " 67890"
     );
   });
 

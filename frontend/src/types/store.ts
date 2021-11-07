@@ -1,12 +1,18 @@
 import { Post } from "./post";
+import { Reaction } from "./reaction";
 
 export type Store = {
+  // POST
   posts: Post[];
   addPost: (post: Post) => void;
   updatePostVote: (id: number, inc: number) => void;
-  addReaction: (post_id: number, name: string, emoji: string) => void;
+  addReaction: (post_id: number, emoji: string) => void;
+  listReactionEmojis: (id: number) => string[];
+  getReactions: (post_id: number) => Reaction[];
 
-  auth_username: string;
-  auth_name: string;
+  // AUTH
+  username: string;
+  name: string;
+  veil: string;
   setAuthName: (name: string) => void;
 };

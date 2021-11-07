@@ -36,22 +36,12 @@ const CreatePostOptions = ({
         <MentionIcon />
         <ScheduleIcon />
 
-        <Modal
+        <EmojiSelection
           isOpen={isOpenEmoji}
-          isCentered
-          scrollBehavior="inside"
-          blockScrollOnMount={false}
           onClose={closeEmoji}
-          finalFocusRef={finalRef}
-        >
-          <ModalOverlay />
-          <ModalContent w="300px" maxH="300px">
-            <ModalHeader textAlign="center">Select Emoji</ModalHeader>
-            <ModalBody>
-              <EmojiSelection selectEmoji={selectEmoji} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+          finalRef={finalRef}
+          selectEmoji={selectEmoji}
+        />
       </Flex>
     </GridItem>
   );

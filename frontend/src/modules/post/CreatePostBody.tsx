@@ -3,15 +3,9 @@ import {
   Textarea,
   FormControl,
   FormHelperText,
-  Box,
 } from "@chakra-ui/react";
-import { Dispatch, MutableRefObject, SetStateAction } from "react";
-import {
-  Controller,
-  UseFormClearErrors,
-  Control,
-  UseFormRegister,
-} from "react-hook-form";
+import { ChangeEvent, Dispatch, MutableRefObject, SetStateAction } from "react";
+import { Controller, UseFormClearErrors, Control } from "react-hook-form";
 import { PostInput } from "../../types";
 
 type Props = {
@@ -19,9 +13,17 @@ type Props = {
   error?: string;
   finalRef: MutableRefObject<HTMLTextAreaElement>;
   clearErrors: UseFormClearErrors<PostInput>;
+  cursorPos: number;
+  setCursorPos: Dispatch<SetStateAction<number>>;
 };
 
-const CreatePostBody = ({ control, error = "", finalRef }: Props) => {
+const CreatePostBody = ({
+  cursorPos,
+  control,
+  error = "",
+  finalRef,
+  setCursorPos,
+}: Props) => {
   return (
     <GridItem
       px={[3, 2]}
@@ -37,12 +39,13 @@ const CreatePostBody = ({ control, error = "", finalRef }: Props) => {
         name="body"
         control={control}
         rules={{ required: "Post cannot be empty" }}
-        render={({ field }) => (
+        render={({
+          field: { onChange: oC, onBlur: oB, ref: _ref, ...rest },
+        }) => (
           <FormControl h="100%">
             <Textarea
-              {...field}
+              {...rest}
               id="create-post-textarea" // chakra-ui issue
-              // {...register("body", { required: "Post cannot be emptyx" })}
               isInvalid={error !== ""}
               ref={finalRef}
               aria-label="post body"
@@ -50,6 +53,19 @@ const CreatePostBody = ({ control, error = "", finalRef }: Props) => {
               h={"100%"}
               resize="none"
               border="1px solid red"
+              onClick={(e: unknown) => {
+                setCursorPos(
+                  (e as ChangeEvent<HTMLTextAreaElement>).target.selectionStart
+                );
+              }}
+              onChange={(e) => {
+                oC(e);
+                setCursorPos(e.target.selectionStart);
+              }}
+              onBlur={(e) => {
+                oB();
+                setCursorPos(e.target.selectionStart);
+              }}
             />
 
             {error !== "" && (
