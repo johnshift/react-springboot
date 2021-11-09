@@ -8,7 +8,7 @@ import {
 } from "../modules/__mocks__/auth";
 
 const createAuthSlice = (set: SetState<Store>, _get: GetState<Store>) => ({
-  name: mockedName,
+  // name: mockedName,
   username: mockedUsername,
   veil: mockedVeil,
   setAuthName: (name: string) => {

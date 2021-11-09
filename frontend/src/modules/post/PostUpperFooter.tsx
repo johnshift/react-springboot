@@ -61,18 +61,19 @@ const PostUpperFooter = ({
                   color="red.600"
                 />
               }
+              aria-label="show votes"
             >
               {vote_count}
             </Button>
             <IconButton
-              aria-label="Upvote"
+              aria-label="upvote"
               icon={<Icon as={IoIosArrowUp} />}
               onClick={() => {
                 updatePostVote(id, 1);
               }}
             />
             <IconButton
-              aria-label="Downvote"
+              aria-label="downvote"
               icon={<Icon as={IoIosArrowDown} />}
               onClick={() => {
                 updatePostVote(id, -1);

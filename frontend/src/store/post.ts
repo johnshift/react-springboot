@@ -15,22 +15,26 @@ const createPostSlice = (set: SetState<Store>, get: GetState<Store>) => ({
   },
 
   updatePostVote: (id: number, inc: number) => {
+    console.log("id: ", id, "inc: ", inc);
     set((state) => {
+      console.log("post before: ", state.posts[1].vote_count);
       for (let i = 0; i < state.posts.length; i++) {
         if (state.posts[i].id === id) {
           state.posts[i].vote_count += inc;
+          break;
         }
       }
+      console.log("post after: ", get().posts[1].vote_count);
 
       return {
-        posts: state.posts,
+        posts: get().posts,
       };
     });
   },
 
   addReaction: (post_id: number, emoji: string) => {
     set((state) => {
-      const auth_name = get().auth_name;
+      const auth_name = get().name;
 
       // find post
       for (let i = 0; i < state.posts.length; i++) {
@@ -60,7 +64,7 @@ const createPostSlice = (set: SetState<Store>, get: GetState<Store>) => ({
   // getReactions retrieves reactions for a particular post
   // changes owned reaction into "You"
   getReactions: (post_id: number): Reaction[] => {
-    const auth_name = get().auth_name;
+    const auth_name = get().name;
 
     // find reactions for the post
     let reactions: Reaction[] = [];

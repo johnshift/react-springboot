@@ -27,7 +27,7 @@ const PostLowerFooter = ({
   return (
     <Flex h="60%" w="100%">
       <Flex w="25%" align="center" justify="start">
-        <Button size="xs" variant="ghost" h="80%">
+        <Button size="xs" variant="ghost" h="80%" aria-label="show comments">
           {comment_count} comments
         </Button>
       </Flex>
@@ -43,6 +43,7 @@ const PostLowerFooter = ({
             ) : undefined
           }
           onClick={onOpenEmoji}
+          aria-label="react to post"
         >
           <Text fontSize="xl" mr={1}>
             {own_reaction}

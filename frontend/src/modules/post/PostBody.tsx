@@ -14,7 +14,7 @@ const PostBody = ({ body }: Props) => (
     // border="1px solid gray"
   >
     {body.split("\n").map((t, i) => (
-      <Box key={i} py={1}>
+      <Box key={i} py={1} data-testid="post-body-part">
         {t}
       </Box>
     ))}
