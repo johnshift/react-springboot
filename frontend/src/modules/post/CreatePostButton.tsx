@@ -23,7 +23,7 @@ type Props = {
 const CreatePostButton = ({ getValues, setValue }: Props) => {
   const toast = useToast();
   const [asVeil, setAsVeil] = useState(true);
-  const { addPost, auth_name } = useStore();
+  const { addPost, name: auth_name } = useStore();
 
   return (
     <GridItem

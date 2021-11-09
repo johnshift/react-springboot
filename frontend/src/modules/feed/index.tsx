@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import useStore from "../../store";
 
-import Post from "../post";
+import Post from "../post/Post";
 
 const Feed = () => {
   const { posts } = useStore();

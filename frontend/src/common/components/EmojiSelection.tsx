@@ -42,7 +42,7 @@ const EmojiSelection = ({ selectEmoji, isOpen, onClose, finalRef }: Props) => {
                   justify="center"
                   align="center"
                   role="button"
-                  // aria-label={emoji.label}
+                  aria-label={emoji.label}
                   h="32px"
                   lineHeight="1.2"
                   transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
