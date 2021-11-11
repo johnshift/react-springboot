@@ -1,9 +1,10 @@
 import { ReactElement } from "react";
+// import { Box } from "@chakra-ui/react";
 
 import Head from "next/head";
-import Layout from "../components/Layout";
-
-import Feed from "../features/feed";
+import Layout from "../common/components/Layout";
+import CreatePost from "../modules/post/CreatePost";
+import Feed from "../modules/feed";
 
 const Page = () => {
   return (
@@ -11,6 +12,7 @@ const Page = () => {
       <Head>
         <title>Veils App</title>
       </Head>
+      <CreatePost />
       <Feed />
     </>
   );

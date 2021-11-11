@@ -1,16 +1,11 @@
-import { Reaction } from "./reaction";
+import { ReactionT } from ".";
 
-export type Post = {
+export type PostT = {
   id: number;
   owner: string;
   created: string;
   body: string;
-  vote_count: number;
-  comment_count: number;
-  reactions: Reaction[];
-};
-
-export type PostInput = {
-  body: string;
-  asVeil: boolean;
+  voteCount: number;
+  commentCount: number;
+  reactions: ReactionT[];
 };

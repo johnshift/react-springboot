@@ -3,15 +3,11 @@ export type LoginInput = {
   password: string;
 };
 
-export type LoginT = {
-  id: number;
+export type LoginResponse = {
   name: string;
-  username: string;
-  email: string;
-  desc: string;
 };
 
 export type LoginError = {
   message: string;
-  // field: "username" | "password";
+  field: "username" | "password";
 };
