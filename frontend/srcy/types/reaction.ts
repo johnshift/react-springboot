@@ -1,5 +1,4 @@
-export type ReactionT = {
-  id: number;
+export type Reaction = {
   owner: string;
   reaction: string;
 };
