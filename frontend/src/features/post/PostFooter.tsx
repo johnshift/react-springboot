@@ -14,9 +14,14 @@ import { PostCtx } from "./Post";
 import EmojiSelection from "../../components/EmojiSelection";
 import axios from "axios";
 import { BACKEND_API_URL } from "../../constants";
+import { useRecoilValue } from "recoil";
+import { sessionAtom } from "../../recoil/auth/atom";
+import { SessionT } from "../../types";
 
 const PostFooter = () => {
   const { commentCount, reactions } = useContext(PostCtx);
+
+  const session = useRecoilValue(sessionAtom);
 
   let own_reaction = "";
   for (const reaction of reactions) {
@@ -36,10 +41,12 @@ const PostFooter = () => {
     onCloseEmoji();
 
     console.log("selected emoji: ", emoji);
+    console.log("session: ", session);
+    console.log("session == null", session == null);
 
-    await axios.post(BACKEND_API_URL + "/reactions", {
-      emoji: emoji,
-    });
+    // await axios.post(BACKEND_API_URL + "/reactions", {
+    //   emoji: emoji,
+    // });
 
     // addReaction(id, emoji);
   };

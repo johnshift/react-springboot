@@ -15,6 +15,8 @@ export const postHandlers = [
       // todo: fetch recommended posts based on session id
       // assuming we are returning based on session id:
 
+      // CHECK IF CSRF TOKEN INCLUDED
+
       const dbPosts = db.post.getAll();
 
       const posts: PostT[] = [];
@@ -33,7 +35,7 @@ export const postHandlers = [
         });
       }
 
-      return res(ctx.delay(4000), ctx.json(posts));
+      return res(ctx.delay(1000), ctx.json(posts));
     }
   ),
 ];
@@ -81,8 +83,6 @@ const getPostReactions = (postId: number): ReactionT[] => {
     });
   }
 
-  // console.log("reactions: ", reactions);
-
   return reactions;
 };
 
@@ -99,8 +99,6 @@ const getPostById = (postId: number): PostT => {
 
   const reactions = getPostReactions(dbPost?.id as number);
 
-  // console.log("reactions: ", reactions);
-
   const post: PostT = {
     id: postId,
     owner: owner,
@@ -110,8 +108,6 @@ const getPostById = (postId: number): PostT => {
     commentCount: dbPost?.commentCount as number,
     reactions: reactions,
   };
-
-  // console.log("post: ", post);
 
   return post;
 };

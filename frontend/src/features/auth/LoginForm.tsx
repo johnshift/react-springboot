@@ -17,20 +17,22 @@ import {
 
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 
-import { LoginInput, LoginError, LoginT } from "../../types";
+import { LoginInput, LoginError, SessionT } from "../../types";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { BACKEND_API_URL } from "../../constants";
+import { AUTH_LOGIN_URL, BACKEND_API_URL } from "../../constants";
 import { useSetRecoilState } from "recoil";
-import { loginAtom } from "../../recoil/auth/atom";
+import { sessionAtom } from "../../recoil/auth/atom";
+import { useRouter } from "next/router";
 
 const LoginForm = () => {
+  const router = useRouter();
   const toast = useToast();
 
   const [showPassword, setshowPassword] = useState(false);
 
-  const setLoginState = useSetRecoilState(loginAtom);
+  const setSessionState = useSetRecoilState(sessionAtom);
 
   const [errMsg, setErrMsg] = useState("");
 
@@ -43,20 +45,23 @@ const LoginForm = () => {
 
   const onSubmit: SubmitHandler<LoginInput> = (data) => {
     axios
-      .post(BACKEND_API_URL + "/auth", {
+      .post<SessionT>(AUTH_LOGIN_URL, {
         username: data.username.toLowerCase(),
         password: data.password,
       })
-      .then((res: AxiosResponse<LoginT>) => {
+      .then((res: AxiosResponse<SessionT>) => {
         if (res.data) {
           setErrMsg("");
           clearErrors();
-          setLoginState(res.data);
+          setSessionState(res.data);
+          console.log("LOGIN res.data: ", res.data);
+          axios.defaults.headers.common["X-CSRF-TOKEN"] = res.data.csrfToken;
           toast({
             status: "success",
             title: "Welcome " + res.data.name,
             description: "You have successfully logged in",
           });
+          router.push("/");
         }
       })
       .catch((err: AxiosError<LoginError>) => {
@@ -73,7 +78,7 @@ const LoginForm = () => {
     <Box bg="whiter" borderRadius="lg" shadow="md" p={10}>
       <VStack>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl mb={5}>
+          <FormControl mb={5} id="chakra-issue-#4328-1">
             <Input
               placeholder="Username or Email"
               {...register("username", { required: "Username is required" })}
@@ -85,7 +90,7 @@ const LoginForm = () => {
               </FormHelperText>
             )}
           </FormControl>
-          <FormControl mb={5}>
+          <FormControl mb={5} id="chakra-issue-#4328-2">
             <InputGroup size="md" mb={5}>
               <Input
                 type={showPassword ? "text" : "password"}

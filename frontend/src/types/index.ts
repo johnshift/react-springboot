@@ -4,7 +4,7 @@ import { PostT } from "./post";
 
 import { LoginError, LoginInput, LoginT } from "./auth";
 
-import { JWTPayloadT } from "./jwt";
+import { SessionT } from "./session";
 
 export type {
   UserT,
@@ -13,5 +13,5 @@ export type {
   LoginError,
   LoginInput,
   LoginT,
-  JWTPayloadT,
+  SessionT,
 };
