@@ -16,21 +16,21 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-if (process.env.NODE_ENV === "development") {
-  require("../mocks");
-}
+// if (process.env.NODE_ENV === "development") {
+require("../mocks");
+// }
 
 const queryClient = new QueryClient();
 
 const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  return getLayout(
-    <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <Component {...pageProps} />
-      </RecoilRoot>
-    </QueryClientProvider>
+  return (
+    <RecoilRoot>
+      <QueryClientProvider client={queryClient}>
+        {getLayout(<Component {...pageProps} />)}
+      </QueryClientProvider>
+    </RecoilRoot>
   );
 };
 

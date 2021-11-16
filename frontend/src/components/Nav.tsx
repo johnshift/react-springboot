@@ -10,9 +10,19 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useRouter } from "next/router";
 import { MdMenu } from "react-icons/md";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { AUTH_LOGOUT_URL } from "../constants";
+import { sessionAtom } from "../recoil/auth/atom";
 
 const Nav = () => {
+  const router = useRouter();
+
+  const [session, setSession] = useRecoilState(sessionAtom);
+  console.log("Nav session: ", session);
+
   return (
     <Flex
       bg="white"
@@ -37,18 +47,37 @@ const Nav = () => {
           icon={<Icon as={MdOutlineNotifications} w={6} h={6} />}
           mr={2}
         /> */}
-        <Menu id="menu">
+        <Menu isLazy id="chakra-#4328-1">
           <MenuButton
             as={IconButton}
             aria-label="menu"
             icon={<Icon as={MdMenu} w={10} h={10} />}
             variant="ghost"
           />
-          {/* <MenuList>
-            <MenuItem>One</MenuItem>
-            <MenuItem>Two</MenuItem>
-            <MenuItem>Three</MenuItem>
-          </MenuList> */}
+          <MenuList id="chakra-#4328-13">
+            <MenuItem
+              id="chakra-#4328-14"
+              onClick={() => {
+                axios
+                  .post(AUTH_LOGOUT_URL, null, {
+                    // headers: {
+                    //   "x-csrf-token": session?.csrfToken as string,
+                    // },
+                  })
+                  .then((res) => {
+                    console.log("logout res: ", res);
+                    setSession(null);
+                    router.replace("/login");
+                  })
+                  .catch((err) => {
+                    console.log("logout err: ", err);
+                  });
+              }}
+            >
+              Logout
+            </MenuItem>
+            <MenuItem>Shit</MenuItem>
+          </MenuList>
         </Menu>
       </Box>
     </Flex>

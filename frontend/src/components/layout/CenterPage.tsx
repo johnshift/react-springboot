@@ -1,11 +1,9 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
-import theme from "./Theme";
-import { ChakraProvider } from "@chakra-ui/react";
-import Nav from "./Nav";
-
-import Sidebar from "./Sidebar";
+import theme from "../Theme";
+import { ChakraProvider, Center } from "@chakra-ui/react";
+import Nav from "../Nav";
 
 type LayoutProps = {
   children: ReactNode;
@@ -17,17 +15,12 @@ const Layout = ({ children, showNav }: LayoutProps) => {
     <ChakraProvider theme={theme}>
       {showNav && <Nav />}
       <Flex
-        h="200vh"
-        mt="80px"
-        mx={["5px", "10%", "20%", "25%", "30%"]}
+        h="100vh"
+        w="100%"
+        justify="center"
         // border="1px solid green"
       >
-        <Sidebar />
-        <Box flex={3} display={["none", "block"]} />
-
-        <Box flex={7} p={[1, 8]} mr={[0, 3]}>
-          {children}
-        </Box>
+        <Center>{children}</Center>
       </Flex>
     </ChakraProvider>
   );

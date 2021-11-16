@@ -59,6 +59,14 @@ export const db = factory({
     userId: Number,
     type: Number, // admin = 0, member = 1
   },
+
+  session: {
+    id: primaryKey(String),
+    userId: Number,
+    name: String,
+    username: String,
+    csrfToken: String,
+  },
 });
 
 // CREDENTIALS

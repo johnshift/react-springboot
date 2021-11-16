@@ -9,3 +9,7 @@
 - Test Driven Dev
   - test functionality before design
   - mocked data + api calls
+
+## Cleanup on final code:
+
+- pages auto loggedin as `johnsmith` on development mode
