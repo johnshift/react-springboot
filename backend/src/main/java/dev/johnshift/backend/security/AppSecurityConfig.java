@@ -36,6 +36,11 @@ import lombok.RequiredArgsConstructor;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	/**
+	 * Clear expired sessions every 5 mins.
+	 */
+	private static final int CLEAR_SESSIONS_DELAY = 1000 * 60 * 5;
+
 	private final PasswordEncoder passwordEncoder;
 	private final AuthService authService;
 
@@ -103,7 +108,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 		List<String> allowedHeaders = Arrays.asList(
 			"content-type",
 			"x-veils-session",
-			"x-veils-session-pub",
 			"x-veils-csrf-token");
 
 		List<String> allowedMethods = Arrays.asList(
@@ -129,7 +133,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 	/**
 	 * Runs session expiration every 1 hour
 	 */
-	@Scheduled(fixedDelay = AuthService.SESSION_AGE)
+	@Scheduled(fixedDelay = CLEAR_SESSIONS_DELAY)
 	public void hello() {
 		List<AuthSessionEntity> expiredSessions = authService.getExpiredSessions();
 		if (!expiredSessions.isEmpty()) {
