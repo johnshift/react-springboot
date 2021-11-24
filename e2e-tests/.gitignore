@@ -1,8 +1,0 @@
-node_modules
-.DS_Store
-dist
-dist-ssr
-*.local
-
-// remove this if you want access to screenshots
-cypress/screenshots
