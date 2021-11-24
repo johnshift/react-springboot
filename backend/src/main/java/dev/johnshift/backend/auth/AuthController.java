@@ -29,24 +29,41 @@ public class AuthController {
         return authService.getExpiredSessions();
     }
 
+    @GetMapping("/public")
+    public String getPublic() {
+        return "Welcome to public page";
+    }
+
+    @GetMapping("/protected")
+    public String getIndex() {
+        return "Welcome to protected page";
+    }
+
+    /**
+     * Checks if theres an active/public session cookie then checks if the session
+     * exists in db.
+     * <p>
+     * If session exists in db, returns associated csrf-token. Otherwise create
+     * new public session.
+     * 
+     * @param request
+     * @param response
+     * @return
+     */
     @GetMapping("/csrf-token")
     public AuthCsrfDTO getCsrfToken(HttpServletRequest request, HttpServletResponse response) {
 
-        // todo: if already logged in, return csrf token from session in db
-        // todo: if not logged in, create pub session, store in cookie and return token
-
-        // check if already has session cookie, also if session in db, then return csrf token
+        // check active session cookie, match csrf-token in db, return if match
         Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
         if (sessionCookie != null) {
             String sessionId = sessionCookie.getValue();
             AuthSessionDTO session = authService.getSessionBySessionId(sessionId);
             if (session != null) {
-               return new AuthCsrfDTO(session.getCsrfToken());
+                return new AuthCsrfDTO(session.getCsrfToken());
             }
-
         }
 
-        // check if already has public session, also if session in db, then return csrf token
+        // check public session cookie, match csrf-token in db, return if match
         Cookie sessionCookiePub = getCookie(request, SESSION_COOKIE_NAME_PUBLIC);
         if (sessionCookiePub != null) {
             String sessionId = sessionCookiePub.getValue();
@@ -56,23 +73,16 @@ public class AuthController {
             }
         }
 
-        // if no actie session, create pub session
+        // if no active session, create pub session
         AuthSessionDTO sessionDTO = authService.createSession();
-        Cookie pubSessionCookie = new Cookie(SESSION_COOKIE_NAME_PUBLIC, sessionDTO.getSessionId());
-        pubSessionCookie.setMaxAge(60 * 60); // expire 1 hour
-        pubSessionCookie.setHttpOnly(true); // unreadable in JS
-        response.addCookie(pubSessionCookie);
+
+        // add session-id to cookies
+        Cookie pubCookie = new Cookie(SESSION_COOKIE_NAME_PUBLIC, sessionDTO.getSessionId());
+        pubCookie.setMaxAge(60 * 60);
+        pubCookie.setHttpOnly(true);
+        response.addCookie(pubCookie);
+
         return AuthCsrfDTO.of(sessionDTO);
-    }
-
-    @GetMapping("/public")
-    public String getPublic() {
-        return "Welcome to public page";
-    }
-
-    @GetMapping("/protected")
-    public String getIndex() {
-        return "Welcome to protected page";
     }
 
 }
