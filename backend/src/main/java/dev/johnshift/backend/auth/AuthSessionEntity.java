@@ -22,17 +22,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AuthSessionEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "session_id")
-    private String sessionId;
+	@Column(name = "session_id")
+	private String sessionId;
 
-    @Column(name = "csrf_token")
-    private String csrfToken;
+	@Column(name = "csrf_token")
+	private String csrfToken;
 
-    @Column(name = "timestamp")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timestamp;
+	@Column(name = "timestamp")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date timestamp;
 }

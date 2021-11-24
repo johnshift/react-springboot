@@ -53,91 +53,91 @@ import static dev.johnshift.backend.auth.AuthController.SESSION_COOKIE_NAME_PUBL
 @RequiredArgsConstructor
 public class AuthCsrfFilter extends OncePerRequestFilter {
 
-    private final AuthService authService;
+	private final AuthService authService;
 
-    private void writeUnauthorizedResponse(HttpServletResponse response, String msg) throws IOException {
+	private void writeUnauthorizedResponse(HttpServletResponse response, String msg) throws IOException {
 
-        ExceptionDTO resp = new ExceptionDTO("AuthException", msg);
-        String jsonPayload = new ObjectMapper().writeValueAsString(resp);
+		ExceptionDTO resp = new ExceptionDTO("AuthException", msg);
+		String jsonPayload = new ObjectMapper().writeValueAsString(resp);
 
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType("application/json");
+		response.setStatus(HttpStatus.UNAUTHORIZED.value());
+		response.setContentType("application/json");
 
-        PrintWriter writer = response.getWriter();
-        writer.write(jsonPayload);
-        writer.flush();
-    }
+		PrintWriter writer = response.getWriter();
+		writer.write(jsonPayload);
+		writer.flush();
+	}
 
-    /**
-     * Steps:
-     * <ol>
-     * <li>Checks for csrf-token header. Unauthorized if null.</li>
-     * <li>Checks either public or user session is present. Unauthorized if both null.</li>
-     * <li>Unauthorized if csrf-token does not match token inside session from db.</li>
-     * </ol>
-     * <p>
-     * Note: Cookie names are case-sensitive
-     */
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+	/**
+	 * Steps:
+	 * <ol>
+	 * <li>Checks for csrf-token header. Unauthorized if null.</li>
+	 * <li>Checks either public or user session is present. Unauthorized if both null.</li>
+	 * <li>Unauthorized if csrf-token does not match token inside session from db.</li>
+	 * </ol>
+	 * <p>
+	 * Note: Cookie names are case-sensitive
+	 */
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+		throws ServletException, IOException {
 
-        // if no x-csrf-token header -> unauthorized
-        String csrfHeader = request.getHeader(CSRF_HEADER_KEY);
-        if (csrfHeader == null) {
-            writeUnauthorizedResponse(response, "Invalid CSRF token");
-            return;
-        }
+		// if no x-csrf-token header -> unauthorized
+		String csrfHeader = request.getHeader(CSRF_HEADER_KEY);
+		if (csrfHeader == null) {
+			writeUnauthorizedResponse(response, "Invalid CSRF token");
+			return;
+		}
 
-        // public session
-        Cookie pubSessionCookie = getCookie(request, SESSION_COOKIE_NAME_PUBLIC);
-        if (pubSessionCookie != null) {
-            String sessionId = pubSessionCookie.getValue();
-            AuthSessionDTO pubSession = authService.getSessionBySessionId(sessionId);
-            if (pubSession == null) {
-                writeUnauthorizedResponse(response, "PUBLIC SESSION NOT FOUND IN DB");
-                return;
-            }
-            if (!csrfHeader.equals(pubSession.getCsrfToken())) {
-                writeUnauthorizedResponse(response, "PUBLIC CSRF TOKEN MISMATCH");
-                return;
-            }
-            chain.doFilter(request, response);
-        }
+		// public session
+		Cookie pubSessionCookie = getCookie(request, SESSION_COOKIE_NAME_PUBLIC);
+		if (pubSessionCookie != null) {
+			String sessionId = pubSessionCookie.getValue();
+			AuthSessionDTO pubSession = authService.getSessionBySessionId(sessionId);
+			if (pubSession == null) {
+				writeUnauthorizedResponse(response, "PUBLIC SESSION NOT FOUND IN DB");
+				return;
+			}
+			if (!csrfHeader.equals(pubSession.getCsrfToken())) {
+				writeUnauthorizedResponse(response, "PUBLIC CSRF TOKEN MISMATCH");
+				return;
+			}
+			chain.doFilter(request, response);
+		}
 
-        // authenticated session
-        Cookie userSessionCookie = getCookie(request, SESSION_COOKIE_NAME);
-        if (userSessionCookie != null) {
-            String sessionId = userSessionCookie.getValue();
-            AuthSessionDTO pubSession = authService.getSessionBySessionId(sessionId);
-            if (pubSession == null) {
-                writeUnauthorizedResponse(response, "USER SESSION NOT FOUND IN DB");
-                return;
-            }
-            if (!csrfHeader.equals(pubSession.getCsrfToken())) {
-                writeUnauthorizedResponse(response, "PUBLIC CSRF TOKEN MISMATCH");
-                return;
-            }
-            chain.doFilter(request, response);
-        }
+		// authenticated session
+		Cookie userSessionCookie = getCookie(request, SESSION_COOKIE_NAME);
+		if (userSessionCookie != null) {
+			String sessionId = userSessionCookie.getValue();
+			AuthSessionDTO pubSession = authService.getSessionBySessionId(sessionId);
+			if (pubSession == null) {
+				writeUnauthorizedResponse(response, "USER SESSION NOT FOUND IN DB");
+				return;
+			}
+			if (!csrfHeader.equals(pubSession.getCsrfToken())) {
+				writeUnauthorizedResponse(response, "PUBLIC CSRF TOKEN MISMATCH");
+				return;
+			}
+			chain.doFilter(request, response);
+		}
 
-        // if code reached here, means no public and user session -> unauthorized
-        writeUnauthorizedResponse(response, "No session found");
-    }
+		// if code reached here, means no public and user session -> unauthorized
+		writeUnauthorizedResponse(response, "No session found");
+	}
 
-    /**
-     * Do not run AuthFilter on the following requests:
-     * <ul>
-     * <li>GET /csrf-token</li>
-     * </ul>
-     */
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
+	/**
+	 * Do not run AuthFilter on the following requests:
+	 * <ul>
+	 * <li>GET /csrf-token</li>
+	 * </ul>
+	 */
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
 
-        Multimap<String, String> allowedRequests = ArrayListMultimap.create();
-        allowedRequests.put("/csrf-token", HttpMethod.GET.name());
-        allowedRequests.put("/expired-sessions", HttpMethod.GET.name());
+		Multimap<String, String> allowedRequests = ArrayListMultimap.create();
+		allowedRequests.put("/csrf-token", HttpMethod.GET.name());
+		allowedRequests.put("/expired-sessions", HttpMethod.GET.name());
 
-        return allowedRequests.containsEntry(request.getRequestURI(), request.getMethod());
-    }
+		return allowedRequests.containsEntry(request.getRequestURI(), request.getMethod());
+	}
 }

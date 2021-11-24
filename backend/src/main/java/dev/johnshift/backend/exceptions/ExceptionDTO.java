@@ -9,17 +9,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ExceptionDTO {
-    private String type;
-    private String message;
-    private Date timestamp;
+	private String type;
+	private String message;
+	private Date timestamp;
 
-    public ExceptionDTO() {
-        this.timestamp = new Date();
-    }
+	public ExceptionDTO() {
+		this.timestamp = new Date();
+	}
 
-    public ExceptionDTO(String type, String message) {
-        this();
-        this.type = type;
-        this.message = message;
-    }
+	public ExceptionDTO(String type, String message) {
+		this();
+		this.type = type;
+		this.message = message;
+	}
 }

@@ -13,43 +13,41 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
-    public static final long SESSION_AGE = 1000L * 60L * 60L;
+	public static final long SESSION_AGE = 1000L * 60L * 60L;
 
-    private final AuthSessionRepository sessionRepo;
+	private final AuthSessionRepository sessionRepo;
 
-    public AuthSessionDTO createSession() {
+	public AuthSessionDTO createSession() {
 
-        AuthSessionEntity newSession = new AuthSessionEntity();
-        newSession.setCsrfToken(UUID.randomUUID().toString());
-        newSession.setSessionId(UUID.randomUUID().toString());
-        newSession.setTimestamp(new Date());
-        
-        AuthSessionEntity session = sessionRepo.save(newSession);
+		AuthSessionEntity newSession = new AuthSessionEntity();
+		newSession.setCsrfToken(UUID.randomUUID().toString());
+		newSession.setSessionId(UUID.randomUUID().toString());
+		newSession.setTimestamp(new Date());
 
-        return AuthSessionDTO.of(session);
+		AuthSessionEntity session = sessionRepo.save(newSession);
 
-    }
+		return AuthSessionDTO.of(session);
 
-    public AuthSessionDTO getSessionBySessionId(String sessionId) {
+	}
 
-        AuthSessionEntity session = sessionRepo.findOneBySessionId(sessionId).orElse(null);
+	public AuthSessionDTO getSessionBySessionId(String sessionId) {
 
-        return AuthSessionDTO.of(session);
-    }
+		AuthSessionEntity session = sessionRepo.findOneBySessionId(sessionId).orElse(null);
 
-    /**
-     * All sessions one hour ago are considered expired
-     * @return
-     */
-    public List<AuthSessionEntity> getExpiredSessions() {
-        Date oneHourAgo = new Date(System.currentTimeMillis() - SESSION_AGE);
-        return sessionRepo.findByTimestampLessThan(oneHourAgo);
-    }
+		return AuthSessionDTO.of(session);
+	}
 
-    public void deleteSession(AuthSessionEntity session) {
+	/**
+	 * All sessions one hour ago are considered expired
+	 * @return
+	 */
+	public List<AuthSessionEntity> getExpiredSessions() {
+		Date oneHourAgo = new Date(System.currentTimeMillis() - SESSION_AGE);
+		return sessionRepo.findByTimestampLessThan(oneHourAgo);
+	}
 
-        sessionRepo.delete(session);
-    }
+	public void deleteSession(AuthSessionEntity session) {
 
-    
+		sessionRepo.delete(session);
+	}
 }

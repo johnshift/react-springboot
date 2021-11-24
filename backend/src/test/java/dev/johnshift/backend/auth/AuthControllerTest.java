@@ -29,132 +29,132 @@ import javax.servlet.http.Cookie;
 @WebMvcTest(controllers = AuthController.class)
 public class AuthControllerTest {
 
-    @MockBean
-    PasswordEncoder passwordEncoder;
+	@MockBean
+	PasswordEncoder passwordEncoder;
 
-    @MockBean
-    AuthSessionRepository sessionRepo;
+	@MockBean
+	AuthSessionRepository sessionRepo;
 
-    @MockBean
-    AuthService authService;
+	@MockBean
+	AuthService authService;
 
-    @MockBean
-    UserDetailsService userDetailsService;
+	@MockBean
+	UserDetailsService userDetailsService;
 
-    @MockBean
-    AuthenticationManager authenticationManager;
+	@MockBean
+	AuthenticationManager authenticationManager;
 
-    @Autowired
-    MockMvc mockMvc;
+	@Autowired
+	MockMvc mockMvc;
 
-    private final String sampleSessionId = UUID.randomUUID().toString();
-    private final String sampleCsrfToken = UUID.randomUUID().toString();
-    private final AuthSessionDTO sampleSessionDTO = new AuthSessionDTO(
-        sampleSessionId,
-        sampleCsrfToken
-    );
+	private final String sampleSessionId = UUID.randomUUID().toString();
+	private final String sampleCsrfToken = UUID.randomUUID().toString();
+	private final AuthSessionDTO sampleSessionDTO = new AuthSessionDTO(
+		sampleSessionId,
+		sampleCsrfToken
+	);
 
-    @Test
-    public void get_csrftoken_public_OK() throws Exception {
+	@Test
+	public void get_csrftoken_public_OK() throws Exception {
 
-        // mock create session returns sample session dto
-        when(authService.createSession()).thenReturn(sampleSessionDTO);
+		// mock create session returns sample session dto
+		when(authService.createSession()).thenReturn(sampleSessionDTO);
 
-        mockMvc.perform(get("/csrf-token"))
-            .andExpect(status().isOk())
-            .andExpect(cookie().value(SESSION_COOKIE_NAME_PUBLIC, sampleSessionId))
-            .andExpect(cookie().httpOnly(SESSION_COOKIE_NAME_PUBLIC, true))
-            .andExpect(cookie().maxAge(SESSION_COOKIE_NAME_PUBLIC, 60 * 60))
-            .andExpect(jsonPath("$.token").value(sampleCsrfToken));
+		mockMvc.perform(get("/csrf-token"))
+			.andExpect(status().isOk())
+			.andExpect(cookie().value(SESSION_COOKIE_NAME_PUBLIC, sampleSessionId))
+			.andExpect(cookie().httpOnly(SESSION_COOKIE_NAME_PUBLIC, true))
+			.andExpect(cookie().maxAge(SESSION_COOKIE_NAME_PUBLIC, 60 * 60))
+			.andExpect(jsonPath("$.token").value(sampleCsrfToken));
 
-    }
+	}
 
-    @Test
-    public void get_csrftoken_with_public_OK() throws Exception {
+	@Test
+	public void get_csrftoken_with_public_OK() throws Exception {
 
-        // mock getting session returns session dto
-        when(authService.getSessionBySessionId(anyString())).thenReturn(sampleSessionDTO);
-        
-        // mock public session cookie
-        Cookie pubSessionCookie = new Cookie(SESSION_COOKIE_NAME_PUBLIC, sampleSessionId);
-        pubSessionCookie.setMaxAge(60 * 60);
-        pubSessionCookie.setHttpOnly(true);
+		// mock getting session returns session dto
+		when(authService.getSessionBySessionId(anyString())).thenReturn(sampleSessionDTO);
+		
+		// mock public session cookie
+		Cookie pubSessionCookie = new Cookie(SESSION_COOKIE_NAME_PUBLIC, sampleSessionId);
+		pubSessionCookie.setMaxAge(60 * 60);
+		pubSessionCookie.setHttpOnly(true);
 
-        mockMvc.perform(get("/csrf-token").cookie(pubSessionCookie))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.token").value(sampleCsrfToken));
+		mockMvc.perform(get("/csrf-token").cookie(pubSessionCookie))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.token").value(sampleCsrfToken));
 
-        // note: no need to check if cookie is sent back as response (it is default behaviour by browsers)
+		// note: no need to check if cookie is sent back as response (it is default behaviour by browsers)
 
-    }
-
-
-
-    @Test
-    public void get_csrftoken_with_active_OK() throws Exception {
-
-        // mock getting session returns session dto
-        when(authService.getSessionBySessionId(anyString())).thenReturn(sampleSessionDTO);
-        
-        // mock active session cookie
-        Cookie pubSessionCookie = new Cookie(SESSION_COOKIE_NAME, sampleSessionId);
-        pubSessionCookie.setMaxAge(60 * 60);
-        pubSessionCookie.setHttpOnly(true);
-
-        mockMvc.perform(get("/csrf-token").cookie(pubSessionCookie))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.token").value(sampleCsrfToken));
-
-        // note: no need to check if cookie is sent back as response (it is default behaviour by browsers)
-
-    }
-
-    @Test
-    public void get_csrftoken_nonExisting_public_OK() throws Exception {
-
-        // mock any calls by getting session should return null for non-existing session
-        when(authService.getSessionBySessionId(anyString())).thenReturn(null);
-
-        // mock create session returns sample session dto
-        when(authService.createSession()).thenReturn(sampleSessionDTO);
-
-        // mock non-Existing public session cookie
-        Cookie pubSessionCookie = new Cookie(SESSION_COOKIE_NAME_PUBLIC, "NON-EXISTING-PUB-SESSIONID");
-        pubSessionCookie.setMaxAge(60 * 60);
-        pubSessionCookie.setHttpOnly(true);
-
-        mockMvc.perform(get("/csrf-token"))
-            .andExpect(status().isOk())
-            .andExpect(cookie().value(SESSION_COOKIE_NAME_PUBLIC, sampleSessionId))
-            .andExpect(cookie().httpOnly(SESSION_COOKIE_NAME_PUBLIC, true))
-            .andExpect(cookie().maxAge(SESSION_COOKIE_NAME_PUBLIC, 60 * 60))
-            .andExpect(jsonPath("$.token").value(sampleCsrfToken));
-
-    }
+	}
 
 
 
-    @Test
-    public void get_csrftoken_nonExisting_active_OK() throws Exception {
+	@Test
+	public void get_csrftoken_with_active_OK() throws Exception {
 
-        // mock any calls by getting session should return null for non-existing session
-        when(authService.getSessionBySessionId(anyString())).thenReturn(null);
+		// mock getting session returns session dto
+		when(authService.getSessionBySessionId(anyString())).thenReturn(sampleSessionDTO);
+		
+		// mock active session cookie
+		Cookie pubSessionCookie = new Cookie(SESSION_COOKIE_NAME, sampleSessionId);
+		pubSessionCookie.setMaxAge(60 * 60);
+		pubSessionCookie.setHttpOnly(true);
 
-        // mock create session returns sample session dto
-        when(authService.createSession()).thenReturn(sampleSessionDTO);
+		mockMvc.perform(get("/csrf-token").cookie(pubSessionCookie))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.token").value(sampleCsrfToken));
 
-        // mock non-Existing public session cookie
-        Cookie pubSessionCookie = new Cookie(SESSION_COOKIE_NAME, "NON-EXISTING-ACTIVE-SESSIONID");
-        pubSessionCookie.setMaxAge(60 * 60);
-        pubSessionCookie.setHttpOnly(true);
+		// note: no need to check if cookie is sent back as response (it is default behaviour by browsers)
 
-        mockMvc.perform(get("/csrf-token"))
-            .andExpect(status().isOk())
-            .andExpect(cookie().value(SESSION_COOKIE_NAME_PUBLIC, sampleSessionId))
-            .andExpect(cookie().httpOnly(SESSION_COOKIE_NAME_PUBLIC, true))
-            .andExpect(cookie().maxAge(SESSION_COOKIE_NAME_PUBLIC, 60 * 60))
-            .andExpect(jsonPath("$.token").value(sampleCsrfToken));
+	}
 
-    }
-    
+	@Test
+	public void get_csrftoken_nonExisting_public_OK() throws Exception {
+
+		// mock any calls by getting session should return null for non-existing session
+		when(authService.getSessionBySessionId(anyString())).thenReturn(null);
+
+		// mock create session returns sample session dto
+		when(authService.createSession()).thenReturn(sampleSessionDTO);
+
+		// mock non-Existing public session cookie
+		Cookie pubSessionCookie = new Cookie(SESSION_COOKIE_NAME_PUBLIC, "NON-EXISTING-PUB-SESSIONID");
+		pubSessionCookie.setMaxAge(60 * 60);
+		pubSessionCookie.setHttpOnly(true);
+
+		mockMvc.perform(get("/csrf-token"))
+			.andExpect(status().isOk())
+			.andExpect(cookie().value(SESSION_COOKIE_NAME_PUBLIC, sampleSessionId))
+			.andExpect(cookie().httpOnly(SESSION_COOKIE_NAME_PUBLIC, true))
+			.andExpect(cookie().maxAge(SESSION_COOKIE_NAME_PUBLIC, 60 * 60))
+			.andExpect(jsonPath("$.token").value(sampleCsrfToken));
+
+	}
+
+
+
+	@Test
+	public void get_csrftoken_nonExisting_active_OK() throws Exception {
+
+		// mock any calls by getting session should return null for non-existing session
+		when(authService.getSessionBySessionId(anyString())).thenReturn(null);
+
+		// mock create session returns sample session dto
+		when(authService.createSession()).thenReturn(sampleSessionDTO);
+
+		// mock non-Existing public session cookie
+		Cookie pubSessionCookie = new Cookie(SESSION_COOKIE_NAME, "NON-EXISTING-ACTIVE-SESSIONID");
+		pubSessionCookie.setMaxAge(60 * 60);
+		pubSessionCookie.setHttpOnly(true);
+
+		mockMvc.perform(get("/csrf-token"))
+			.andExpect(status().isOk())
+			.andExpect(cookie().value(SESSION_COOKIE_NAME_PUBLIC, sampleSessionId))
+			.andExpect(cookie().httpOnly(SESSION_COOKIE_NAME_PUBLIC, true))
+			.andExpect(cookie().maxAge(SESSION_COOKIE_NAME_PUBLIC, 60 * 60))
+			.andExpect(jsonPath("$.token").value(sampleCsrfToken));
+
+	}
+	
 }

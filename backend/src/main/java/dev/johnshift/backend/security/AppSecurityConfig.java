@@ -35,113 +35,107 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
-    
-    private final PasswordEncoder passwordEncoder;
-    private final AuthService authService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+	private final PasswordEncoder passwordEncoder;
+	private final AuthService authService;
 
-        http
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
 
-            // disable spring security default csrf and session management
-            // all session management is handled inside AuthFilter
-            .csrf().disable()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+		http
 
-            // cors settings
-            .cors()
-            .configurationSource(getCorsConfigurationSource())
-            .and()
+			// disable spring security default csrf and session management
+			// all session management is handled inside AuthFilter
+			.csrf().disable()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
 
-            // Custom Auth Filter
-            .addFilterAfter(new AuthCsrfFilter(authService), HeaderWriterFilter.class) 
+			// cors settings
+			.cors()
+			.configurationSource(getCorsConfigurationSource())
+			.and()
 
-            // Todo: extend session age on requests
+			// Custom Auth Filter
+			.addFilterAfter(new AuthCsrfFilter(authService), HeaderWriterFilter.class)
+
+			// Todo: extend session age on requests
 
 
-            .authorizeRequests()
+			.authorizeRequests()
 
-            // public endpoints
-            .antMatchers(HttpMethod.GET, "/public").permitAll()
-            .antMatchers(HttpMethod.GET, "/expired-sessions").permitAll();
-    }
+			// public endpoints
+			.antMatchers(HttpMethod.GET, "/public").permitAll()
+			.antMatchers(HttpMethod.GET, "/expired-sessions").permitAll();
+	}
 
-    @Override
-    @Bean
-    protected UserDetailsService userDetailsService() {
+	@Override
+	@Bean
+	protected UserDetailsService userDetailsService() {
 
-        UserDetails user = User.builder()
-            .username("user")
-            .password(passwordEncoder.encode("pass"))
-            .roles("USER")
-            .build();
+		UserDetails user = User.builder()
+			.username("user")
+			.password(passwordEncoder.encode("pass"))
+			.roles("USER")
+			.build();
 
-        
-        return new InMemoryUserDetailsManager(user);
-    }
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+		return new InMemoryUserDetailsManager(user);
+	}
 
-    // CORS configuration
-    private CorsConfigurationSource getCorsConfigurationSource() {
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
-        CorsConfiguration config = new CorsConfiguration();
+	// CORS configuration
+	private CorsConfigurationSource getCorsConfigurationSource() {
 
-        List<String> allowedOrigins = Arrays.asList(
+		CorsConfiguration config = new CorsConfiguration();
 
-            // WARNING: remove localhost in production!
-            "http://localhost:3000",
-            "http://localhost:5000"
-        );
+		List<String> allowedOrigins = Arrays.asList(
 
-        List<String> allowedHeaders = Arrays.asList(
-            "content-type",
-            "x-veils-session",
-            "x-veils-session-pub",
-            "x-veils-csrf-token"
-        );
+			// WARNING: remove localhost in production!
+			"http://localhost:3000",
+			"http://localhost:5000");
 
-        List<String> allowedMethods = Arrays.asList(
-            HttpMethod.GET.name(),
-            HttpMethod.POST.name(),
-            HttpMethod.PUT.name(),
-            HttpMethod.DELETE.name(),
-            HttpMethod.OPTIONS.name()
-        );
+		List<String> allowedHeaders = Arrays.asList(
+			"content-type",
+			"x-veils-session",
+			"x-veils-session-pub",
+			"x-veils-csrf-token");
 
-        boolean allowCredentials = true;
+		List<String> allowedMethods = Arrays.asList(
+			HttpMethod.GET.name(),
+			HttpMethod.POST.name(),
+			HttpMethod.PUT.name(),
+			HttpMethod.DELETE.name(),
+			HttpMethod.OPTIONS.name());
 
-        config.setAllowedOriginPatterns(allowedOrigins);
-        config.setAllowedHeaders(allowedHeaders);
-        config.setAllowedMethods(allowedMethods);
-        config.setAllowCredentials(allowCredentials);
+		boolean allowCredentials = true;
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);    
+		config.setAllowedOriginPatterns(allowedOrigins);
+		config.setAllowedHeaders(allowedHeaders);
+		config.setAllowedMethods(allowedMethods);
+		config.setAllowCredentials(allowCredentials);
 
-        return source;
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
 
-    }
+		return source;
+	}
 
-    /**
-     * Runs session expiration every 1 hour
-     */
-    @Scheduled(fixedDelay = AuthService.SESSION_AGE)
-    public void hello() {
-        List<AuthSessionEntity> expiredSessions = authService.getExpiredSessions();
-        if (!expiredSessions.isEmpty()) {
-            for(AuthSessionEntity session: expiredSessions) {
-                authService.deleteSession(session);
-            }
-        }
-    }
-
-    
+	/**
+	 * Runs session expiration every 1 hour
+	 */
+	@Scheduled(fixedDelay = AuthService.SESSION_AGE)
+	public void hello() {
+		List<AuthSessionEntity> expiredSessions = authService.getExpiredSessions();
+		if (!expiredSessions.isEmpty()) {
+			for (AuthSessionEntity session : expiredSessions) {
+				authService.deleteSession(session);
+			}
+		}
+	}
 }
