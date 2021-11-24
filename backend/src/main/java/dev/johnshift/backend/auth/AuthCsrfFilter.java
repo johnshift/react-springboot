@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 import static org.springframework.web.util.WebUtils.getCookie;
 import static dev.johnshift.backend.auth.AuthController.CSRF_HEADER_KEY;
 import static dev.johnshift.backend.auth.AuthController.SESSION_COOKIE_NAME;
-import static dev.johnshift.backend.auth.AuthController.SESSION_COOKIE_NAME_PUBLIC;
 
 /**
  * AuthFilter is invoked once per request only.
@@ -72,7 +71,7 @@ public class AuthCsrfFilter extends OncePerRequestFilter {
 	 * Steps:
 	 * <ol>
 	 * <li>Checks for csrf-token header. Unauthorized if null.</li>
-	 * <li>Checks either public or user session is present. Unauthorized if both null.</li>
+	 * <li>Checks if session cookie is present. Unauthorized if null.</li>
 	 * <li>Unauthorized if csrf-token does not match token inside session from db.</li>
 	 * </ol>
 	 * <p>
@@ -89,32 +88,16 @@ public class AuthCsrfFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		// public session
-		Cookie pubSessionCookie = getCookie(request, SESSION_COOKIE_NAME_PUBLIC);
-		if (pubSessionCookie != null) {
-			String sessionId = pubSessionCookie.getValue();
-			AuthSessionDTO pubSession = authService.getSessionBySessionId(sessionId);
-			if (pubSession == null) {
-				writeUnauthorizedResponse(response, "PUBLIC SESSION NOT FOUND IN DB");
-				return;
-			}
-			if (!csrfHeader.equals(pubSession.getCsrfToken())) {
-				writeUnauthorizedResponse(response, "PUBLIC CSRF TOKEN MISMATCH");
-				return;
-			}
-			chain.doFilter(request, response);
-		}
-
 		// authenticated session
-		Cookie userSessionCookie = getCookie(request, SESSION_COOKIE_NAME);
-		if (userSessionCookie != null) {
-			String sessionId = userSessionCookie.getValue();
-			AuthSessionDTO pubSession = authService.getSessionBySessionId(sessionId);
-			if (pubSession == null) {
+		Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
+		if (sessionCookie != null) {
+			String sessionId = sessionCookie.getValue();
+			AuthCsrfDTO csrfDTO = authService.getCsrfToken(sessionId);
+			if (csrfDTO == null) {
 				writeUnauthorizedResponse(response, "USER SESSION NOT FOUND IN DB");
 				return;
 			}
-			if (!csrfHeader.equals(pubSession.getCsrfToken())) {
+			if (!csrfHeader.equals(csrfDTO.getToken())) {
 				writeUnauthorizedResponse(response, "PUBLIC CSRF TOKEN MISMATCH");
 				return;
 			}
@@ -136,7 +119,6 @@ public class AuthCsrfFilter extends OncePerRequestFilter {
 
 		Multimap<String, String> allowedRequests = ArrayListMultimap.create();
 		allowedRequests.put("/csrf-token", HttpMethod.GET.name());
-		allowedRequests.put("/expired-sessions", HttpMethod.GET.name());
 
 		return allowedRequests.containsEntry(request.getRequestURI(), request.getMethod());
 	}

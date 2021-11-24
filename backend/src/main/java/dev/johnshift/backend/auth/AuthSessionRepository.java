@@ -17,5 +17,13 @@ public interface AuthSessionRepository extends JpaRepository<AuthSessionEntity, 
 	@Query(value = "SELECT * FROM sessions WHERE session_id = ?1", nativeQuery = true)
 	Optional<AuthSessionEntity> findOneBySessionId(String sessionId);
 
+	/**
+	 * Retrieves csrf-token from an existing session
+	 * @param ts
+	 * @return
+	 */
+	@Query(value = "SELECT csrf_token FROM sessions WHERE session_id = ?1", nativeQuery = true)
+	Optional<String> getCsrfToken(String sessionId);
+
 	List<AuthSessionEntity> findByTimestampLessThan(Date ts);
 }

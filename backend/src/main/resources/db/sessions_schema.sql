@@ -3,5 +3,6 @@ CREATE TABLE sessions(
   id SERIAL PRIMARY KEY NOT NULL,
   session_id VARCHAR(36) NOT NULL,
   csrf_token VARCHAR(64) NOT NULL,
-  timestamp TIMESTAMP NOT NULL
+  timestamp TIMESTAMP NOT NULL,
+  is_authenticated BOOLEAN DEFAULT FALSE
 );

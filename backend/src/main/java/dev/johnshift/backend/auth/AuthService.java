@@ -13,28 +13,43 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
+	/**
+	 * Session age = 1 hour. 
+	 * <p>
+	 * 1000ms x 60sec x 60min x 1hr
+	 */
 	public static final long SESSION_AGE = 1000L * 60L * 60L;
 
 	private final AuthSessionRepository sessionRepo;
 
-	public AuthSessionDTO createSession() {
+	/**
+	 * Creates a new session in db.
+	 * @param isAuthenticated
+	 * @return
+	 */
+	public AuthSessionDTO createSession(boolean isAuthenticated) {
 
 		AuthSessionEntity newSession = new AuthSessionEntity();
 		newSession.setCsrfToken(UUID.randomUUID().toString());
 		newSession.setSessionId(UUID.randomUUID().toString());
 		newSession.setTimestamp(new Date());
+		newSession.setAuthenticated(isAuthenticated);
 
 		AuthSessionEntity session = sessionRepo.save(newSession);
 
 		return AuthSessionDTO.of(session);
-
 	}
 
-	public AuthSessionDTO getSessionBySessionId(String sessionId) {
+	/**
+	 * Retrieves csrf-token associated with session-id. Returns null if not found.
+	 * @param sessionId
+	 * @return
+	 */
+	public AuthCsrfDTO getCsrfToken(String sessionId) {
 
-		AuthSessionEntity session = sessionRepo.findOneBySessionId(sessionId).orElse(null);
+		String csrfToken = sessionRepo.getCsrfToken(sessionId).orElse(null);
 
-		return AuthSessionDTO.of(session);
+		return new AuthCsrfDTO(csrfToken);
 	}
 
 	/**

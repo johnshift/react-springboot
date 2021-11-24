@@ -35,4 +35,7 @@ public class AuthSessionEntity {
 	@Column(name = "timestamp")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timestamp;
+
+	@Column(name = "is_authenticated")
+	private boolean isAuthenticated;
 }

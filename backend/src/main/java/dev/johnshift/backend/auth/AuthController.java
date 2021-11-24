@@ -19,7 +19,6 @@ public class AuthController {
 
 	public static final String CSRF_HEADER_KEY = "x-veils-csrf-token";
 	public static final String SESSION_COOKIE_NAME = "X-VEILS-SESSION";
-	public static final String SESSION_COOKIE_NAME_PUBLIC = "X-VEILS-SESSION-PUB";
 
 	private final AuthService authService;
 
@@ -57,27 +56,17 @@ public class AuthController {
 		Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
 		if (sessionCookie != null) {
 			String sessionId = sessionCookie.getValue();
-			AuthSessionDTO session = authService.getSessionBySessionId(sessionId);
-			if (session != null) {
-				return new AuthCsrfDTO(session.getCsrfToken());
-			}
-		}
-
-		// check public session cookie, match csrf-token in db, return if match
-		Cookie sessionCookiePub = getCookie(request, SESSION_COOKIE_NAME_PUBLIC);
-		if (sessionCookiePub != null) {
-			String sessionId = sessionCookiePub.getValue();
-			AuthSessionDTO session = authService.getSessionBySessionId(sessionId);
-			if (session != null) {
-				return new AuthCsrfDTO(session.getCsrfToken());
+			AuthCsrfDTO csrfDTO = authService.getCsrfToken(sessionId);
+			if (csrfDTO != null) {
+				return csrfDTO;
 			}
 		}
 
 		// if no active session, create pub session
-		AuthSessionDTO sessionDTO = authService.createSession();
+		AuthSessionDTO sessionDTO = authService.createSession(false);
 
 		// add session-id to cookies
-		Cookie pubCookie = new Cookie(SESSION_COOKIE_NAME_PUBLIC, sessionDTO.getSessionId());
+		Cookie pubCookie = new Cookie(SESSION_COOKIE_NAME, sessionDTO.getSessionId());
 		pubCookie.setMaxAge(60 * 60);
 		pubCookie.setHttpOnly(true);
 		response.addCookie(pubCookie);
