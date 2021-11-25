@@ -19,14 +19,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.header.HeaderWriterFilter;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import dev.johnshift.backend.auth.AuthCsrfFilter;
-import dev.johnshift.backend.auth.AuthService;
-import dev.johnshift.backend.auth.AuthSessionEntity;
+import dev.johnshift.backend.security.filters.CsrfFilter;
+import dev.johnshift.backend.security.filters.ExceptionHandlerFilter;
+import dev.johnshift.backend.security.filters.SessionFilter;
+import dev.johnshift.backend.session.SessionEntity;
+import dev.johnshift.backend.session.SessionService;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -36,13 +37,11 @@ import lombok.RequiredArgsConstructor;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	/**
-	 * Clear expired sessions every 5 mins.
-	 */
+	/** Clear expired sessions every 5 mins. */
 	private static final int CLEAR_SESSIONS_DELAY = 1000 * 60 * 5;
 
 	private final PasswordEncoder passwordEncoder;
-	private final AuthService authService;
+	private final SessionService sessionService;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -62,7 +61,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 
 			// Custom Auth Filter
-			.addFilterAfter(new AuthCsrfFilter(authService), HeaderWriterFilter.class)
+			.addFilterAfter(new ExceptionHandlerFilter(), ChannelProcessingFilter.class)
+			.addFilterAfter(new SessionFilter(sessionService), ExceptionHandlerFilter.class)
+			.addFilterAfter(new CsrfFilter(sessionService), SessionFilter.class)
 
 			// Todo: extend session age on requests
 
@@ -130,15 +131,13 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 		return source;
 	}
 
-	/**
-	 * Runs session expiration every 1 hour
-	 */
+	/** Runs session expiration every 1 hour */
 	@Scheduled(fixedDelay = CLEAR_SESSIONS_DELAY)
 	public void hello() {
-		List<AuthSessionEntity> expiredSessions = authService.getExpiredSessions();
+		List<SessionEntity> expiredSessions = sessionService.getExpiredSessions();
 		if (!expiredSessions.isEmpty()) {
-			for (AuthSessionEntity session : expiredSessions) {
-				authService.deleteSession(session);
+			for (SessionEntity session : expiredSessions) {
+				sessionService.deleteSession(session);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package dev.johnshift.backend.auth;
+package dev.johnshift.backend.session;
 
 import java.util.Date;
 
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "sessions")
 @Data
 @NoArgsConstructor
-public class AuthSessionEntity {
+public class SessionEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
