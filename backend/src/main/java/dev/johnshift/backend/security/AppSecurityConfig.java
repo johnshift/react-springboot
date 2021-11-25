@@ -25,6 +25,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import dev.johnshift.backend.security.filters.CsrfFilter;
 import dev.johnshift.backend.security.filters.ExceptionHandlerFilter;
+import dev.johnshift.backend.security.filters.LoggingFilter;
 import dev.johnshift.backend.security.filters.SessionFilter;
 import dev.johnshift.backend.session.SessionEntity;
 import dev.johnshift.backend.session.SessionService;
@@ -60,14 +61,21 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 			.configurationSource(getCorsConfigurationSource())
 			.and()
 
-			// Custom Auth Filter
+			// logging
+			.addFilterBefore(new LoggingFilter(), ChannelProcessingFilter.class)
+			
+			// spring security exception handler
 			.addFilterAfter(new ExceptionHandlerFilter(), ChannelProcessingFilter.class)
-			.addFilterAfter(new SessionFilter(sessionService), ExceptionHandlerFilter.class)
+
+
+			// custom session management
+			// Todo: extend session age on requests
+			.addFilterAfter(new SessionFilter(sessionService), LoggingFilter.class)
+
+			// custom csrf filter
 			.addFilterAfter(new CsrfFilter(sessionService), SessionFilter.class)
 
-			// Todo: extend session age on requests
-
-
+			
 			.authorizeRequests()
 
 			// public endpoints
