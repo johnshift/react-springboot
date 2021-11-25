@@ -76,7 +76,8 @@ public class AuthControllerTest {
 		pubSessionCookie.setMaxAge(60 * 60);
 		pubSessionCookie.setHttpOnly(true);
 
-		mockMvc.perform(get("/csrf-token").cookie(pubSessionCookie))
+		mockMvc.perform(get("/csrf-token")
+			.cookie(pubSessionCookie))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.token").value(sampleCsrfToken));
 

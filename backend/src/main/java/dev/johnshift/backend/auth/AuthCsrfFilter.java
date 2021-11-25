@@ -20,33 +20,26 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import dev.johnshift.backend.exceptions.ExceptionDTO;
 import lombok.RequiredArgsConstructor;
 
-
 import static org.springframework.web.util.WebUtils.getCookie;
 import static dev.johnshift.backend.auth.AuthController.CSRF_HEADER_KEY;
 import static dev.johnshift.backend.auth.AuthController.SESSION_COOKIE_NAME;
 
-/**
- * AuthFilter is invoked once per request only.
+/** AuthFilter is invoked once per request only.
  * <p>
  * Notes:
  * <ul>
- * <li>Anonymous clients should already have <code>X-XSRF-TOKEN</code> header in
- * their request or else they will be rejected by xsrf verification.</li>
- * <li>Clients can request anonymous <code>X-XSRF-TOKEN</code> if none is found
- * in client state. Upon request, a new anonymous <code>X-SESSION</code> will be
- * created linked with a new <code>X-XSRF-TOKEN</code> which will also be sent
- * in response headers.</li>
- * <li><code>X-SESSION</code> cookie should have <code>http-only</code>
- * attribute to be unreadable by client JS. It should also have
- * <code>same-site STRICT</code> attribute to be unreadable to other
- * websites.</li>
- * <li>Anonymous sessions should be deleted once user successfully logged
- * in.</li>
+ * <li>Anonymous clients should already have <code>X-XSRF-TOKEN</code> header in their request or
+ * else they will be rejected by xsrf verification.</li>
+ * <li>Clients can request anonymous <code>X-XSRF-TOKEN</code> if none is found in client state.
+ * Upon request, a new anonymous <code>X-SESSION</code> will be created linked with a new
+ * <code>X-XSRF-TOKEN</code> which will also be sent in response headers.</li>
+ * <li><code>X-SESSION</code> cookie should have <code>http-only</code> attribute to be unreadable
+ * by client JS. It should also have <code>same-site STRICT</code> attribute to be unreadable to
+ * other websites.</li>
+ * <li>Anonymous sessions should be deleted once user successfully logged in.</li>
  * <li>User sessions should be deleted on logout</li>
- * <li>Todo: refresh session expiration if received any request from loggedin
- * user
- * <li>Todo: <code>same-site</code> cookies is still unsupported in
- * springboot</li>
+ * <li>todo -> refresh session expiration if received any request from loggedin user</li>
+ * <li>todo -> <code>same-site</code> cookies is still unsupported in springboot</li>
  * </ul>
  */
 @RequiredArgsConstructor
@@ -67,16 +60,14 @@ public class AuthCsrfFilter extends OncePerRequestFilter {
 		writer.flush();
 	}
 
-	/**
-	 * Steps:
+	/** Checks csrf-token in header and matches to session in db.
 	 * <ol>
 	 * <li>Checks for csrf-token header. Unauthorized if null.</li>
 	 * <li>Checks if session cookie is present. Unauthorized if null.</li>
 	 * <li>Unauthorized if csrf-token does not match token inside session from db.</li>
 	 * </ol>
 	 * <p>
-	 * Note: Cookie names are case-sensitive
-	 */
+	 * Note: Cookie names are case-sensitive */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws ServletException, IOException {
@@ -108,8 +99,7 @@ public class AuthCsrfFilter extends OncePerRequestFilter {
 		writeUnauthorizedResponse(response, "No session found");
 	}
 
-	/**
-	 * Do not run AuthFilter on the following requests:
+	/** Do not run AuthFilter on the following requests:
 	 * <ul>
 	 * <li>GET /csrf-token</li>
 	 * </ul>
