@@ -1,6 +1,5 @@
 package dev.johnshift.backend.exceptions;
 
-
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -15,35 +14,29 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
-  public static final String INVALID_TYPE = "InvalidTypeException";
-  public static final String INVALID_TYPE_MSG = "Invalid type provided";
+	public static final String INVALID_TYPE = "InvalidTypeException";
+	public static final String INVALID_TYPE_MSG = "Invalid type provided";
 
-  /*
-   * Overriden Exceptions
-   * e.g. JsonParse errors, path not found etc. etc.
-  */
+	/*
+	 * Overriden Exceptions e.g. JsonParse errors, path not found etc. etc.
+	 */
 
-  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-  protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(
-      MethodArgumentTypeMismatchException ex, WebRequest request
-  ) {
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(
+		MethodArgumentTypeMismatchException ex, WebRequest request) {
 
-    ExceptionDTO dto = new ExceptionDTO(
-      INVALID_TYPE,
-      INVALID_TYPE_MSG
-    );
+		ExceptionDTO dto = new ExceptionDTO(
+			INVALID_TYPE,
+			INVALID_TYPE_MSG);
 
-    return buildResponseEntity(dto, HttpStatus.BAD_REQUEST);
-  }
+		return buildResponseEntity(dto, HttpStatus.BAD_REQUEST);
+	}
 
+	/*
+	 * Handle Global App Exceptions here e.g. Validations etc. etc.
+	 */
 
-  /*
-   * Handle Global App Exceptions here
-   * e.g. Validations etc. etc.
-  */
-
-  private ResponseEntity<Object> buildResponseEntity(ExceptionDTO resp, HttpStatus status) {
-    return new ResponseEntity<>(resp, status);
-  }
+	private ResponseEntity<Object> buildResponseEntity(ExceptionDTO resp, HttpStatus status) {
+		return new ResponseEntity<>(resp, status);
+	}
 }
-

@@ -1,7 +1,8 @@
 package dev.johnshift.backend.session;
 
 import java.util.Date;
-
+import java.util.List;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,32 +11,35 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Entity that reflects session table in DB
- */
+/** Entity that reflects session table in DB */
 @Entity
-@Table(name = "sessions")
 @Data
 @NoArgsConstructor
+@Table(name = "sessions")
+@TypeDef(name = "list-array", typeClass = ListArrayType.class)
 public class SessionEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
-	@Column(name = "session_id")
-	private String sessionId;
+	@Id
+	@Column(name = "id")
+	@Type(type = "pg-uuid")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
 
 	@Column(name = "csrf_token")
-	private String csrfToken;
+	@Type(type = "pg-uuid")
+	private UUID csrfToken;
 
-	@Column(name = "timestamp")
+	@Column(name = "recent_ts")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date timestamp;
+	private Date recentTs;
 
-	@Column(name = "is_authenticated")
-	private boolean isAuthenticated;
+	@Type(type = "list-array")
+	@Column(name = "roles", columnDefinition = "text[]")
+	private List<String> roles;
 }

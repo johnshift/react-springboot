@@ -1,19 +1,15 @@
 package dev.johnshift.backend.security.filters;
 
 import java.io.IOException;
-
+import java.util.Objects;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
-import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
-
+import dev.johnshift.backend.security.AuthException;
 import dev.johnshift.backend.session.SessionService;
 import lombok.RequiredArgsConstructor;
 
@@ -60,7 +56,7 @@ public class CsrfFilter extends OncePerRequestFilter {
 			return csrfAttr;
 		}
 
-		return null;
+		throw AuthException.unauthorized("CSRF Header not found");
 	}
 
 	/** Retrieves session-id either from session cookie or request attribute.
@@ -80,7 +76,7 @@ public class CsrfFilter extends OncePerRequestFilter {
 			return sessionId;
 		}
 
-		return null;
+		throw AuthException.unauthorized("No active session found");
 	}
 
 	/** Checks csrf-token in header or request attribute and matches to session in db.
@@ -100,44 +96,32 @@ public class CsrfFilter extends OncePerRequestFilter {
 		throws ServletException, IOException {
 
 		String reqCsrfToken = getReqCsrfToken(request);
-
-		// if no x-csrf-token in header or attribute -> unauthorized
-		if (reqCsrfToken == null) {
-			Utils.writeUnauthorizedResponse(response, "No csrf-token found in request");
-			return;
-		}
-
 		String sessionId = getReqSessionId(request);
-		if (sessionId == null) {
-			Utils.writeUnauthorizedResponse(response, "No session found in request");
-			return;
-		}
-
 		String csrfToken = sessionService.getCsrfToken(sessionId);
-		if (csrfToken == null) {
-			Utils.writeUnauthorizedResponse(response, "No csrf-token found using current session");
-			return;
-		}
 
-		if (!reqCsrfToken.equals(csrfToken)) {
-			Utils.writeUnauthorizedResponse(response, "CSRF token mismatch");
-			return;
+		if (!Objects.equals(reqCsrfToken, csrfToken)) {
+			throw AuthException.unauthorized("CSRF token mismatch");
 		}
 
 		chain.doFilter(request, response);
 	}
 
-	/** Do not run AuthFilter on the following requests:
-	 * <ul>
-	 * <li>GET /csrf-token</li>
-	 * </ul>
-	 */
-	@Override
-	protected boolean shouldNotFilter(HttpServletRequest request) {
+	// @Override
+	// protected boolean shouldNotFilter(HttpServletRequest request) {
 
-		Multimap<String, String> allowedRequests = ArrayListMultimap.create();
-		allowedRequests.put("/csrf-token", HttpMethod.GET.name());
+	// Map<String, String> allowedRequests = new HashMap<>();
+	// allowedRequests.put("/csrf-token", HttpMethod.GET.name());
 
-		return allowedRequests.containsEntry(request.getRequestURI(), request.getMethod());
-	}
+	// String path = request.getRequestURI();
+	// String method = request.getMethod();
+
+	// boolean shouldSkip = false;
+	// String mappedMethod = allowedRequests.get(path);
+
+	// if (mappedMethod != null && mappedMethod.equals(method)) {
+	// shouldSkip = true;
+	// }
+
+	// return shouldSkip;
+	// }
 }

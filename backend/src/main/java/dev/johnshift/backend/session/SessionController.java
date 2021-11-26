@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import dev.johnshift.backend.exceptions.ExceptionDTO;
@@ -12,9 +13,16 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/session")
 public class SessionController {
 
 	private final SessionService sessionService;
+
+	@GetMapping("/")
+	public String getIndex() {
+		return "This should be publicly accesible";
+	}
+
 
 	@GetMapping("/csrf-token")
 	public String getCsrfToken(HttpServletRequest request, HttpServletResponse response) {

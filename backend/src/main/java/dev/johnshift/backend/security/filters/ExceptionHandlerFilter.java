@@ -16,7 +16,13 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 		} catch (RuntimeException e) {
 
-			Utils.writeUnauthorizedResponse(response, e.getMessage());
+			// we print exception message for debug
+			System.out.println("\n\nAuthentication Error: \t" + e.getMessage() + "\n\t");
+			e.printStackTrace();
+			System.out.println("\n");
+
+			// we return ambiguous error message
+			Utils.writeUnauthorizedResponse(response, "UNAUTHORIZED");
 		}
 	}
 }

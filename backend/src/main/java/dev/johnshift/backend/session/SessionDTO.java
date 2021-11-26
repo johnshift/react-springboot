@@ -9,8 +9,9 @@ public class SessionDTO {
 
 	public static SessionDTO of(SessionEntity session) {
 		return new SessionDTO(
-			session.getSessionId(),
-			session.getCsrfToken());
+			session.getId().toString(),
+			session.getCsrfToken().toString());
 	}
-	
+
 }
+

@@ -1,6 +1,5 @@
 package dev.johnshift.backend.exceptions;
 
-
 import java.util.Date;
 
 import lombok.Getter;

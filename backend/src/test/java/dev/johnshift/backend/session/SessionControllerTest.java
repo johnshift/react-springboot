@@ -1,5 +1,6 @@
-package dev.johnshift.backend.auth;
+package dev.johnshift.backend.session;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,23 +50,30 @@ public class SessionControllerTest {
 	@Autowired
 	MockMvc mockMvc;
 
+	private final String SESSION_CSRF_TOKEN_URL = "/api/v1/session/csrf-token";
 	private final String sampleSessionId = UUID.randomUUID().toString();
 	private final String sampleCsrfToken = UUID.randomUUID().toString();
 	private final SessionDTO sampleSessionDTO = new SessionDTO(sampleSessionId, sampleCsrfToken);
 
+	// @BeforeAll
+	// void prep() {
+	// System.out.println("sampleSessionId: " + sampleSessionId);
+	// System.out.println("sampleCsrfToken: " + sampleCsrfToken);
+	// }
+
 	@Test
-	public void get_csrftoken_OK() throws Exception {
+	public void get_csrftoken_auto_public_session_OK() throws Exception {
 
 		// mock create session returns sample session dto
 		when(sessionService.getCsrfTokenFromHttpRequest(any())).thenReturn(sampleCsrfToken);
 
 		// mock calls from SessionFilter creating public session
-		when(sessionService.createSession(false)).thenReturn(sampleSessionDTO);
+		when(sessionService.createPublicSession()).thenReturn(sampleSessionDTO);
 
 		// mock calls from CsrfFilter retrieving csrfToken
 		when(sessionService.getCsrfToken(sampleSessionId)).thenReturn(sampleCsrfToken);
 
-		mockMvc.perform(get("/csrf-token"))
+		mockMvc.perform(get(SESSION_CSRF_TOKEN_URL))
 			.andExpect(status().isOk())
 			.andExpect(cookie().value(SESSION_COOKIE_NAME, sampleSessionId))
 			.andExpect(cookie().httpOnly(SESSION_COOKIE_NAME, true))
@@ -76,26 +84,23 @@ public class SessionControllerTest {
 	@Test
 	public void get_csrftoken_with_session_OK() throws Exception {
 
-		// mock create session returns sample session dto
-		when(sessionService.getCsrfTokenFromHttpRequest(any())).thenReturn(sampleCsrfToken);
-
-		// mock calls from SessionFilter creating public session
-		when(sessionService.createSession(false)).thenReturn(sampleSessionDTO);
-
-		// mock calls from CsrfFilter retrieving csrfToken
-		when(sessionService.getCsrfToken(sampleSessionId)).thenReturn(sampleCsrfToken);
-
 		// mock active session cookie
 		Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, sampleSessionId);
 		sessionCookie.setMaxAge(60 * 60);
 		sessionCookie.setHttpOnly(true);
 
-		mockMvc.perform(get("/csrf-token")
+		// mock create session returns sample session dto
+		when(sessionService.getCsrfTokenFromHttpRequest(any())).thenReturn(sampleCsrfToken);
+
+		// mock calls from SessionFilter session lookup
+		when(sessionService.getSessionBySessionId(sampleSessionId)).thenReturn(sampleSessionDTO);
+
+		// mock calls from CsrfFilter retrieving csrfToken
+		when(sessionService.getCsrfToken(sampleSessionId)).thenReturn(sampleCsrfToken);
+
+		mockMvc.perform(get(SESSION_CSRF_TOKEN_URL)
 			.cookie(sessionCookie))
 			.andExpect(status().isOk())
-			.andExpect(cookie().value(SESSION_COOKIE_NAME, sampleSessionId))
-			.andExpect(cookie().httpOnly(SESSION_COOKIE_NAME, true))
-			.andExpect(cookie().maxAge(SESSION_COOKIE_NAME, 60 * 60))
 			.andExpect(content().string(sampleCsrfToken));
 	}
 
@@ -106,7 +111,7 @@ public class SessionControllerTest {
 		when(sessionService.getCsrfTokenFromHttpRequest(any())).thenReturn(sampleCsrfToken);
 
 		// mock calls from SessionFilter creating public session
-		when(sessionService.createSession(false)).thenReturn(sampleSessionDTO);
+		when(sessionService.createPublicSession()).thenReturn(sampleSessionDTO);
 
 		// mock calls from CsrfFilter retrieving csrfToken
 		when(sessionService.getCsrfToken(sampleSessionId)).thenReturn(sampleCsrfToken);
@@ -116,7 +121,7 @@ public class SessionControllerTest {
 		pubSessionCookie.setMaxAge(60 * 60);
 		pubSessionCookie.setHttpOnly(true);
 
-		mockMvc.perform(get("/csrf-token"))
+		mockMvc.perform(get(SESSION_CSRF_TOKEN_URL))
 			.andExpect(status().isOk())
 			.andExpect(cookie().value(SESSION_COOKIE_NAME, sampleSessionId))
 			.andExpect(cookie().httpOnly(SESSION_COOKIE_NAME, true))

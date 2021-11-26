@@ -21,6 +21,6 @@ public class Utils {
 		writer.write(jsonPayload);
 		writer.flush();
 	}
-	
+
 	private Utils() {}
 }

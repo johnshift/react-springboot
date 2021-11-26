@@ -1,5 +1,7 @@
 package dev.johnshift.backend.session;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -18,13 +20,13 @@ public class SessionServiceImpl implements SessionService {
 	private final SessionRepository sessionRepository;
 
 	@Override
-	public SessionDTO createSession(boolean isAuthenticated) {
+	public SessionDTO createSession() {
 
 		SessionEntity newSession = new SessionEntity();
-		newSession.setCsrfToken(UUID.randomUUID().toString());
-		newSession.setSessionId(UUID.randomUUID().toString());
-		newSession.setTimestamp(new Date());
-		newSession.setAuthenticated(isAuthenticated);
+		newSession.setId(UUID.randomUUID());
+		newSession.setCsrfToken(UUID.randomUUID());
+		newSession.setRecentTs(new Date());
+		newSession.setRoles(Arrays.asList("USER"));
 
 		SessionEntity session = sessionRepository.save(newSession);
 
@@ -32,9 +34,25 @@ public class SessionServiceImpl implements SessionService {
 	}
 
 	@Override
+	public SessionDTO createPublicSession() {
+
+		SessionEntity newSession = new SessionEntity();
+		newSession.setId(UUID.randomUUID());
+		newSession.setCsrfToken(UUID.randomUUID());
+		newSession.setRecentTs(new Date());
+		newSession.setRoles(Collections.emptyList());
+
+		SessionEntity session = sessionRepository.save(newSession);
+		return SessionDTO.of(session);
+	}
+
+
+	@Override
 	public SessionDTO getSessionBySessionId(String sessionId) {
 
-		SessionEntity session = sessionRepository.findOneBySessionId(sessionId)
+		UUID id = UUID.fromString(sessionId);
+
+		SessionEntity session = sessionRepository.findOneBySessionId(id)
 			.orElseThrow(SessionException::notFound);
 
 		return SessionDTO.of(session);
@@ -43,7 +61,7 @@ public class SessionServiceImpl implements SessionService {
 	@Override
 	public String getCsrfToken(String sessionId) {
 
-		return sessionRepository.getCsrfToken(sessionId)
+		return sessionRepository.getCsrfToken(UUID.fromString(sessionId))
 			.orElseThrow(SessionException::csrfNotFound);
 	}
 
@@ -59,7 +77,7 @@ public class SessionServiceImpl implements SessionService {
 	public List<SessionEntity> getExpiredSessions() {
 
 		Date oneHourAgo = new Date(System.currentTimeMillis() - SESSION_AGE);
-		return sessionRepository.findByTimestampLessThan(oneHourAgo);
+		return sessionRepository.findByRecentTsLessThan(oneHourAgo);
 	}
 
 	@Override
@@ -87,5 +105,14 @@ public class SessionServiceImpl implements SessionService {
 		}
 
 		throw SessionException.reqSessionNotFound();
+	}
+
+	@Override
+	public void refreshSession(String sessionId) {
+
+		UUID id = UUID.fromString(sessionId);
+
+		sessionRepository.refreshSession(new Date(), id);
+
 	}
 }

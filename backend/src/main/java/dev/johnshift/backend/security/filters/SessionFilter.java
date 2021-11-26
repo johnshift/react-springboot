@@ -46,6 +46,7 @@ public class SessionFilter extends OncePerRequestFilter {
 			if (session != null) {
 
 				// proceed to run security filters
+				request.setAttribute(SESSION_CSRF_HEADER_KEY, session.getCsrfToken());
 				filterChain.doFilter(request, response);
 
 				// AFter doing the filter chains,
@@ -56,7 +57,7 @@ public class SessionFilter extends OncePerRequestFilter {
 		}
 
 		// create public session if no-session or invalid non-existing sessions
-		SessionDTO newSession = sessionService.createSession(false);
+		SessionDTO newSession = sessionService.createPublicSession();
 
 		// add public session to response cookie
 		Cookie pubCookie = new Cookie(SESSION_COOKIE_NAME, newSession.getSessionId());
