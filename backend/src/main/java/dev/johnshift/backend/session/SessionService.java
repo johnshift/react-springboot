@@ -9,7 +9,7 @@ public interface SessionService {
 	 * 1000ms x 60sec x 60min x 1hr */
 	public static final long SESSION_AGE = 1000L * 60L * 60L;
 
-	/** CCreates a new session with default role "USER".
+	/** Creates a new session with default role "USER".
 	 * 
 	 * @param isAuthenticated
 	 * @return */
@@ -22,12 +22,14 @@ public interface SessionService {
 	SessionDTO createPublicSession();
 
 	/** Retrieves the whole session entity using session-id.
+	 * <p>
+	 * Should update timestamp if a session is found in db.
 	 * 
 	 * @param sessionId
 	 * @return */
 	SessionDTO getSessionBySessionId(String sessionId);
 
-	/** Ref
+	/** Refresh recent timestamp on a session.
 	 * 
 	 * @param sessionId
 	 * @return */
@@ -35,12 +37,16 @@ public interface SessionService {
 
 
 	/** Retrieves csrf-token associated with session-id.
+	 * <p>
+	 * Should update timestamp if a session is found in db.
 	 * 
 	 * @param sessionId
 	 * @return */
 	String getCsrfToken(String sessionId);
 
 	/** Retrieves csrf-token associated with session cookie.
+	 * <p>
+	 * Should update timestamp if a session is found in db.
 	 * 
 	 * @param request
 	 * @return */

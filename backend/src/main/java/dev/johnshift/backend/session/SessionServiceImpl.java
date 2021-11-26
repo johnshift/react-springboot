@@ -46,14 +46,17 @@ public class SessionServiceImpl implements SessionService {
 		return SessionDTO.of(session);
 	}
 
-
 	@Override
 	public SessionDTO getSessionBySessionId(String sessionId) {
 
 		UUID id = UUID.fromString(sessionId);
 
+		// find session in db
 		SessionEntity session = sessionRepository.findOneBySessionId(id)
 			.orElseThrow(SessionException::notFound);
+
+		// update timestamp to token
+		refreshSession(sessionId);
 
 		return SessionDTO.of(session);
 	}
@@ -61,16 +64,25 @@ public class SessionServiceImpl implements SessionService {
 	@Override
 	public String getCsrfToken(String sessionId) {
 
-		return sessionRepository.getCsrfToken(UUID.fromString(sessionId))
+		String csrfToken = sessionRepository.getCsrfToken(UUID.fromString(sessionId))
 			.orElseThrow(SessionException::csrfNotFound);
+
+		// update timestamp to token
+		refreshSession(sessionId);
+
+		return csrfToken;
 	}
 
 	@Override
 	public String getCsrfTokenFromHttpRequest(HttpServletRequest request) {
 
 		String reqSessionId = getReqSessionId(request);
+		String csrfToken = getCsrfToken(reqSessionId);
 
-		return getCsrfToken(reqSessionId);
+		// update timestamp to token
+		refreshSession(reqSessionId);
+
+		return csrfToken;
 	}
 
 	@Override
@@ -112,7 +124,8 @@ public class SessionServiceImpl implements SessionService {
 
 		UUID id = UUID.fromString(sessionId);
 
-		sessionRepository.refreshSession(new Date(), id);
+		System.out.println("refreshing session-id: " + sessionId);
 
+		sessionRepository.refreshSession(new Date(), id);
 	}
 }

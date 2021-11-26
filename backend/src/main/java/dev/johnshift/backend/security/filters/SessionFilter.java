@@ -17,7 +17,8 @@ import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_MAX_
 import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_HTTP_ONLY;
 import static dev.johnshift.backend.session.SessionConstants.SESSION_CSRF_HEADER_KEY;
 
-/** Checks if an active session is present in the request.
+/** Checks if an active session is present in the request. If it matches with session in db, updates
+ * time stamp;
  * <p>
  * Creates anonymous session if no-session or invalid non-existing sessions.
  * <p>
