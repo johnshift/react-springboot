@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Table(name = "sessions")
-@TypeDef(name = "list-array", typeClass = ListArrayType.class)
+@TypeDef(name = "list-array", typeClass = ListArrayType.class) // enable array type from db
 public class SessionEntity {
 
 	@Id

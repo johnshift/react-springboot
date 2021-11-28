@@ -1,6 +1,6 @@
-CREATE TABLE sessions(
-	id uuid PRIMARY KEY DEFAULT uuid_generate_v4(), 
-	csrf_token uuid DEFAULT uuid_generate_v4(), 
-	recent_ts TIMESTAMP NOT NULL, 
-	roles TEXT[] NOT NULL
+CREATE TABLE sessions (
+	session_id uuid PRIMARY KEY, 
+	session_csrf_token uuid NOT NULL, 
+	session_recent_ts TIMESTAMP NOT NULL, 
+	session_roles TEXT[] NOT NULL
 );
