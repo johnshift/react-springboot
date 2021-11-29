@@ -9,14 +9,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface SessionRepository extends JpaRepository<SessionEntity, Long> {
+public interface SessionRepository extends JpaRepository<Session, UUID> {
 
 	/** Retrieves SessionEntity using session id
 	 * 
 	 * @param sessionID
 	 * @return */
 	@Query(value = "SELECT * FROM sessions WHERE id = ?1", nativeQuery = true)
-	Optional<SessionEntity> findOneBySessionId(UUID id);
+	Optional<Session> findOneBySessionId(UUID id);
 
 	/** Retrieves csrf-token from an existing session
 	 * 
@@ -37,7 +37,7 @@ public interface SessionRepository extends JpaRepository<SessionEntity, Long> {
 	 * 
 	 * @param ts
 	 * @return */
-	List<SessionEntity> findByRecentTsLessThan(Date recentTs);
+	List<Session> findByRecentTsLessThan(Date recentTs);
 
 	// /** Creates a new public session with empty role.
 	// * <p>

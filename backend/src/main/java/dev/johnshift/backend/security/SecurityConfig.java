@@ -4,31 +4,30 @@ package dev.johnshift.backend.security;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import dev.johnshift.backend.security.filters.UserPassAuthFilter;
+import dev.johnshift.backend.credential.CredentialService;
+import dev.johnshift.backend.security.filters.AuthenticationFilter;
 import dev.johnshift.backend.security.filters.CsrfFilter;
 import dev.johnshift.backend.security.filters.ExceptionHandlerFilter;
 import dev.johnshift.backend.security.filters.SessionFilter;
-import dev.johnshift.backend.session.SessionEntity;
+import dev.johnshift.backend.session.Session;
 import dev.johnshift.backend.session.SessionService;
 import lombok.RequiredArgsConstructor;
 
@@ -44,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final PasswordEncoder passwordEncoder;
 	private final SessionService sessionService;
+	private final CredentialService credentialService;
+	private final UserDetailsService userServiceImpl;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -66,35 +67,48 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.addFilterAfter(new ExceptionHandlerFilter(), ChannelProcessingFilter.class)
 			.addFilterAfter(new SessionFilter(sessionService), UsernamePasswordAuthenticationFilter.class)
 			.addFilterAfter(new CsrfFilter(sessionService), SessionFilter.class)
-
+			.addFilterAfter(new UserPassAuthFilter(authenticationManager(), sessionService), CsrfFilter.class)
+			.addFilterAfter(new AuthenticationFilter(credentialService, sessionService),
+				UserPassAuthFilter.class)
 			// Todo: extend session age on requests
 
 			.authorizeRequests()
 
 			// public endpoints
-			.antMatchers(HttpMethod.GET, "/public").permitAll()
-			.antMatchers(HttpMethod.GET, "/expired-sessions").permitAll();
+			// .antMatchers("/api/v1/session/csrf-token").permitAll()
+
+			.anyRequest()
+			.authenticated();
 	}
+
+
 
 	@Override
-	@Bean
-	protected UserDetailsService userDetailsService() {
-
-		UserDetails user = User.builder()
-			.username("user")
-			.password(passwordEncoder.encode("pass"))
-			.roles("USER")
-			.build();
-
-
-		return new InMemoryUserDetailsManager(user);
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth
+			.userDetailsService(userServiceImpl)
+			.passwordEncoder(passwordEncoder);
 	}
 
-	@Override
-	@Bean
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
+	// @Override
+	// @Bean
+	// public AuthenticationManager authenticationManagerBean() throws Exception {
+	// return super.authenticationManagerBean();
+	// }
+
+	// @Override
+	// @Bean
+	// protected UserDetailsService userDetailsService() {
+
+	// UserDetails user = User.builder()
+	// .username("user")
+	// .password(passwordEncoder.encode("pass"))
+	// .roles("USER")
+	// .build();
+
+
+	// return new InMemoryUserDetailsManager(user);
+	// }
 
 	// CORS configuration
 	private CorsConfigurationSource getCorsConfigurationSource() {
@@ -135,10 +149,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	/** Runs session expiration every 1 hour */
 	@Scheduled(fixedDelay = CLEAR_SESSIONS_DELAY)
 	public void clearExpiredSessions() {
-		List<SessionEntity> expiredSessions = sessionService.getExpiredSessions();
+		List<Session> expiredSessions = sessionService.getExpiredSessions();
 		if (!expiredSessions.isEmpty()) {
-			for (SessionEntity session : expiredSessions) {
-				sessionService.deleteSession(session);
+			for (Session session : expiredSessions) {
+				sessionService.deleteSession(session.getId());
 			}
 		}
 	}

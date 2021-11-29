@@ -12,16 +12,20 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws ServletException, IOException {
+
 		try {
+
 			filterChain.doFilter(request, response);
 		} catch (RuntimeException e) {
 
-			// we print exception message for debug
-			System.out.println("\n\nAuthentication Error: \t" + e.getMessage() + "\n\t");
-			e.printStackTrace();
-			System.out.println("\n");
+			System.out.println("\n\n\n================= Exception Handler Filter CATCH =================\n");
 
-			// we return ambiguous error message
+			// print exception message for debug
+			System.out.println("Authentication Error: \t" + e.getMessage() + "\n\n");
+			// e.printStackTrace();
+			// System.out.println("\n");
+
+			// only return ambiguous error for security
 			Utils.writeUnauthorizedResponse(response, "UNAUTHORIZED");
 		}
 	}

@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "sessions")
 @TypeDef(name = "list-array", typeClass = ListArrayType.class) // enable array type from db
-public class SessionEntity {
+public class Session {
 
 	@Id
 	@Column(name = "id")
@@ -35,11 +35,14 @@ public class SessionEntity {
 	@Type(type = "pg-uuid")
 	private UUID csrfToken;
 
+	@Column(name = "principal")
+	private String principal;
+
 	@Column(name = "recent_ts")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date recentTs;
 
 	@Type(type = "list-array")
-	@Column(name = "roles", columnDefinition = "text[]")
-	private List<String> roles;
+	@Column(name = "authorities", columnDefinition = "text[]")
+	private List<String> authorities;
 }

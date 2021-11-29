@@ -34,20 +34,23 @@ public class SessionFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws ServletException, IOException {
 
+		System.out.println("\n\n\n================= SESSION FILTER =================\n");
+
 		Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
 
 		// active session present in cookie
 		if (sessionCookie != null) {
+			System.out.println("active session cookie = " + sessionCookie.getValue());
 			String sessionId = sessionCookie.getValue();
 
 			// retrieve session in db
 			SessionDTO session = sessionService.getSessionBySessionId(sessionId);
+			System.out.println("db-session from cookie: " + session.toString());
 
 			// continue if session cookie matches in db
 			if (session != null) {
 
 				// proceed to run security filters
-				request.setAttribute(SESSION_CSRF_HEADER_KEY, session.getCsrfToken());
 				filterChain.doFilter(request, response);
 
 				// AFter doing the filter chains,
@@ -59,6 +62,7 @@ public class SessionFilter extends OncePerRequestFilter {
 
 		// create public session if no-session or invalid non-existing sessions
 		SessionDTO newSession = sessionService.createPublicSession();
+		System.out.println("created public session = " + newSession.getSessionId());
 
 		// add public session to response cookie
 		Cookie pubCookie = new Cookie(SESSION_COOKIE_NAME, newSession.getSessionId());

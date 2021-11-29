@@ -9,13 +9,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import dev.johnshift.backend.user.UserVeilEntity;
+import dev.johnshift.backend.user.UserVeil;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "credentials")
-public class CredentialEntity {
+public class Credential {
 
 	@Id
 	@Column(name = "id")
@@ -36,5 +36,7 @@ public class CredentialEntity {
 			@JoinColumn(name = "user_id", referencedColumnName = "user_id"),
 			@JoinColumn(name = "veil_id", referencedColumnName = "veil_id")
 	})
-	private UserVeilEntity userVeil;
+	private UserVeil userVeil;
 }
+
+

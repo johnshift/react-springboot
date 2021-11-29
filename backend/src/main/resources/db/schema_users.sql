@@ -12,11 +12,12 @@ CREATE TABLE user_veils (
 
 CREATE TABLE credentials (
 	id SERIAL PRIMARY KEY,
-	username TEXT NOT NULL,
+	username TEXT NOT NULL UNIQUE,
 	password TEXT NOT NULL,
-	email TEXT NOT NULL,
+	email TEXT NOT NULL UNIQUE,
 	user_id INTEGER NOT NULL,
 	veil_id INTEGER NOT NULL,
+	UNIQUE(username),
 	FOREIGN KEY (user_id, veil_id) REFERENCES user_veils (user_id, veil_id)
 		ON DELETE CASCADE
 );

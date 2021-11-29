@@ -1,6 +1,7 @@
 package dev.johnshift.backend.session;
 
 import java.util.List;
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 public interface SessionService {
@@ -20,6 +21,13 @@ public interface SessionService {
 	 * @param isAuthenticated
 	 * @return */
 	SessionDTO createPublicSession();
+
+	/** Promotes public session into an active session with default "USER" role.
+	 * 
+	 * @param sessionId
+	 * @param principal
+	 * @return */
+	SessionDTO promotePublicSession(String sessionId, String principal);
 
 	/** Retrieves the whole session entity using session-id.
 	 * <p>
@@ -57,10 +65,10 @@ public interface SessionService {
 	 * {@link #SESSION_AGE} is available through {@link AuthService}.
 	 * 
 	 * @return */
-	List<SessionEntity> getExpiredSessions();
+	List<Session> getExpiredSessions();
 
 	/** Deletes a session entity
 	 * 
 	 * @param session */
-	public void deleteSession(SessionEntity session);
+	public void deleteSession(UUID sessionId);
 }

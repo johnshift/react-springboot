@@ -1,6 +1,5 @@
 package dev.johnshift.backend.session;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import dev.johnshift.backend.session.SessionController;
-import dev.johnshift.backend.session.SessionDTO;
-import dev.johnshift.backend.session.SessionRepository;
-import dev.johnshift.backend.session.SessionService;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,7 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_NAME;
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
@@ -53,7 +49,10 @@ public class SessionControllerTest {
 	private final String SESSION_CSRF_TOKEN_URL = "/api/v1/session/csrf-token";
 	private final String sampleSessionId = UUID.randomUUID().toString();
 	private final String sampleCsrfToken = UUID.randomUUID().toString();
-	private final SessionDTO sampleSessionDTO = new SessionDTO(sampleSessionId, sampleCsrfToken);
+	private final String samplePrincipal = "some_principal";
+	private final List<String> sampleAuthorities = Arrays.asList("ROLE_1", "ROLE_2");
+	private final SessionDTO sampleSessionDTO = new SessionDTO(
+		sampleSessionId, sampleCsrfToken, samplePrincipal, sampleAuthorities);
 
 	// @BeforeAll
 	// void prep() {

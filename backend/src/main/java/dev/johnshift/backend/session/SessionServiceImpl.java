@@ -22,13 +22,15 @@ public class SessionServiceImpl implements SessionService {
 	@Override
 	public SessionDTO createSession() {
 
-		SessionEntity newSession = new SessionEntity();
+		Session newSession = new Session();
 		newSession.setId(UUID.randomUUID());
 		newSession.setCsrfToken(UUID.randomUUID());
 		newSession.setRecentTs(new Date());
-		newSession.setRoles(Arrays.asList("USER"));
 
-		SessionEntity session = sessionRepository.save(newSession);
+		// todo: include other write authorities
+		newSession.setAuthorities(Arrays.asList("ROLE_USER"));
+
+		Session session = sessionRepository.save(newSession);
 
 		return SessionDTO.of(session);
 	}
@@ -36,13 +38,30 @@ public class SessionServiceImpl implements SessionService {
 	@Override
 	public SessionDTO createPublicSession() {
 
-		SessionEntity newSession = new SessionEntity();
+		Session newSession = new Session();
 		newSession.setId(UUID.randomUUID());
 		newSession.setCsrfToken(UUID.randomUUID());
+		newSession.setPrincipal("");
 		newSession.setRecentTs(new Date());
-		newSession.setRoles(Collections.emptyList());
+		newSession.setAuthorities(Collections.emptyList());
 
-		SessionEntity session = sessionRepository.save(newSession);
+		Session session = sessionRepository.save(newSession);
+		return SessionDTO.of(session);
+	}
+
+	@Override
+	public SessionDTO promotePublicSession(String sessionId, String principal) {
+
+
+		Session promotedSession = new Session();
+		promotedSession.setId(UUID.fromString(sessionId));
+		promotedSession.setCsrfToken(UUID.randomUUID());
+		promotedSession.setPrincipal(principal);
+		promotedSession.setRecentTs(new Date());
+		promotedSession.setAuthorities(Arrays.asList("ROLE_USER"));
+
+		Session session = sessionRepository.save(promotedSession);
+
 		return SessionDTO.of(session);
 	}
 
@@ -52,7 +71,7 @@ public class SessionServiceImpl implements SessionService {
 		UUID id = UUID.fromString(sessionId);
 
 		// find session in db
-		SessionEntity session = sessionRepository.findOneBySessionId(id)
+		Session session = sessionRepository.findOneBySessionId(id)
 			.orElseThrow(SessionException::notFound);
 
 		// update timestamp to token
@@ -86,16 +105,15 @@ public class SessionServiceImpl implements SessionService {
 	}
 
 	@Override
-	public List<SessionEntity> getExpiredSessions() {
+	public List<Session> getExpiredSessions() {
 
 		Date oneHourAgo = new Date(System.currentTimeMillis() - SESSION_AGE);
 		return sessionRepository.findByRecentTsLessThan(oneHourAgo);
 	}
 
 	@Override
-	public void deleteSession(SessionEntity session) {
-
-		sessionRepository.delete(session);
+	public void deleteSession(UUID sessionId) {
+		sessionRepository.deleteById(sessionId);
 	}
 
 
@@ -123,8 +141,6 @@ public class SessionServiceImpl implements SessionService {
 	public void refreshSession(String sessionId) {
 
 		UUID id = UUID.fromString(sessionId);
-
-		System.out.println("refreshing session-id: " + sessionId);
 
 		sessionRepository.refreshSession(new Date(), id);
 	}

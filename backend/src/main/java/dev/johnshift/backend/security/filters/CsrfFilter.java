@@ -1,13 +1,15 @@
 package dev.johnshift.backend.security.filters;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 import dev.johnshift.backend.security.AuthException;
 import dev.johnshift.backend.session.SessionService;
@@ -48,15 +50,18 @@ public class CsrfFilter extends OncePerRequestFilter {
 
 		String csrfHeader = request.getHeader(SESSION_CSRF_HEADER_KEY);
 		if (csrfHeader != null) {
+			System.out.println("req csrf-token from header = " + csrfHeader);
 			return csrfHeader;
 		}
 
 		String csrfAttr = (String) request.getAttribute(SESSION_CSRF_HEADER_KEY);
 		if (csrfAttr != null) {
+			System.out.println("req csrf-token from attribute = " + csrfAttr);
 			return csrfAttr;
 		}
 
-		throw AuthException.unauthorized("CSRF Header not found");
+		System.out.println("EXCEPTION -> NO REQUEST CSRF TOKEN");
+		throw AuthException.unauthorized("Request csrf-token not found");
 	}
 
 	/** Retrieves session-id either from session cookie or request attribute.
@@ -68,14 +73,17 @@ public class CsrfFilter extends OncePerRequestFilter {
 	private String getReqSessionId(HttpServletRequest request) {
 		Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
 		if (sessionCookie != null) {
+			System.out.println("req session-id from header = " + sessionCookie.getValue());
 			return sessionCookie.getValue();
 		}
 
 		String sessionId = (String) request.getAttribute(SESSION_COOKIE_NAME);
 		if (sessionId != null) {
+			System.out.println("req session-id from attribute = " + sessionId);
 			return sessionId;
 		}
 
+		System.out.println("EXCEPTION -> NO REQUEST SESSION-ID");
 		throw AuthException.unauthorized("No active session found");
 	}
 
@@ -95,9 +103,13 @@ public class CsrfFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws ServletException, IOException {
 
+		System.out.println("\n\n\n================= CSRF FILTER =================\n");
+
+
 		String reqCsrfToken = getReqCsrfToken(request);
 		String sessionId = getReqSessionId(request);
 		String csrfToken = sessionService.getCsrfToken(sessionId);
+		System.out.println("csrf-token in session from db = " + csrfToken);
 
 		if (!Objects.equals(reqCsrfToken, csrfToken)) {
 			throw AuthException.unauthorized("CSRF token mismatch");
@@ -106,22 +118,29 @@ public class CsrfFilter extends OncePerRequestFilter {
 		chain.doFilter(request, response);
 	}
 
-	// @Override
-	// protected boolean shouldNotFilter(HttpServletRequest request) {
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
 
-	// Map<String, String> allowedRequests = new HashMap<>();
-	// allowedRequests.put("/csrf-token", HttpMethod.GET.name());
+		System.out.println("------> CSRF_FILTER shouldNotFilter called");
 
-	// String path = request.getRequestURI();
-	// String method = request.getMethod();
+		Map<String, String> allowedRequests = new HashMap<>();
+		System.out.println("HttpMethod.GET.name() = " + HttpMethod.GET.name());
+		allowedRequests.put("/api/v1/session/csrf-token", HttpMethod.GET.name());
 
-	// boolean shouldSkip = false;
-	// String mappedMethod = allowedRequests.get(path);
+		String path = request.getRequestURI();
+		System.out.println("path = " + path);
+		String method = request.getMethod();
+		System.out.println("method = " + method);
 
-	// if (mappedMethod != null && mappedMethod.equals(method)) {
-	// shouldSkip = true;
-	// }
+		boolean shouldSkip = false;
+		String mappedMethod = allowedRequests.get(path);
+		System.out.println("mappedMethod = " + mappedMethod);
 
-	// return shouldSkip;
-	// }
+		if (mappedMethod != null && mappedMethod.equals(method)) {
+			shouldSkip = true;
+		}
+
+		System.out.println("shouldSkip = " + shouldSkip);
+		return shouldSkip;
+	}
 }
