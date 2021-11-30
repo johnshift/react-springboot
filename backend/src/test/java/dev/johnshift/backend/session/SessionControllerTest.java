@@ -64,7 +64,7 @@ public class SessionControllerTest {
 	public void get_csrftoken_auto_public_session_OK() throws Exception {
 
 		// mock create session returns sample session dto
-		when(sessionService.getCsrfTokenFromHttpRequest(any())).thenReturn(sampleCsrfToken);
+		when(sessionService.getCsrfToken(any())).thenReturn(sampleCsrfToken);
 
 		// mock calls from SessionFilter creating public session
 		when(sessionService.createPublicSession()).thenReturn(sampleSessionDTO);
@@ -89,7 +89,7 @@ public class SessionControllerTest {
 		sessionCookie.setHttpOnly(true);
 
 		// mock create session returns sample session dto
-		when(sessionService.getCsrfTokenFromHttpRequest(any())).thenReturn(sampleCsrfToken);
+		when(sessionService.getCsrfToken(any())).thenReturn(sampleCsrfToken);
 
 		// mock calls from SessionFilter session lookup
 		when(sessionService.getSessionBySessionId(sampleSessionId)).thenReturn(sampleSessionDTO);
@@ -107,7 +107,7 @@ public class SessionControllerTest {
 	public void get_csrftoken_nonExisting_session_OK() throws Exception {
 
 		// mock create session returns sample session dto
-		when(sessionService.getCsrfTokenFromHttpRequest(any())).thenReturn(sampleCsrfToken);
+		when(sessionService.getCsrfToken(any())).thenReturn(sampleCsrfToken);
 
 		// mock calls from SessionFilter creating public session
 		when(sessionService.createPublicSession()).thenReturn(sampleSessionDTO);

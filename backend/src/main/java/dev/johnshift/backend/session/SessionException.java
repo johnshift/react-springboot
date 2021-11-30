@@ -28,18 +28,18 @@ public class SessionException extends RuntimeException {
 	}
 
 	public static SessionException notFound() {
-		return new SessionException(SESSION_NOT_FOUND, HttpStatus.NOT_FOUND);
+		return new SessionException(SESSION_NOT_FOUND, HttpStatus.UNAUTHORIZED);
 	}
 
 	public static SessionException csrfNotFound() {
-		return new SessionException(SESSION_CSRF_NOT_FOUND, HttpStatus.NOT_FOUND);
+		return new SessionException(SESSION_CSRF_NOT_FOUND, HttpStatus.UNAUTHORIZED);
 	}
 
 	public static SessionException reqCsrfNotFound() {
-		return new SessionException(REQUEST_CSRF_NOT_FOUND, HttpStatus.NOT_FOUND);
+		return new SessionException(REQUEST_CSRF_NOT_FOUND, HttpStatus.UNAUTHORIZED);
 	}
 
 	public static SessionException reqSessionNotFound() {
-		return new SessionException(REQUEST_SESSION_NOT_FOUND, HttpStatus.NOT_FOUND);
+		return new SessionException(REQUEST_SESSION_NOT_FOUND, HttpStatus.UNAUTHORIZED);
 	}
 }

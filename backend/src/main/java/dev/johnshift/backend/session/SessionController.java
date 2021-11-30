@@ -1,5 +1,6 @@
 package dev.johnshift.backend.session;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import dev.johnshift.backend.exceptions.ExceptionDTO;
 import lombok.RequiredArgsConstructor;
+
+import static org.springframework.web.util.WebUtils.getCookie;
+import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_NAME;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,10 +37,29 @@ public class SessionController {
 	@GetMapping("/csrf-token")
 	public String getCsrfToken(HttpServletRequest request, HttpServletResponse response) {
 
-		String token = sessionService.getCsrfTokenFromHttpRequest(request);
-		System.out.println("controller retrieved token = " + token);
+		String reqSessionId = getReqSessionId(request);
 
-		return token;
+		return sessionService.getCsrfToken(reqSessionId);
+	}
+
+	/** Retrieves session-id either from session cookie or request attribute.
+	 * <p>
+	 * Throws {@link SessionException}: "Request session not found" if both null.
+	 * 
+	 * @param request
+	 * @return */
+	private String getReqSessionId(HttpServletRequest request) {
+		Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
+		if (sessionCookie != null) {
+			return sessionCookie.getValue();
+		}
+
+		String sessionId = (String) request.getAttribute(SESSION_COOKIE_NAME);
+		if (sessionId != null) {
+			return sessionId;
+		}
+
+		throw SessionException.reqSessionNotFound();
 	}
 
 	// =====================================================================

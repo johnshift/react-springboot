@@ -53,7 +53,6 @@ public class CredentialServiceImpl implements CredentialService {
 			return credential.getPassword();
 		}
 
-
 		return null;
 	}
 

@@ -61,8 +61,7 @@ public class UserPassAuthFilter extends UsernamePasswordAuthenticationFilter {
 
 	}
 
-	/** On successful authentication, deletes existing session (if loggedin) or public session (issued
-	 * by session,csrf filters).
+	/** On successful authentication, promotes existing pub-session into active-session
 	 * <p>
 	 * Deletes entry for both cookies and request attributes and also in DB. */
 	@Override
@@ -71,17 +70,17 @@ public class UserPassAuthFilter extends UsernamePasswordAuthenticationFilter {
 
 		System.out.println("----> successful authentication <----");
 
-		// System.out.println("successful authentication");
 		User principal = (User) authResult.getPrincipal();
 		System.out.println("auth'd principal = " + principal.getUsername());
 
 		String prevSessionId = null;
 
-		// remove pub session from cookie/attribute
+		// retrieve session-id from request
 		Cookie pubSessionCookie = getCookie(request, SESSION_COOKIE_NAME);
 		if (pubSessionCookie != null) {
-			System.out.println("already-existing pub session cookie = " + pubSessionCookie.getValue());
 			prevSessionId = pubSessionCookie.getValue();
+			System.out.println("already-existing pub session cookie = " + prevSessionId);
+
 		} else {
 			prevSessionId = (String) request.getAttribute(SESSION_COOKIE_NAME);
 			System.out.println("already-existing pub session attribute = " + prevSessionId);

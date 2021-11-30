@@ -5,13 +5,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-
-import static org.springframework.web.util.WebUtils.getCookie;
-import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_NAME;
 
 @Service
 @RequiredArgsConstructor
@@ -20,30 +15,9 @@ public class SessionServiceImpl implements SessionService {
 	private final SessionRepository sessionRepository;
 
 	@Override
-	public SessionDTO createSession() {
-
-		Session newSession = new Session();
-		newSession.setId(UUID.randomUUID());
-		newSession.setCsrfToken(UUID.randomUUID());
-		newSession.setRecentTs(new Date());
-
-		// todo: include other write authorities
-		newSession.setAuthorities(Arrays.asList("ROLE_USER"));
-
-		Session session = sessionRepository.save(newSession);
-
-		return SessionDTO.of(session);
-	}
-
-	@Override
 	public SessionDTO createPublicSession() {
 
-		Session newSession = new Session();
-		newSession.setId(UUID.randomUUID());
-		newSession.setCsrfToken(UUID.randomUUID());
-		newSession.setPrincipal("");
-		newSession.setRecentTs(new Date());
-		newSession.setAuthorities(Collections.emptyList());
+		Session newSession = newPubSession();
 
 		Session session = sessionRepository.save(newSession);
 		return SessionDTO.of(session);
@@ -53,12 +27,7 @@ public class SessionServiceImpl implements SessionService {
 	public SessionDTO promotePublicSession(String sessionId, String principal) {
 
 
-		Session promotedSession = new Session();
-		promotedSession.setId(UUID.fromString(sessionId));
-		promotedSession.setCsrfToken(UUID.randomUUID());
-		promotedSession.setPrincipal(principal);
-		promotedSession.setRecentTs(new Date());
-		promotedSession.setAuthorities(Arrays.asList("ROLE_USER"));
+		Session promotedSession = newPromotedSession(sessionId, principal);
 
 		Session session = sessionRepository.save(promotedSession);
 
@@ -93,18 +62,6 @@ public class SessionServiceImpl implements SessionService {
 	}
 
 	@Override
-	public String getCsrfTokenFromHttpRequest(HttpServletRequest request) {
-
-		String reqSessionId = getReqSessionId(request);
-		String csrfToken = getCsrfToken(reqSessionId);
-
-		// update timestamp to token
-		refreshSession(reqSessionId);
-
-		return csrfToken;
-	}
-
-	@Override
 	public List<Session> getExpiredSessions() {
 
 		Date oneHourAgo = new Date(System.currentTimeMillis() - SESSION_AGE);
@@ -116,32 +73,42 @@ public class SessionServiceImpl implements SessionService {
 		sessionRepository.deleteById(sessionId);
 	}
 
-
-	/** Retrieves session-id either from session cookie or request attribute.
-	 * <p>
-	 * Throws {@link SessionException}: "Request session not found" if both null.
-	 * 
-	 * @param request
-	 * @return */
-	private String getReqSessionId(HttpServletRequest request) {
-		Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
-		if (sessionCookie != null) {
-			return sessionCookie.getValue();
-		}
-
-		String sessionId = (String) request.getAttribute(SESSION_COOKIE_NAME);
-		if (sessionId != null) {
-			return sessionId;
-		}
-
-		throw SessionException.reqSessionNotFound();
-	}
-
 	@Override
 	public void refreshSession(String sessionId) {
 
 		UUID id = UUID.fromString(sessionId);
 
 		sessionRepository.refreshSession(new Date(), id);
+	}
+
+	/** Creates a public session with empty authorities and principal.
+	 * 
+	 * @return {@link Session} */
+	private Session newPubSession() {
+		Session newSession = new Session();
+		newSession.setId(UUID.randomUUID());
+		newSession.setCsrfToken(UUID.randomUUID());
+		newSession.setPrincipal("");
+		newSession.setRecentTs(new Date());
+		newSession.setAuthorities(Collections.emptyList());
+
+		return newSession;
+	}
+
+	/** Promots a given public session by using session-id, principal and ROLE_USER
+	 * 
+	 * @param authorities
+	 * @param principal
+	 * @return {@link Session} */
+	private Session newPromotedSession(String sessionId, String principal) {
+
+		Session newSession = new Session();
+		newSession.setId(UUID.fromString(sessionId));
+		newSession.setCsrfToken(UUID.randomUUID());
+		newSession.setPrincipal(principal);
+		newSession.setRecentTs(new Date());
+		newSession.setAuthorities(Arrays.asList("ROLE_USER"));
+
+		return newSession;
 	}
 }
