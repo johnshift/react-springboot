@@ -4,7 +4,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,17 +21,6 @@ import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_NAME
 public class SessionController {
 
 	private final SessionService sessionService;
-
-	@GetMapping("/")
-	public String getIndex() {
-		return "This should be publicly accesible";
-	}
-
-	@GetMapping("/user-only")
-	@PreAuthorize("isAuthenticated()")
-	public String getUserOnly() {
-		return "This should be user-only accesible";
-	}
 
 	@GetMapping("/csrf-token")
 	public String getCsrfToken(HttpServletRequest request, HttpServletResponse response) {

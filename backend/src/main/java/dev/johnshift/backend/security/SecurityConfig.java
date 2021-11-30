@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,7 +22,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import dev.johnshift.backend.security.filters.UserPassAuthFilter;
+import dev.johnshift.backend.security.filters.UserPassFilter;
 import dev.johnshift.backend.credential.CredentialService;
 import dev.johnshift.backend.security.filters.AuthenticationFilter;
 import dev.johnshift.backend.security.filters.CsrfFilter;
@@ -67,21 +68,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.addFilterAfter(new ExceptionHandlerFilter(), ChannelProcessingFilter.class)
 			.addFilterAfter(new SessionFilter(sessionService), UsernamePasswordAuthenticationFilter.class)
 			.addFilterAfter(new CsrfFilter(sessionService), SessionFilter.class)
-			.addFilterAfter(new UserPassAuthFilter(authenticationManager(), sessionService), CsrfFilter.class)
+			.addFilterAfter(new UserPassFilter(authenticationManager(), sessionService), CsrfFilter.class)
 			.addFilterAfter(new AuthenticationFilter(credentialService, sessionService),
-				UserPassAuthFilter.class)
+				UserPassFilter.class)
 			// Todo: extend session age on requests
 
 			.authorizeRequests()
 
 			// public endpoints
-			// .antMatchers("/api/v1/session/csrf-token").permitAll()
+			.antMatchers(HttpMethod.GET, "/api/v1/session/csrf-token").permitAll()
+			.antMatchers(HttpMethod.GET, "/api/v1/security/permit-all").permitAll()
+
+			// role-specific endpoints
+			.antMatchers(HttpMethod.GET, "/api/v1/security/user-only").hasRole("USER")
 
 			.anyRequest()
 			.authenticated();
 	}
 
-
+	// NOT SECURED Endpoints
+	@Override
+	public void configure(WebSecurity webSecurity) throws Exception {
+		webSecurity.ignoring().antMatchers(HttpMethod.GET, "/api/v1/security/not-secured");
+	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {

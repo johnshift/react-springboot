@@ -8,17 +8,18 @@ All exceptions should be catched by `ExceptionHandlers`
 
 ## User workflows
 - Sessions
-	- no-session-cookie -> create pub-session w/o roles
-	- w/ non-existing-session-cookie -> create pub-session w/o roles
-	- w/ existing-session-cookie -> load session w/ roles
+	- If no session found in request, a public session is automatically created.
+	- Active session-ids are added into cookies with http-only and 1hr max-age.
+	- Public sessions don't have any roles and authorities. Principal is also empty.
 - CSRF
-	- active session but no csrf-token in header -> unauthorized
-	- public session but no csrf-token in request attribute -> unauthorized
-	- request & db csrf-token mismatch -> unauthorized
-	- `GET /csrf-token` -> use current session and returns csrf-token as payload.  
-	Subsequent requests should include csrf-token into http headers.
+	- Public sessions inherently passes csrf-filter (csrf-token is added via request attribute).
+	- Active sessions are required to explicitly add csrf-token into request headers.
+	- All mismatched csrf-tokens are unauthorized.
+	- `GET /csrf-token` -> returns csrf-token from current session.
 - Login
-	- successful login -> promote pub-session into active-session w/ roles -> send csrf-token as response
+	- On successful login, promotes pub-session into active-session.  
+	All roles and permissions are retrieved and added as authorities into current session.
+	- Adds csrf-token into response headers to be used by clients on subsequent requests.
 
 ## TODO
 - ( ? ? ? ) `uuid-ossp` postgres extension:

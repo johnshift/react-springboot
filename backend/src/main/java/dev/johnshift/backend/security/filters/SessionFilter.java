@@ -1,11 +1,13 @@
 package dev.johnshift.backend.security.filters;
 
 import java.io.IOException;
+import java.util.Objects;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 import dev.johnshift.backend.session.SessionDTO;
 import dev.johnshift.backend.session.SessionService;
@@ -49,6 +51,13 @@ public class SessionFilter extends OncePerRequestFilter {
 
 			// continue if session cookie matches in db
 			if (session != null) {
+
+				// if public session and method = GET, include csrf-token into request attributes
+				boolean isGetRequest = Objects.equals(request.getMethod(), HttpMethod.GET.name());
+				if (session.getAuthorities().isEmpty() && isGetRequest) {
+					System.out.println("Using public session -> Adding csrf-token into request attribute.");
+					request.setAttribute(SESSION_CSRF_HEADER_KEY, session.getCsrfToken());
+				}
 
 				// proceed to run security filters
 				filterChain.doFilter(request, response);

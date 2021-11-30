@@ -1,15 +1,12 @@
 package dev.johnshift.backend.security.filters;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 import dev.johnshift.backend.security.AuthException;
 import dev.johnshift.backend.session.SessionService;
@@ -118,29 +115,29 @@ public class CsrfFilter extends OncePerRequestFilter {
 		chain.doFilter(request, response);
 	}
 
-	@Override
-	protected boolean shouldNotFilter(HttpServletRequest request) {
+	// @Override
+	// protected boolean shouldNotFilter(HttpServletRequest request) {
 
-		System.out.println("------> CSRF_FILTER shouldNotFilter called");
+	// System.out.println("------> CSRF_FILTER shouldNotFilter called");
 
-		Map<String, String> allowedRequests = new HashMap<>();
-		System.out.println("HttpMethod.GET.name() = " + HttpMethod.GET.name());
-		allowedRequests.put("/api/v1/session/csrf-token", HttpMethod.GET.name());
+	// Map<String, String> allowedRequests = new HashMap<>();
+	// System.out.println("HttpMethod.GET.name() = " + HttpMethod.GET.name());
+	// allowedRequests.put("/api/v1/session/csrf-token", HttpMethod.GET.name());
 
-		String path = request.getRequestURI();
-		System.out.println("path = " + path);
-		String method = request.getMethod();
-		System.out.println("method = " + method);
+	// String path = request.getRequestURI();
+	// System.out.println("path = " + path);
+	// String method = request.getMethod();
+	// System.out.println("method = " + method);
 
-		boolean shouldSkip = false;
-		String mappedMethod = allowedRequests.get(path);
-		System.out.println("mappedMethod = " + mappedMethod);
+	// boolean shouldSkip = false;
+	// String mappedMethod = allowedRequests.get(path);
+	// System.out.println("mappedMethod = " + mappedMethod);
 
-		if (mappedMethod != null && mappedMethod.equals(method)) {
-			shouldSkip = true;
-		}
+	// if (mappedMethod != null && mappedMethod.equals(method)) {
+	// shouldSkip = true;
+	// }
 
-		System.out.println("shouldSkip = " + shouldSkip);
-		return shouldSkip;
-	}
+	// System.out.println("shouldSkip = " + shouldSkip);
+	// return shouldSkip;
+	// }
 }

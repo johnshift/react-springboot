@@ -21,6 +21,15 @@ import lombok.RequiredArgsConstructor;
 import static org.springframework.web.util.WebUtils.getCookie;
 import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_NAME;
 
+/** This filter does the following:
+ * <ul>
+ * <li>Get session-id from cookie. (no session-id = no auth)</li>
+ * <li>Retrieve principal and password from session. (no match = no auth)</li>
+ * <li>Create user-pass token using credentials</li>
+ * <li>Set user-pass token as authentication for SecurityContextHolder.</li>
+ * <li>Let spring-security do the rest.</li>
+ * </ul>
+ */
 @RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter {
 
@@ -38,7 +47,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		// if no cookie do nothing.
 		Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
 		if (sessionCookie == null) {
-			System.out.println("no cookie in session -> do nothing -> next filter");
+			System.out.println("no cookie in session -> meaning no authorizations -> next filter");
 			filterChain.doFilter(request, response);
 			return;
 		}
