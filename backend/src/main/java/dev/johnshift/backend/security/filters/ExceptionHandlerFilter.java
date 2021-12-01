@@ -6,7 +6,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
 	@Override
@@ -18,12 +20,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 		} catch (RuntimeException e) {
 
-			System.out.println("\n\n\n================= Exception Handler Filter CATCH =================\n");
-
 			// print exception message for debug
-			System.out.println("Authentication Error: \t" + e.getMessage() + "\n\n");
+			log.debug("Authentication Error: \t" + e.getMessage());
 			// e.printStackTrace();
-			// System.out.println("\n");
+			// log.debug("\n");
 
 			// only return ambiguous error for security
 			Utils.writeUnauthorizedResponse(response, "UNAUTHORIZED");

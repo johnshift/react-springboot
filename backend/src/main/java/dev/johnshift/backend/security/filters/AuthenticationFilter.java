@@ -18,6 +18,7 @@ import dev.johnshift.backend.credential.CredentialService;
 import dev.johnshift.backend.session.SessionDTO;
 import dev.johnshift.backend.session.SessionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import static org.springframework.web.util.WebUtils.getCookie;
 import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_NAME;
 
@@ -30,6 +31,7 @@ import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_NAME
  * <li>Let spring-security do the rest.</li>
  * </ul>
  */
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationFilter extends OncePerRequestFilter {
 
@@ -41,24 +43,22 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		FilterChain filterChain)
 		throws ServletException, IOException {
 
-		System.out.println("\n\n\n================= AUTHENTICATION FILTER =================\n");
-
 		// all authenticated requests has ROLE_USER and is present in cookie header
 		// if no cookie do nothing.
 		Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
 		if (sessionCookie == null) {
-			System.out.println("no cookie in session -> meaning no authorizations -> next filter");
+			log.debug("No cookie in session -> No authorizations -> Next filter");
 			filterChain.doFilter(request, response);
 			return;
 		}
 
 		String sessionId = sessionCookie.getValue();
-		System.out.println("session cookie session-id = " + sessionId);
+		log.debug("Session Cookie = " + sessionId);
 		SessionDTO sessionDTO = sessionService.getSessionBySessionId(sessionId);
-		System.out.println("sessionDTO from db = " + sessionDTO.toString());
+		log.debug("SessionDTO from db = " + sessionDTO.toString());
 
 		String password = credentialService.getPasswordByPrincipalOrNull(sessionDTO.getPrincipal());
-		System.out.println("password retrieved using principal = " + password);
+		log.debug("Password using principal = " + password);
 
 		// throw exception if no password
 		if (password == null) {
@@ -69,16 +69,16 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		Set<GrantedAuthority> authorities = sessionDTO.getAuthorities().stream()
-			.map(a -> new SimpleGrantedAuthority(a))
+			.map(SimpleGrantedAuthority::new)
 			.collect(Collectors.toSet());
-		System.out.println("authorities = " + authorities.toString());
+		log.debug("Authorities = " + authorities.toString());
 
 		Authentication authentication = new UsernamePasswordAuthenticationToken(
 			sessionDTO.getPrincipal(),
 			password,
 			authorities);
 
-		System.out.println("user-pass auth token isAuthenticated = " + authentication.isAuthenticated());
+		log.debug("User-pass token isAuthenticated = " + authentication.isAuthenticated());
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);

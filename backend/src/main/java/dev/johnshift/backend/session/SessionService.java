@@ -32,7 +32,8 @@ public interface SessionService {
 	 * Should update timestamp if a session is found in db.
 	 * 
 	 * @param sessionId
-	 * @return */
+	 * @throws {@link SessionException} - if no session matched session-id
+	 * @return {@link SessionDTO} */
 	SessionDTO getSessionBySessionId(String sessionId);
 
 	/** Refresh recent timestamp on a session.

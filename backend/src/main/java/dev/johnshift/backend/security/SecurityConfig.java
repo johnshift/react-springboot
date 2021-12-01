@@ -27,6 +27,7 @@ import dev.johnshift.backend.credential.CredentialService;
 import dev.johnshift.backend.security.filters.AuthenticationFilter;
 import dev.johnshift.backend.security.filters.CsrfFilter;
 import dev.johnshift.backend.security.filters.ExceptionHandlerFilter;
+import dev.johnshift.backend.security.filters.LoggingFilter;
 import dev.johnshift.backend.security.filters.SessionFilter;
 import dev.johnshift.backend.session.Session;
 import dev.johnshift.backend.session.SessionService;
@@ -65,7 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 
 			// Custom Auth Filter
-			.addFilterAfter(new ExceptionHandlerFilter(), ChannelProcessingFilter.class)
+			.addFilterAfter(new LoggingFilter(), ChannelProcessingFilter.class)
+			.addFilterAfter(new ExceptionHandlerFilter(), LoggingFilter.class)
 			.addFilterAfter(new SessionFilter(sessionService), UsernamePasswordAuthenticationFilter.class)
 			.addFilterAfter(new CsrfFilter(sessionService), SessionFilter.class)
 			.addFilterAfter(new UserPassFilter(authenticationManager(), sessionService), CsrfFilter.class)

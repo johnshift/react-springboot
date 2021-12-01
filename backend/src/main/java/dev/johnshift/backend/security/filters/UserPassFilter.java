@@ -19,6 +19,7 @@ import dev.johnshift.backend.security.AuthException;
 import dev.johnshift.backend.security.LoginReqDTO;
 import dev.johnshift.backend.session.SessionDTO;
 import dev.johnshift.backend.session.SessionService;
+import lombok.extern.slf4j.Slf4j;
 import static org.springframework.web.util.WebUtils.getCookie;
 import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_NAME;
 import static dev.johnshift.backend.session.SessionConstants.SESSION_CSRF_HEADER_KEY;
@@ -30,6 +31,7 @@ import static dev.johnshift.backend.session.SessionConstants.SESSION_CSRF_HEADER
  * <p>
  * The <code>csrf-token</code> associated with the session is sent in response headers. Clients are
  * responsible for adding csrf-token into headers on subsequent requests. */
+@Slf4j
 public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationManager authenticationManager;
@@ -46,14 +48,12 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 		throws AuthenticationException {
 
-		System.out.println("\n\n\n================= USER-PASS FILTER: attemptAuthentication =================\n");
-
 		try {
 			LoginReqDTO loginReq = new ObjectMapper()
 				.readValue(request.getInputStream(), LoginReqDTO.class);
 
-			System.err.println("login-request principal = " + loginReq.getPrincipal());
-			System.err.println("login-request password = " + loginReq.getPassword());
+			log.debug("Login request principal = " + loginReq.getPrincipal());
+			log.debug("Login request password = " + loginReq.getPassword());
 
 			Authentication authByUsername = new UsernamePasswordAuthenticationToken(
 				loginReq.getPrincipal(),
@@ -75,10 +75,10 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 		Authentication authResult) throws IOException, ServletException {
 
-		System.out.println("----> successful authentication <----");
+		log.debug("Successful authentication");
 
 		User principal = (User) authResult.getPrincipal();
-		System.out.println("auth'd principal = " + principal.getUsername());
+		log.debug("Authenticated principal = " + principal.getUsername());
 
 		String prevSessionId = null;
 
@@ -86,18 +86,18 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 		Cookie pubSessionCookie = getCookie(request, SESSION_COOKIE_NAME);
 		if (pubSessionCookie != null) {
 			prevSessionId = pubSessionCookie.getValue();
-			System.out.println("already-existing pub session cookie = " + prevSessionId);
+			log.debug("Already-existing pub session cookie = " + prevSessionId);
 
 		} else {
 			prevSessionId = (String) request.getAttribute(SESSION_COOKIE_NAME);
-			System.out.println("already-existing pub session attribute = " + prevSessionId);
+			log.debug("Already-existing pub session attribute = " + prevSessionId);
 			request.setAttribute(SESSION_COOKIE_NAME, null);
 		}
 
 		// promote public session into active sesion and write response
 		if (prevSessionId != null) {
 			SessionDTO session = sessionService.promotePublicSession(prevSessionId, principal.getUsername());
-			System.out.println("PROMOTED session-id = " + session.getSessionId());
+			log.debug("PROMOTED session-id = " + session.getSessionId());
 
 			// SessionCsrfDTO dto = new SessionCsrfDTO(session.getCsrfToken());
 			// String payload = new ObjectMapper().writeValueAsString(dto);
@@ -114,8 +114,8 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 		AuthenticationException failed) throws IOException, ServletException {
 
-		System.out.println("----> UNsuccessful authentication <----");
-		System.out.println("err = " + failed.getMessage());
+		log.debug("Unsuccessful authentication");
+		log.debug("err = " + failed.getMessage());
 		throw AuthException.unauthorized("Incorrect username/email or password");
 	}
 

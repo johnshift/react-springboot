@@ -12,4 +12,12 @@ spring:
             "[non_contextual_creation]": true # ignore hibernate-postgres warnings on start
     hibernate:
       ddl-auto: update # provided at @Sql in IT tests
-    show-sql: true
+    show-sql: false
+
+# logging.level.org.springframework: DEBUG
+
+logging:
+  pattern: 
+    console: "%clr(%d{ISO8601}){faint} %clr([ ${LOG_LEVEL_PATTERN:%5p} ] ){yellow} %clr(%-40.40logger{39}:%M:%L) %msg%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  level:
+    "[dev.johnshift.backend]":  DEBUG

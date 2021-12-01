@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import dev.johnshift.backend.security.AuthException;
 import dev.johnshift.backend.session.SessionService;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import static org.springframework.web.util.WebUtils.getCookie;
 import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_NAME;
 import static dev.johnshift.backend.session.SessionConstants.SESSION_CSRF_HEADER_KEY;
@@ -32,6 +32,7 @@ import static dev.johnshift.backend.session.SessionConstants.SESSION_CSRF_HEADER
  * <li>Todo -> <code>same-site</code> cookies is still unsupported in springboot</li>
  * </ul>
  */
+@Slf4j
 @RequiredArgsConstructor
 public class CsrfFilter extends OncePerRequestFilter {
 
@@ -47,17 +48,17 @@ public class CsrfFilter extends OncePerRequestFilter {
 
 		String csrfHeader = request.getHeader(SESSION_CSRF_HEADER_KEY);
 		if (csrfHeader != null) {
-			System.out.println("req csrf-token from header = " + csrfHeader);
+			log.debug("Request Header csrf-token = " + csrfHeader);
 			return csrfHeader;
 		}
 
 		String csrfAttr = (String) request.getAttribute(SESSION_CSRF_HEADER_KEY);
 		if (csrfAttr != null) {
-			System.out.println("req csrf-token from attribute = " + csrfAttr);
+			log.debug("Request Attribute csrf-token = " + csrfAttr);
 			return csrfAttr;
 		}
 
-		System.out.println("EXCEPTION -> NO REQUEST CSRF TOKEN");
+		log.debug("getReqCsrfToken EXCEPTION -> NO REQUEST CSRF TOKEN");
 		throw AuthException.unauthorized("Request csrf-token not found");
 	}
 
@@ -70,17 +71,17 @@ public class CsrfFilter extends OncePerRequestFilter {
 	private String getReqSessionId(HttpServletRequest request) {
 		Cookie sessionCookie = getCookie(request, SESSION_COOKIE_NAME);
 		if (sessionCookie != null) {
-			System.out.println("req session-id from header = " + sessionCookie.getValue());
+			log.debug("Request Cookie session-id = " + sessionCookie.getValue());
 			return sessionCookie.getValue();
 		}
 
 		String sessionId = (String) request.getAttribute(SESSION_COOKIE_NAME);
 		if (sessionId != null) {
-			System.out.println("req session-id from attribute = " + sessionId);
+			log.debug("Request Attribute session-id = " + sessionId);
 			return sessionId;
 		}
 
-		System.out.println("EXCEPTION -> NO REQUEST SESSION-ID");
+		log.debug("getReqSessionId EXCEPTION -> NO REQUEST SESSION-ID");
 		throw AuthException.unauthorized("No active session found");
 	}
 
@@ -100,13 +101,11 @@ public class CsrfFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws ServletException, IOException {
 
-		System.out.println("\n\n\n================= CSRF FILTER =================\n");
-
 
 		String reqCsrfToken = getReqCsrfToken(request);
 		String sessionId = getReqSessionId(request);
 		String csrfToken = sessionService.getCsrfToken(sessionId);
-		System.out.println("csrf-token in session from db = " + csrfToken);
+		log.debug("Csrf-token from db = " + csrfToken);
 
 		if (!Objects.equals(reqCsrfToken, csrfToken)) {
 			throw AuthException.unauthorized("CSRF token mismatch");
@@ -118,26 +117,26 @@ public class CsrfFilter extends OncePerRequestFilter {
 	// @Override
 	// protected boolean shouldNotFilter(HttpServletRequest request) {
 
-	// System.out.println("------> CSRF_FILTER shouldNotFilter called");
+	// log.debug("------> CSRF_FILTER shouldNotFilter called");
 
 	// Map<String, String> allowedRequests = new HashMap<>();
-	// System.out.println("HttpMethod.GET.name() = " + HttpMethod.GET.name());
+	// log.debug("HttpMethod.GET.name() = " + HttpMethod.GET.name());
 	// allowedRequests.put("/api/v1/session/csrf-token", HttpMethod.GET.name());
 
 	// String path = request.getRequestURI();
-	// System.out.println("path = " + path);
+	// log.debug("path = " + path);
 	// String method = request.getMethod();
-	// System.out.println("method = " + method);
+	// log.debug("method = " + method);
 
 	// boolean shouldSkip = false;
 	// String mappedMethod = allowedRequests.get(path);
-	// System.out.println("mappedMethod = " + mappedMethod);
+	// log.debug("mappedMethod = " + mappedMethod);
 
 	// if (mappedMethod != null && mappedMethod.equals(method)) {
 	// shouldSkip = true;
 	// }
 
-	// System.out.println("shouldSkip = " + shouldSkip);
+	// log.debug("shouldSkip = " + shouldSkip);
 	// return shouldSkip;
 	// }
 }
