@@ -60,7 +60,12 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 				loginReq.getPassword());
 
 
-			return authenticationManager.authenticate(authByUsername);
+			Authentication finalAuthentication = authenticationManager.authenticate(authByUsername);
+			if (finalAuthentication != null) {
+				log.debug("finalAuthentication = " + finalAuthentication.toString());
+			}
+
+			return finalAuthentication;
 
 		} catch (IOException e) {
 			throw new RuntimeException(e);

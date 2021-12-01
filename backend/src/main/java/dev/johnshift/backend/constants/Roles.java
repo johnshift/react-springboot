@@ -1,5 +1,6 @@
 package dev.johnshift.backend.constants;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.google.common.collect.Sets;
@@ -30,5 +31,14 @@ public enum Roles {
 		grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
 
 		return grantedAuthorities;
+	}
+
+	public List<String> getAuthoritiesAsString() {
+		List<String> authoritiesStrs = getAuthorities().stream()
+			.map(a -> a.getAuthority())
+			.collect(Collectors.toList());
+		authoritiesStrs.add("ROLE_" + this.name());
+
+		return authoritiesStrs;
 	}
 }

@@ -22,7 +22,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
 			// print exception message for debug
 			log.debug("Exception: \t" + e.getMessage());
-			// e.printStackTrace();
+			e.printStackTrace();
 
 			// only return ambiguous error for security
 			Utils.writeUnauthorizedResponse(response, "UNAUTHORIZED");

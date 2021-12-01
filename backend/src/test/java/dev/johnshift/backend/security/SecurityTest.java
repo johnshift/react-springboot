@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,10 +25,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.Cookie;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -364,6 +368,70 @@ public class SecurityTest {
 		 * <p>
 		 * Whether to use Authentication manager in AuthenticationFilter */
 	}
+
+	// login, valid username, valid password -> OK
+	@Test
+	public void login_validUsername_validPassword_OK() throws Exception {
+
+		// mock login request payload
+		String username = Generator.randomString();
+		String password = Generator.randomString();
+		LoginReqDTO loginReq = new LoginReqDTO();
+		loginReq.setPrincipal(username);
+		loginReq.setPassword(password);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String payload = objectMapper.writeValueAsString(loginReq);
+
+		// mock public session
+		String sessionId = Generator.uuid().toString();
+		String csrfToken = Generator.uuid().toString();
+		String principal = Generator.randomString();
+		SessionDTO pubSession = new SessionDTO(
+			sessionId,
+			csrfToken,
+			principal,
+			Collections.emptyList());
+
+		// mock session-filter create public session
+		when(sessionService.createPublicSession()).thenReturn(pubSession);
+
+		// mock csrf-filter getCsrfToken
+		when(sessionService.getCsrfToken(sessionId)).thenReturn(csrfToken);
+
+		// mock authentication-filter getSessionBySessionId
+		when(sessionService.getSessionBySessionId(sessionId)).thenReturn(pubSession);
+
+		// mock authentication-filter retrieve password by principal
+		when(credentialService.getPasswordByPrincipalOrNull(username))
+			.thenReturn(password);
+
+		// mock authentication manager authenticate
+		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+		grantedAuthorities.addAll(Roles.USER.getGrantedAuthorities());
+		Authentication userPassToken = new UsernamePasswordAuthenticationToken(
+			principal, samplePassword, grantedAuthorities);
+		when(authenticationManager.authenticate(any())).thenReturn(userPassToken);
+
+		// mock promote promote session
+		SessionDTO promotedSession = new SessionDTO(
+			sessionId,
+			csrfToken,
+			principal,
+			Roles.USER.getAuthoritiesAsString());
+		when(sessionService.promotePublicSession(sessionId, principal)).thenReturn(promotedSession);
+
+		mockMvc.perform(
+			post("/api/v1/login")
+				.contentType(MediaType.APPLICATION_JSON.getType())
+				.content(payload))
+			.andExpect(status().isOk())
+			.andExpect(header().string(SESSION_CSRF_HEADER_KEY, csrfToken));
+	}
+
+
+	// login, valid email, valid password -> OK
+	// login, invalid principal -> Unauthorized
+	// login, incorrect password -> Unauthorized
 
 	// user-only, no session, no csrf -> unauthorized
 	// user-only, no session, w/ csrf -> unauthorized
