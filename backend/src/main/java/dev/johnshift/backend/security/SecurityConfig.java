@@ -8,15 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -43,10 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	/** Clear expired sessions every 5 mins. */
 	private static final int CLEAR_SESSIONS_DELAY = 1000 * 60 * 5;
 
-	private final PasswordEncoder passwordEncoder;
 	private final SessionService sessionService;
 	private final CredentialService credentialService;
-	private final UserDetailsService userServiceImpl;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -71,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.addFilterAfter(new SessionFilter(sessionService), UsernamePasswordAuthenticationFilter.class)
 			.addFilterAfter(new CsrfFilter(sessionService), SessionFilter.class)
 			.addFilterAfter(new UserPassFilter(authenticationManager(), sessionService), CsrfFilter.class)
-			.addFilterAfter(new AuthenticationFilter(credentialService, sessionService),
+			.addFilterAfter(new AuthenticationFilter(credentialService, sessionService, authenticationManager()),
 				UserPassFilter.class)
 			// Todo: extend session age on requests
 
@@ -82,7 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, "/api/v1/security/permit-all").permitAll()
 
 			// role-specific endpoints
-			.antMatchers(HttpMethod.GET, "/api/v1/security/user-only").hasRole("USER")
+			.antMatchers(HttpMethod.GET, "/api/v1/security/user-only").hasAuthority("ROLE_USER")
+			.antMatchers(HttpMethod.GET, "/api/v1/security/post-1-write").hasAuthority("post-1:write")
 
 			.anyRequest()
 			.authenticated();
@@ -94,12 +90,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		webSecurity.ignoring().antMatchers(HttpMethod.GET, "/api/v1/security/not-secured");
 	}
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-			.userDetailsService(userServiceImpl)
-			.passwordEncoder(passwordEncoder);
-	}
+	// @Override
+	// protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	// auth
+	// .userDetailsService(userServiceImpl)
+	// .passwordEncoder(passwordEncoder);
+	// }
 
 	// @Override
 	// @Bean

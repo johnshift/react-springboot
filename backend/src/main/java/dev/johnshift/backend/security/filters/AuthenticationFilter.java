@@ -1,17 +1,14 @@
 package dev.johnshift.backend.security.filters;
 
 import java.io.IOException;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import dev.johnshift.backend.credential.CredentialService;
@@ -37,6 +34,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
 	private final CredentialService credentialService;
 	private final SessionService sessionService;
+	private final AuthenticationManager authenticationManager;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -68,19 +66,18 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		Set<GrantedAuthority> authorities = sessionDTO.getAuthorities().stream()
-			.map(SimpleGrantedAuthority::new)
-			.collect(Collectors.toSet());
-		log.debug("Authorities = " + authorities.toString());
-
+		// set pre-authentication token
 		Authentication authentication = new UsernamePasswordAuthenticationToken(
 			sessionDTO.getPrincipal(),
-			password,
-			authorities);
+			password);
 
-		log.debug("User-pass token isAuthenticated = " + authentication.isAuthenticated());
+		// retrieve full details of authentication after verification
+		Authentication finalAuthentication = authenticationManager.authenticate(authentication);
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		// set authentication into security context
+		SecurityContextHolder.getContext().setAuthentication(finalAuthentication);
+
 		filterChain.doFilter(request, response);
 
 	}

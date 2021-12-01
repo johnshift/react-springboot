@@ -21,9 +21,8 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 		} catch (RuntimeException e) {
 
 			// print exception message for debug
-			log.debug("Authentication Error: \t" + e.getMessage());
+			log.debug("Exception: \t" + e.getMessage());
 			// e.printStackTrace();
-			// log.debug("\n");
 
 			// only return ambiguous error for security
 			Utils.writeUnauthorizedResponse(response, "UNAUTHORIZED");

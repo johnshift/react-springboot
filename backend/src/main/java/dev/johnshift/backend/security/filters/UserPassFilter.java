@@ -12,7 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import dev.johnshift.backend.security.AuthException;
@@ -77,8 +77,8 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 
 		log.debug("Successful authentication");
 
-		User principal = (User) authResult.getPrincipal();
-		log.debug("Authenticated principal = " + principal.getUsername());
+		String principal = (String) authResult.getPrincipal();
+		log.debug("Authenticated principal = " + principal);
 
 		String prevSessionId = null;
 
@@ -87,7 +87,6 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 		if (pubSessionCookie != null) {
 			prevSessionId = pubSessionCookie.getValue();
 			log.debug("Already-existing pub session cookie = " + prevSessionId);
-
 		} else {
 			prevSessionId = (String) request.getAttribute(SESSION_COOKIE_NAME);
 			log.debug("Already-existing pub session attribute = " + prevSessionId);
@@ -96,16 +95,14 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 
 		// promote public session into active sesion and write response
 		if (prevSessionId != null) {
-			SessionDTO session = sessionService.promotePublicSession(prevSessionId, principal.getUsername());
+			SessionDTO session = sessionService.promotePublicSession(prevSessionId, principal);
 			log.debug("PROMOTED session-id = " + session.getSessionId());
-
-			// SessionCsrfDTO dto = new SessionCsrfDTO(session.getCsrfToken());
-			// String payload = new ObjectMapper().writeValueAsString(dto);
 
 			response.setStatus(HttpStatus.OK.value());
 			response.setHeader(SESSION_CSRF_HEADER_KEY, session.getCsrfToken());
-			// response.setContentType("application/json");
-			// response.getWriter().write(payload);
+
+			// set authentication into security context
+			SecurityContextHolder.getContext().setAuthentication(authResult);
 		}
 
 	}
