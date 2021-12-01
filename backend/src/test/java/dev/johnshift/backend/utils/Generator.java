@@ -35,10 +35,8 @@ public class Generator {
 	}
 
 	public static UUID uuid() {
-		EasyRandom er = new EasyRandom();
-		UUID newUUID = er.nextObject(UUID.class);
 
-		return newUUID;
+		return UUID.randomUUID();
 	}
 
 }

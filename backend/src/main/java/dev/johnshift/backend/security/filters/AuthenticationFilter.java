@@ -70,10 +70,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		Authentication authentication = new UsernamePasswordAuthenticationToken(
 			sessionDTO.getPrincipal(),
 			password);
+		log.debug("Pre-authentication = " + authentication.toString());
 
 		// retrieve full details of authentication after verification
 		Authentication finalAuthentication = authenticationManager.authenticate(authentication);
-
+		log.debug("Final authentication = " + finalAuthentication.toString());
 
 		// set authentication into security context
 		SecurityContextHolder.getContext().setAuthentication(finalAuthentication);

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -42,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final SessionService sessionService;
 	private final CredentialService credentialService;
+	private final AuthenticationManager authenticationManager;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -65,8 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.addFilterAfter(new ExceptionHandlerFilter(), LoggingFilter.class)
 			.addFilterAfter(new SessionFilter(sessionService), UsernamePasswordAuthenticationFilter.class)
 			.addFilterAfter(new CsrfFilter(sessionService), SessionFilter.class)
-			.addFilterAfter(new UserPassFilter(authenticationManager(), sessionService), CsrfFilter.class)
-			.addFilterAfter(new AuthenticationFilter(credentialService, sessionService, authenticationManager()),
+			.addFilterAfter(new UserPassFilter(authenticationManager, sessionService), CsrfFilter.class)
+			.addFilterAfter(new AuthenticationFilter(credentialService, sessionService,
+				authenticationManager),
 				UserPassFilter.class)
 			// Todo: extend session age on requests
 
@@ -89,13 +92,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity webSecurity) throws Exception {
 		webSecurity.ignoring().antMatchers(HttpMethod.GET, "/api/v1/security/not-secured");
 	}
-
-	// @Override
-	// protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-	// auth
-	// .userDetailsService(userServiceImpl)
-	// .passwordEncoder(passwordEncoder);
-	// }
 
 	// @Override
 	// @Bean

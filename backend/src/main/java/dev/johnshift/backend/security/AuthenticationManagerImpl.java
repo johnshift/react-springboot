@@ -27,7 +27,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-
+		log.debug("AuthenticationManagerImpl authenticate called");
 
 		if (!(authentication.getPrincipal() instanceof String)) {
 			throw new AuthException("Principal is not an instance of string");

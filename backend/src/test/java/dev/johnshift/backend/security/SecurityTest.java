@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.Cookie;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -319,6 +322,10 @@ public class SecurityTest {
 			principal,
 			authorities);
 
+		// mock authentication
+		Authentication userPassToken = new UsernamePasswordAuthenticationToken(principal, samplePassword,
+			grantedAuthorities);
+
 		// mock session-filter create public session
 		when(sessionService.getSessionBySessionId(sessionId)).thenReturn(activeSession);
 
@@ -331,6 +338,9 @@ public class SecurityTest {
 		// mock authentication-filter retrieve password by principal
 		when(credentialService.getPasswordByPrincipalOrNull(activeSession.getPrincipal()))
 			.thenReturn(samplePassword);
+
+		// mock authentication manager authenticate
+		when(authenticationManager.authenticate(any())).thenReturn(userPassToken);
 
 		// mock pub-session cookie
 		Cookie activeSessionCookie = new Cookie(SESSION_COOKIE_NAME, sessionId);
