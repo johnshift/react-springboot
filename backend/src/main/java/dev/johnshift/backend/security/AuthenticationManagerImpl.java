@@ -60,12 +60,12 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
 		}
 
 		if (!passwordMatched) {
-			log.debug("password = " + password + "  length = " + password.length());
-			log.debug("dbPassword = " + dbPassword + "  length = " + dbPassword.length());
+			log.debug("password = " + password);
+			log.debug("dbPassword = " + dbPassword);
 			String encryptedPassword = passwordEncoder.encode(password);
-			log.debug("encrypted password = " + encryptedPassword + "  length = " + encryptedPassword.length());
+			log.debug("encrypted password = " + encryptedPassword);
 			String encryptedDbPassword = passwordEncoder.encode(dbPassword);
-			log.debug("encrypted dbPassword = " + encryptedDbPassword + "  length = " + encryptedDbPassword.length());
+			log.debug("encrypted dbPassword = " + encryptedDbPassword);
 			throw new AuthException("Incorrect username/email or password");
 		}
 
@@ -73,9 +73,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
 		Set<GrantedAuthority> authorities = new HashSet<>();
 		authorities.addAll(Roles.USER.getGrantedAuthorities());
 
-
 		// todo: grant write authorities e.g. post_<id>:write
-
 
 		return new UsernamePasswordAuthenticationToken(principal, password, authorities);
 	}
