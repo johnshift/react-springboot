@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import dev.johnshift.backend.credential.CredentialService;
-import dev.johnshift.backend.security.AuthException;
 import dev.johnshift.backend.session.SessionDTO;
 import dev.johnshift.backend.session.SessionService;
 import lombok.RequiredArgsConstructor;

@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import dev.johnshift.backend.constants.Roles;
+import dev.johnshift.backend.constants.Role;
 import dev.johnshift.backend.credential.CredentialService;
 import dev.johnshift.backend.session.SessionDTO;
 import dev.johnshift.backend.session.SessionException;
@@ -324,7 +324,7 @@ public class SecurityTest {
 		// active sessions are assign ROLE_USER in authority
 		List<String> authorities = List.of("ROLE_USER");
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-		grantedAuthorities.addAll(Roles.USER.getGrantedAuthorities());
+		grantedAuthorities.addAll(Role.USER.getGrantedAuthorities());
 		SessionDTO activeSession = new SessionDTO(
 			sessionId,
 			csrfToken,

@@ -14,7 +14,7 @@ import static dev.johnshift.backend.constants.Authority.REACTION_READ;
 
 @Getter
 @RequiredArgsConstructor
-public enum Roles {
+public enum Role {
 
 	USER(Sets.newHashSet(POST_READ, REACTION_READ));
 

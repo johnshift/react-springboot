@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import dev.johnshift.backend.constants.Roles;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import dev.johnshift.backend.constants.Role;
 import dev.johnshift.backend.credential.Credential;
 import dev.johnshift.backend.session.Session;
 import dev.johnshift.backend.session.SessionDTO;
@@ -89,13 +91,13 @@ public class Generator {
 			UUID.randomUUID().toString(),
 			UUID.randomUUID().toString(),
 			genString(),
-			Roles.USER.getAuthoritiesAsString());
+			Role.USER.getAuthoritiesAsString());
 	}
 
 	public static SessionDTO promotedSessionDTO(String sessionId, String csrfToken, String principal) {
 		return new SessionDTO(
 			sessionId, csrfToken, principal,
-			Roles.USER.getAuthoritiesAsString());
+			Role.USER.getAuthoritiesAsString());
 	}
 
 	public static Authentication userPassToken(String principal, String password) {
@@ -106,7 +108,20 @@ public class Generator {
 	public static Authentication userRoleAuth(String principal, String password) {
 
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-		grantedAuthorities.addAll(Roles.USER.getGrantedAuthorities());
+		grantedAuthorities.addAll(Role.USER.getGrantedAuthorities());
+
+		return new UsernamePasswordAuthenticationToken(
+			principal, password, grantedAuthorities);
+	}
+
+	public static Authentication userWithWritesAuth(String principal, String password, List<String> auths) {
+
+		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+		grantedAuthorities.addAll(Role.USER.getGrantedAuthorities());
+		grantedAuthorities.addAll(
+			auths.stream()
+				.map(a -> new SimpleGrantedAuthority(a))
+				.collect(Collectors.toSet()));
 
 		return new UsernamePasswordAuthenticationToken(
 			principal, password, grantedAuthorities);

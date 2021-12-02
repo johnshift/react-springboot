@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import dev.johnshift.backend.constants.Roles;
+import dev.johnshift.backend.constants.Role;
 import dev.johnshift.backend.credential.CredentialService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +77,7 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
 
 		// grant default user authorities
 		Set<GrantedAuthority> authorities = new HashSet<>();
-		authorities.addAll(Roles.USER.getGrantedAuthorities());
+		authorities.addAll(Role.USER.getGrantedAuthorities());
 
 		// todo: grant write authorities e.g. post_<id>:write
 

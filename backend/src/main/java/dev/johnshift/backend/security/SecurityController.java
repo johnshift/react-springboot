@@ -1,9 +1,15 @@
 package dev.johnshift.backend.security;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/security")
 public class SecurityController {
@@ -32,6 +38,23 @@ public class SecurityController {
 	@GetMapping("/post-1-write")
 	public String getPost1Write() {
 		return POST_1_WRITE;
+	}
+
+	@PostMapping("/users")
+	// @PreAuthorize("#userReq.username + 'black' == 'batmanblack'")
+	public String getUserById(@RequestBody UserReq userReq) {
+
+		// log.debug("pathvariable id = " + id);
+		log.debug("userReq = " + userReq.toString());
+
+		return "CONGRATS";
+	}
+
+	@Data
+	@NoArgsConstructor
+	public static class UserReq {
+		private int id;
+		private String username;
 	}
 
 }

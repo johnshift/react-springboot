@@ -3,6 +3,7 @@ package dev.johnshift.backend.security;
 
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import dev.johnshift.backend.security.filters.UserPassFilter;
@@ -48,6 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http
+			.authorizeRequests(authorize -> authorize
+				.antMatchers(HttpMethod.POST, "/api/v1/security/users")
+				.access("@urlAccessChecker.check(authentication,request)"))
 
 			// disable spring security default csrf and session management
 			// all session management is handled inside AuthFilter
@@ -59,6 +64,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// cors settings
 			.cors()
 			.configurationSource(getCorsConfigurationSource())
+			.and()
+
+			.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
 			.and()
 
 			// Custom Auth Filter
@@ -80,7 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 			// role-specific endpoints
 			.antMatchers(HttpMethod.GET, "/api/v1/security/user-only").hasAuthority("ROLE_USER")
-			.antMatchers(HttpMethod.GET, "/api/v1/security/post-1-write").hasAuthority("post-1:write")
 
 			.anyRequest()
 			.authenticated();
@@ -89,7 +96,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// NOT SECURED Endpoints
 	@Override
 	public void configure(WebSecurity webSecurity) throws Exception {
-		webSecurity.ignoring().antMatchers(HttpMethod.GET, "/api/v1/security/not-secured");
+		webSecurity.ignoring()
+			.antMatchers(HttpMethod.GET, "/api/v1/security/not-secured");
+		// .antMatchers(HttpMethod.POST, "/api/v1/security/users/**");
+	}
+
+	@Bean
+	public AccessDeniedHandler accessDeniedHandler() {
+		return new CustomAccessDeniedHandler();
 	}
 
 	// @Override
