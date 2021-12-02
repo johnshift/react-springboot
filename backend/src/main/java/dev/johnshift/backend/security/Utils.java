@@ -1,4 +1,4 @@
-package dev.johnshift.backend.security.filters;
+package dev.johnshift.backend.security;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,17 +9,28 @@ import dev.johnshift.backend.exceptions.ExceptionDTO;
 
 public class Utils {
 
-	public static void writeUnauthorizedResponse(HttpServletResponse response, String msg) throws IOException {
+	private static void writeExceptionResponse(HttpStatus status, HttpServletResponse response, String msg)
+		throws IOException {
 
 		ExceptionDTO resp = new ExceptionDTO("AuthenticationException", msg);
 		String jsonPayload = new ObjectMapper().writeValueAsString(resp);
 
-		response.setStatus(HttpStatus.UNAUTHORIZED.value());
+		response.setStatus(status.value());
 		response.setContentType("application/json");
 
 		PrintWriter writer = response.getWriter();
 		writer.write(jsonPayload);
 		writer.flush();
+	}
+
+	public static void writeUnauthorizedResponse(HttpServletResponse response, String msg) throws IOException {
+
+		writeExceptionResponse(HttpStatus.UNAUTHORIZED, response, msg);
+	}
+
+	public static void writeForbiddenResponse(HttpServletResponse response, String msg) throws IOException {
+
+		writeExceptionResponse(HttpStatus.FORBIDDEN, response, msg);
 	}
 
 	private Utils() {}

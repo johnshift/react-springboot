@@ -62,6 +62,7 @@ public class CredentialServiceImpl implements CredentialService {
 			return password;
 		}
 
+		log.debug("Retrieved password = " + password);
 		return password;
 	}
 

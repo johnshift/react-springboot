@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import dev.johnshift.backend.credential.CredentialService;
+import dev.johnshift.backend.security.AuthException;
 import dev.johnshift.backend.session.SessionDTO;
 import dev.johnshift.backend.session.SessionService;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 		String password = credentialService.getPasswordByPrincipalOrNull(sessionDTO.getPrincipal());
 		log.debug("Password using principal = " + password);
 
-		// throw exception if no password
+		// throw exception if no password on non-public session
 		if (password == null) {
 			// throw AuthException.unauthorized("Incorrect password for principal " +
 			// sessionDTO.getPrincipal());

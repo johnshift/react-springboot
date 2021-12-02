@@ -38,6 +38,34 @@ public class CsrfFilter extends OncePerRequestFilter {
 
 	private final SessionService sessionService;
 
+	/** Checks csrf-token in header or request attribute and matches to session in db.
+	 * <ol>
+	 * <li>Checks for csrf-token header and request attribute. Unauthorized if both null.</li>
+	 * <li>If CSRF token in header is present, it ignores public issued session-id and only match
+	 * csrf-token with active sessions in db.</li>
+	 * <li>For active sesisons, checks if session cookie is present. Unauthorized if null.</li>
+	 * <li>For public sesisons, checks if session request attribute is present. Unauthorized if
+	 * null.</li>
+	 * <li>Unauthorized if csrf-token does not match token inside session from db.</li>
+	 * </ol>
+	 * <p>
+	 * Note: Cookie names are case-sensitive */
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+		throws ServletException, IOException {
+
+		String reqCsrfToken = getReqCsrfToken(request);
+		String sessionId = getReqSessionId(request);
+		String csrfToken = sessionService.getCsrfToken(sessionId);
+		log.debug("Csrf-token from db = " + csrfToken);
+
+		if (!Objects.equals(reqCsrfToken, csrfToken)) {
+			throw AuthException.unauthorized("CSRF token mismatch");
+		}
+
+		chain.doFilter(request, response);
+	}
+
 	/** Retrieves csrf-token either from header or request attribute.
 	 * <p>
 	 * Returns <code>null</code> if none found.
@@ -84,59 +112,4 @@ public class CsrfFilter extends OncePerRequestFilter {
 		log.debug("getReqSessionId EXCEPTION -> NO REQUEST SESSION-ID");
 		throw AuthException.unauthorized("No active session found");
 	}
-
-	/** Checks csrf-token in header or request attribute and matches to session in db.
-	 * <ol>
-	 * <li>Checks for csrf-token header and request attribute. Unauthorized if both null.</li>
-	 * <li>If CSRF token in header is present, it ignores public issued session-id and only match
-	 * csrf-token with active sessions in db.</li>
-	 * <li>For active sesisons, checks if session cookie is present. Unauthorized if null.</li>
-	 * <li>For public sesisons, checks if session request attribute is present. Unauthorized if
-	 * null.</li>
-	 * <li>Unauthorized if csrf-token does not match token inside session from db.</li>
-	 * </ol>
-	 * <p>
-	 * Note: Cookie names are case-sensitive */
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-		throws ServletException, IOException {
-
-
-		String reqCsrfToken = getReqCsrfToken(request);
-		String sessionId = getReqSessionId(request);
-		String csrfToken = sessionService.getCsrfToken(sessionId);
-		log.debug("Csrf-token from db = " + csrfToken);
-
-		if (!Objects.equals(reqCsrfToken, csrfToken)) {
-			throw AuthException.unauthorized("CSRF token mismatch");
-		}
-
-		chain.doFilter(request, response);
-	}
-
-	// @Override
-	// protected boolean shouldNotFilter(HttpServletRequest request) {
-
-	// log.debug("------> CSRF_FILTER shouldNotFilter called");
-
-	// Map<String, String> allowedRequests = new HashMap<>();
-	// log.debug("HttpMethod.GET.name() = " + HttpMethod.GET.name());
-	// allowedRequests.put("/api/v1/session/csrf-token", HttpMethod.GET.name());
-
-	// String path = request.getRequestURI();
-	// log.debug("path = " + path);
-	// String method = request.getMethod();
-	// log.debug("method = " + method);
-
-	// boolean shouldSkip = false;
-	// String mappedMethod = allowedRequests.get(path);
-	// log.debug("mappedMethod = " + mappedMethod);
-
-	// if (mappedMethod != null && mappedMethod.equals(method)) {
-	// shouldSkip = true;
-	// }
-
-	// log.debug("shouldSkip = " + shouldSkip);
-	// return shouldSkip;
-	// }
 }

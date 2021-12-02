@@ -58,6 +58,7 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 			Authentication authByUsername = new UsernamePasswordAuthenticationToken(
 				loginReq.getPrincipal(),
 				loginReq.getPassword());
+			log.debug("Login request authByUsername token = " + authByUsername.toString());
 
 
 			Authentication finalAuthentication = authenticationManager.authenticate(authByUsername);

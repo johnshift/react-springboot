@@ -15,6 +15,9 @@ import dev.johnshift.backend.credential.CredentialService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/** Authenticates session or login-req.
+ * <p>
+ * throws {@link AuthException} if incorrect principal-credential combination. */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -43,6 +46,9 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
 
 		// retrieve db-pass
 		String dbPassword = credentialService.getPasswordByPrincipalOrNull(principal);
+		if (dbPassword == null) {
+			throw new AuthException("Incorrect username/email or password");
+		}
 
 		// match encrypted password
 		boolean passwordMatched = false;

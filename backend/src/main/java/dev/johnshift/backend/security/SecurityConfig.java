@@ -3,7 +3,6 @@ package dev.johnshift.backend.security;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.EnableScheduling;

@@ -84,10 +84,23 @@ public class Generator {
 			Collections.emptyList());
 	}
 
+	public static SessionDTO activeSessionDTO() {
+		return new SessionDTO(
+			UUID.randomUUID().toString(),
+			UUID.randomUUID().toString(),
+			genString(),
+			Roles.USER.getAuthoritiesAsString());
+	}
+
 	public static SessionDTO promotedSessionDTO(String sessionId, String csrfToken, String principal) {
 		return new SessionDTO(
 			sessionId, csrfToken, principal,
 			Roles.USER.getAuthoritiesAsString());
+	}
+
+	public static Authentication userPassToken(String principal, String password) {
+		return new UsernamePasswordAuthenticationToken(
+			principal, password);
 	}
 
 	public static Authentication userRoleAuth(String principal, String password) {
