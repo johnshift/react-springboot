@@ -269,7 +269,7 @@ public class SecurityTest {
 			.andExpect(jsonPath("$.timestamp").exists());
 	}
 
-	// get permit-all, active-cession, invalid csrf -> Unauthorized
+	// get permit-all, active-session, invalid csrf -> Unauthorized
 	@Test
 	public void get_permitAll_activeSession_invalidCsrf_Unauthorized() throws Exception {
 
@@ -346,7 +346,7 @@ public class SecurityTest {
 		// mock authentication manager authenticate
 		when(authenticationManager.authenticate(any())).thenReturn(userPassToken);
 
-		// mock pub-session cookie
+		// mock active-session cookie
 		Cookie activeSessionCookie = new Cookie(SESSION_COOKIE_NAME, sessionId);
 		activeSessionCookie.setMaxAge(60 * 60);
 		activeSessionCookie.setHttpOnly(true);
