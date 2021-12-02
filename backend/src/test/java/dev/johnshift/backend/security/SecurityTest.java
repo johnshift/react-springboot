@@ -358,67 +358,48 @@ public class SecurityTest {
 			// note: sending back the cookie is browser behaviour -> no need to test returned cookie
 			.andExpect(status().isOk())
 			.andExpect(content().string(SecurityController.PERMIT_ALL));
-
-
-		/** Todo:
-		 * <p>
-		 * How to generalize Roles, Authorities data structure
-		 * <p>
-		 * AuthenticationFilter vs UserDetailsService
-		 * <p>
-		 * Whether to use Authentication manager in AuthenticationFilter */
 	}
 
-	// login, valid username, valid password -> OK
+	// login, valid principal, valid password -> OK
 	@Test
-	public void login_validUsername_validPassword_OK() throws Exception {
+	public void login_validPrincipal_validPassword_OK() throws Exception {
 
 		// mock login request payload
-		String username = Generator.randomString();
+		String principal = Generator.randomString();
 		String password = Generator.randomString();
 		LoginReqDTO loginReq = new LoginReqDTO();
-		loginReq.setPrincipal(username);
+		loginReq.setPrincipal(principal);
 		loginReq.setPassword(password);
 		ObjectMapper objectMapper = new ObjectMapper();
 		String payload = objectMapper.writeValueAsString(loginReq);
 
 		// mock public session
-		String sessionId = Generator.uuid().toString();
-		String csrfToken = Generator.uuid().toString();
-		String principal = Generator.randomString();
-		SessionDTO pubSession = new SessionDTO(
-			sessionId,
-			csrfToken,
-			principal,
-			Collections.emptyList());
+		SessionDTO pubSessionDTO = Generator.pubSessionDTO();
+		String sessionId = pubSessionDTO.getSessionId();
+		String csrfToken = pubSessionDTO.getCsrfToken();
 
 		// mock session-filter create public session
-		when(sessionService.createPublicSession()).thenReturn(pubSession);
+		when(sessionService.createPublicSession()).thenReturn(pubSessionDTO);
 
 		// mock csrf-filter getCsrfToken
-		when(sessionService.getCsrfToken(sessionId)).thenReturn(csrfToken);
+		when(sessionService.getCsrfToken(sessionId))
+			.thenReturn(csrfToken);
 
 		// mock authentication-filter getSessionBySessionId
-		when(sessionService.getSessionBySessionId(sessionId)).thenReturn(pubSession);
+		when(sessionService.getSessionBySessionId(sessionId)).thenReturn(pubSessionDTO);
 
 		// mock authentication-filter retrieve password by principal
-		when(credentialService.getPasswordByPrincipalOrNull(username))
+		when(credentialService.getPasswordByPrincipalOrNull(principal))
 			.thenReturn(password);
 
 		// mock authentication manager authenticate
-		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-		grantedAuthorities.addAll(Roles.USER.getGrantedAuthorities());
-		Authentication userPassToken = new UsernamePasswordAuthenticationToken(
-			principal, samplePassword, grantedAuthorities);
+		Authentication userPassToken = Generator.userRoleAuth(principal, password);
 		when(authenticationManager.authenticate(any())).thenReturn(userPassToken);
 
 		// mock promote promote session
-		SessionDTO promotedSession = new SessionDTO(
-			sessionId,
-			csrfToken,
-			principal,
-			Roles.USER.getAuthoritiesAsString());
-		when(sessionService.promotePublicSession(sessionId, principal)).thenReturn(promotedSession);
+		SessionDTO promotedSession = Generator.promotedSessionDTO(sessionId, csrfToken, principal);
+		when(sessionService.promotePublicSession(sessionId, principal))
+			.thenReturn(promotedSession);
 
 		mockMvc.perform(
 			post("/api/v1/login")
@@ -428,8 +409,6 @@ public class SecurityTest {
 			.andExpect(header().string(SESSION_CSRF_HEADER_KEY, csrfToken));
 	}
 
-
-	// login, valid email, valid password -> OK
 	// login, invalid principal -> Unauthorized
 	// login, incorrect password -> Unauthorized
 
