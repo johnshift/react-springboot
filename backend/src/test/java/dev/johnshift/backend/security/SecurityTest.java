@@ -875,7 +875,7 @@ public class SecurityTest {
 				.contentType("application/json")
 				.content(payload))
 			.andExpect(status().isOk())
-			.andExpect(content().string("CONGRATS"));
+			.andExpect(content().string(SecurityController.CONGRATS));
 
 	}
 
