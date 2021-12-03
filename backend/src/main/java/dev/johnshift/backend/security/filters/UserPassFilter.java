@@ -34,6 +34,8 @@ import static dev.johnshift.backend.session.SessionConstants.SESSION_CSRF_HEADER
 @Slf4j
 public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 
+	public static final String FROM_USERPASS_FILTER_ATTRIBUTE_KEY = "from-userpass-filter";
+
 	private final AuthenticationManager authenticationManager;
 	private final SessionService sessionService;
 
@@ -47,6 +49,8 @@ public class UserPassFilter extends UsernamePasswordAuthenticationFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 		throws AuthenticationException {
+
+		request.setAttribute(FROM_USERPASS_FILTER_ATTRIBUTE_KEY, true);
 
 		try {
 			LoginReqDTO loginReq = new ObjectMapper()

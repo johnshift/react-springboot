@@ -21,6 +21,7 @@ public class AuthServiceImpl implements AuthService {
 	// private final CredentialService credentialService;
 	// private final UserService userService;
 
+	/** Only approve if user retrieved using principal matches user.name and user.id */
 	public void authPostCreate(String principal, String owner, int userId) throws AuthException {
 
 		log.debug("principal=\"" + principal + "\", owner=\"" + owner + "\", user_id=" + userId);
@@ -40,20 +41,28 @@ public class AuthServiceImpl implements AuthService {
 		int credVeilId = credential.get().getUserVeil().getId().getVeilId();
 		log.debug("credUserId = " + credUserId + ", credVeilId = " + credVeilId);
 
-		Optional<User> user = userRepository.findById(credUserId);
+		Optional<User> user = userRepository.findById(userId);
 		if (user.isEmpty()) {
-			log.debug("No public user found using credId");
-			user = userRepository.findById(credVeilId);
-
-			if (user.isEmpty()) {
-				log.debug("No veil user found using veilId");
-				throw AuthException.forbidden();
-			}
+			log.debug("No user matched payload userId = " + userId);
+			throw AuthException.forbidden();
 		}
-		log.debug("Found user = " + user.get().toString());
+		String name = user.get().getName();
+		log.debug("Found userId match -> name = " + name);
+
+		// Optional<User> user = userRepository.findById(credUserId);
+		// if (user.isEmpty()) {
+		// log.debug("No public user found using credId");
+		// user = userRepository.findById(credVeilId);
+
+		// if (user.isEmpty()) {
+		// log.debug("No veil user found using veilId");
+		// throw AuthException.forbidden();
+		// }
+		// }
+		// log.debug("Found user = " + user.get().toString());
 
 		// match owner with name, userId with id
-		boolean matchedName = owner.equals(user.get().getName());
+		boolean matchedName = owner.equals(name);
 		boolean matchedId = userId == user.get().getId();
 		log.debug("matchedName = " + matchedName + ", matchedId = " + matchedId);
 

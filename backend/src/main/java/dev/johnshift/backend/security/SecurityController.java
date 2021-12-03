@@ -23,6 +23,7 @@ public class SecurityController {
 
 	private final AuthService authService;
 
+	public static final String CONGRATS = "Congrats!";
 	public static final String NOT_SECURED = "This endpoint is NOT SECURED. Anyone can access it.";
 	public static final String PERMIT_ALL =
 		"This endpoint uses permitAll(). Any public/active session w/ or w/o authorizations";
@@ -50,7 +51,7 @@ public class SecurityController {
 		// log.debug("pathvariable id = " + id);
 		log.debug("userReq = " + userReq.toString());
 
-		return "CONGRATS";
+		return CONGRATS;
 	}
 
 	@PostMapping("/posts")
@@ -63,7 +64,7 @@ public class SecurityController {
 		String principal = (String) authentication.getPrincipal();
 		authService.authPostCreate(principal, reqPost.getOwner(), reqPost.getUserId());
 
-		return "CONGRATS";
+		return CONGRATS;
 	}
 
 	@Data
