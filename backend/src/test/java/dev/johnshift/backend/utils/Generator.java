@@ -154,7 +154,7 @@ public class Generator {
 		return sb.toString();
 	}
 
-	private static List<String> genStringList() {
+	public static List<String> genStringList() {
 
 		int numElements = 3;
 
@@ -166,12 +166,12 @@ public class Generator {
 		return result;
 	}
 
-	private static Long genLong() {
+	public static Long genLong() {
 
 		return new Random().nextLong();
 	}
 
-	private static int genInt() {
+	public static int genInt() {
 
 		return new Random().nextInt();
 	}

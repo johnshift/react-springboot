@@ -14,8 +14,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import dev.johnshift.backend.auth.AuthService;
 import dev.johnshift.backend.constants.Role;
 import dev.johnshift.backend.credential.CredentialService;
+import dev.johnshift.backend.post.PostCreateRequest;
 import dev.johnshift.backend.session.SessionDTO;
 import dev.johnshift.backend.session.SessionException;
 import dev.johnshift.backend.session.SessionService;
@@ -27,6 +29,7 @@ import java.util.Set;
 import javax.servlet.http.Cookie;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,6 +56,9 @@ public class SecurityTest {
 
 	@MockBean
 	UserDetailsService userDetailsService;
+
+	@MockBean
+	AuthService authService;
 
 	@MockBean
 	AuthenticationManager authenticationManager;
@@ -726,7 +732,7 @@ public class SecurityTest {
 
 	// user-only, active-session, w/ csrf, ok password -> OK
 	@Test
-	public void userOnly_activeSession_withCsrf_withPassword_FORBIDDEN() throws Exception {
+	public void userOnly_activeSession_withCsrf_withPassword_OK() throws Exception {
 
 		SessionDTO activeSession = Generator.activeSessionDTO();
 		String sessionId = activeSession.getSessionId();
@@ -746,7 +752,7 @@ public class SecurityTest {
 		when(sessionService.getCsrfToken(sessionId))
 			.thenReturn(csrfToken);
 
-		// mock authentication-filter: notice null returned
+		// mock authentication-filter
 		when(credentialService.getPasswordByPrincipalOrNull(principal))
 			.thenReturn(password);
 
@@ -759,6 +765,118 @@ public class SecurityTest {
 				.header(SESSION_CSRF_HEADER_KEY, csrfToken))
 			.andExpect(status().isOk())
 			.andExpect(content().string(SecurityController.USER_ONLY));
+	}
+
+
+	// posts, unauthorized create post -> Forbidden
+	@Test
+	public void posts_unAuthCreatePost_FORBIDDEN() throws Exception {
+
+		// mock create post request
+		int userId = Generator.genInt();
+		String owner = Generator.genString();
+		String body = Generator.genString();
+		PostCreateRequest reqPost = new PostCreateRequest();
+		reqPost.setUserId(userId);
+		reqPost.setBody(body);
+		reqPost.setOwner(owner);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String payload = objectMapper.writeValueAsString(reqPost);
+
+		// mock active session
+		SessionDTO activeSession = Generator.activeSessionDTO();
+		String sessionId = activeSession.getSessionId();
+		String csrfToken = activeSession.getCsrfToken();
+		String principal = activeSession.getPrincipal();
+		Cookie activeSessionCookie = new Cookie(SESSION_COOKIE_NAME, sessionId);
+		activeSessionCookie.setMaxAge(60 * 60);
+		activeSessionCookie.setHttpOnly(true);
+		String password = Generator.randomString();
+		Authentication finalAuth = Generator.userRoleAuth(principal, password);
+
+		// mock session-filter retrieve session from db
+		when(sessionService.getSessionBySessionId(sessionId))
+			.thenReturn(activeSession);
+
+		// mock csrf-filter retrieve csrfToken from db
+		when(sessionService.getCsrfToken(sessionId))
+			.thenReturn(csrfToken);
+
+		// mock authentication-filter
+		when(credentialService.getPasswordByPrincipalOrNull(principal))
+			.thenReturn(password);
+
+		// mock authenticationManager
+		when(authenticationManager.authenticate(any())).thenReturn(finalAuth);
+
+		// mock auth-service throwing error
+		doThrow(AuthException.forbidden()).when(authService).authPostCreate(principal, owner, userId);
+
+		mockMvc.perform(
+			post("/api/v1/security/posts")
+				.cookie(activeSessionCookie)
+				.header(SESSION_CSRF_HEADER_KEY, csrfToken)
+				.contentType("application/json")
+				.content(payload))
+			.andExpect(status().isForbidden())
+			.andExpect(jsonPath("$.type").value("AuthException"))
+			.andExpect(jsonPath("$.message").value("Access Denied"))
+			.andExpect(jsonPath("$.timestamp").exists());
+
+	}
+
+	// posts, authorized create post -> OK
+	@Test
+
+	public void posts_authCreatePost_OK() throws Exception {
+
+		// mock create post request
+		int userId = Generator.genInt();
+		String owner = Generator.genString();
+		String body = Generator.genString();
+		PostCreateRequest reqPost = new PostCreateRequest();
+		reqPost.setUserId(userId);
+		reqPost.setBody(body);
+		reqPost.setOwner(owner);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String payload = objectMapper.writeValueAsString(reqPost);
+
+		// mock active session
+		SessionDTO activeSession = Generator.activeSessionDTO();
+		String sessionId = activeSession.getSessionId();
+		String csrfToken = activeSession.getCsrfToken();
+		String principal = activeSession.getPrincipal();
+		Cookie activeSessionCookie = new Cookie(SESSION_COOKIE_NAME, sessionId);
+		activeSessionCookie.setMaxAge(60 * 60);
+		activeSessionCookie.setHttpOnly(true);
+		String password = Generator.randomString();
+		Authentication finalAuth = Generator.userRoleAuth(principal, password);
+
+		// mock session-filter retrieve session from db
+		when(sessionService.getSessionBySessionId(sessionId))
+			.thenReturn(activeSession);
+
+		// mock csrf-filter retrieve csrfToken from db
+		when(sessionService.getCsrfToken(sessionId))
+			.thenReturn(csrfToken);
+
+		// mock authentication-filter
+		when(credentialService.getPasswordByPrincipalOrNull(principal))
+			.thenReturn(password);
+
+		// mock authenticationManager
+		when(authenticationManager.authenticate(any())).thenReturn(finalAuth);
+
+
+		mockMvc.perform(
+			post("/api/v1/security/posts")
+				.cookie(activeSessionCookie)
+				.header(SESSION_CSRF_HEADER_KEY, csrfToken)
+				.contentType("application/json")
+				.content(payload))
+			.andExpect(status().isOk())
+			.andExpect(content().string("CONGRATS"));
+
 	}
 
 	// get post-1-write, no session -> unauthorized
