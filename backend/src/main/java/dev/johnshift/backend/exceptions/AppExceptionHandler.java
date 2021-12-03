@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import dev.johnshift.backend.security.AuthException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -35,6 +36,19 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 	/*
 	 * Handle Global App Exceptions here e.g. Validations etc. etc.
 	 */
+
+	/** Handle feature-specific exceptions here */
+
+	@ExceptionHandler(value = AuthException.class)
+	public ResponseEntity<Object> handleAuthException(AuthException ex, WebRequest request) {
+
+		ExceptionDTO dto = new ExceptionDTO(
+			ex.getClass().getSimpleName(),
+			ex.getMessage());
+
+		return buildResponseEntity(dto, ex.getStatus());
+
+	}
 
 	private ResponseEntity<Object> buildResponseEntity(ExceptionDTO resp, HttpStatus status) {
 		return new ResponseEntity<>(resp, status);

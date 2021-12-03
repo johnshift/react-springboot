@@ -54,19 +54,24 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
 		boolean passwordMatched = false;
 		try {
 			boolean shouldUpgradeEncoding = passwordEncoder.upgradeEncoding(password);
+			log.debug("shouldUpgradeEncoding = " + shouldUpgradeEncoding);
 
 			// if password is already encrypted, simply compare if passwords are equal
 			if (!shouldUpgradeEncoding) {
+				log.debug("reqPassword is already encrypted. Doing simple comparison");
 				passwordMatched = Objects.equals(password, dbPassword);
+				log.debug("passwordMatched = " + passwordMatched);
 			}
 		} catch (Exception e) {
 
 			// if password is raw, use passwordEncoder.matches
+			log.debug("reqPassword is raw, doing bcrypt password match");
 			passwordMatched = passwordEncoder.matches(password, dbPassword);
+			log.debug("passwordMatched = " + passwordMatched);
 		}
 
 		if (!passwordMatched) {
-			log.debug("password = " + password);
+			log.debug("req password = " + password);
 			log.debug("dbPassword = " + dbPassword);
 			String encryptedPassword = passwordEncoder.encode(password);
 			log.debug("encrypted password = " + encryptedPassword);

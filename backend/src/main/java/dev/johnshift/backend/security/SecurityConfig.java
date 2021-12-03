@@ -50,9 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http
-			.authorizeRequests(authorize -> authorize
-				.antMatchers(HttpMethod.POST, "/api/v1/security/users")
-				.access("@urlAccessChecker.check(authentication,request)"))
+			// .authorizeRequests(authorize -> authorize
+			// .antMatchers(HttpMethod.POST, "/api/v1/users/{userId}/posts")
+			// .access("@webSecurity.check(authentication,#userId)"))
 
 			// disable spring security default csrf and session management
 			// all session management is handled inside AuthFilter

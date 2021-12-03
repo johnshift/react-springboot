@@ -1,7 +1,8 @@
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
 	name TEXT NOT NULL,
-	description TEXT NOT NULL
+	description TEXT NOT NULL,
+	UNIQUE(id, name)
 );
 
 CREATE TABLE user_veils (

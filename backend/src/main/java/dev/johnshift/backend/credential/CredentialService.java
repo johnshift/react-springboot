@@ -1,5 +1,7 @@
 package dev.johnshift.backend.credential;
 
+import java.util.Optional;
+
 public interface CredentialService {
 
 	// /** This is mainly used for implementing {@link UserDetails}.
@@ -27,5 +29,11 @@ public interface CredentialService {
 	 * @param principal
 	 * @return */
 	String getPasswordByPrincipalOrNull(String principal);
+
+	/** Retrieves a credential using only principal
+	 * 
+	 * @param principal
+	 * @return {@link CredentialDTO} */
+	Optional<CredentialDTO> getCredentialByPrincipal(String principal);
 
 }

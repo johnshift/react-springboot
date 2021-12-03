@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 public class AuthException extends RuntimeException {
 
 	public static final String UNAUTHORIZED_REQUEST = "Unauthorized Request";
+	public static final String ACCESS_DENIED = "Access Denied";
 
 	private final HttpStatus status;
 
@@ -16,6 +17,10 @@ public class AuthException extends RuntimeException {
 	public AuthException(String msg, HttpStatus status) {
 		super(msg);
 		this.status = status;
+	}
+
+	public static AuthException forbidden() {
+		return new AuthException(ACCESS_DENIED, HttpStatus.FORBIDDEN);
 	}
 
 	public static AuthException unauthorized() {
