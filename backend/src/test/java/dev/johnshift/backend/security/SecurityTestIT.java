@@ -437,6 +437,5 @@ public class SecurityTestIT {
 			.exchange()
 			.expectStatus().isOk()
 			.expectHeader().exists(SESSION_CSRF_HEADER_KEY);
-
 	}
 }

@@ -18,9 +18,6 @@ public class AuthServiceImpl implements AuthService {
 	private final CredentialRepository credentialRepository;
 	private final UserRepository userRepository;
 
-	// private final CredentialService credentialService;
-	// private final UserService userService;
-
 	/** Only approve if user retrieved using principal matches user.name and user.id */
 	public void authPostCreate(String principal, String owner, int userId) throws AuthException {
 
@@ -49,18 +46,6 @@ public class AuthServiceImpl implements AuthService {
 		String name = user.get().getName();
 		log.debug("Found userId match -> name = " + name);
 
-		// Optional<User> user = userRepository.findById(credUserId);
-		// if (user.isEmpty()) {
-		// log.debug("No public user found using credId");
-		// user = userRepository.findById(credVeilId);
-
-		// if (user.isEmpty()) {
-		// log.debug("No veil user found using veilId");
-		// throw AuthException.forbidden();
-		// }
-		// }
-		// log.debug("Found user = " + user.get().toString());
-
 		// match owner with name, userId with id
 		boolean matchedName = owner.equals(name);
 		boolean matchedId = userId == user.get().getId();
@@ -70,45 +55,4 @@ public class AuthServiceImpl implements AuthService {
 			throw AuthException.forbidden();
 		}
 	}
-
-
-	// public boolean hasPostCreateAccess(String principal, String owner, int userId) {
-
-	// log.debug("principal=\"" + principal + "\", owner=\"" + owner + "\", user_id=" + userId);
-
-	// // retrieve credential-dto using principal (username/email)
-	// CredentialDTO credential = credentialService.getCredentialByPrincipal(principal).orElse(null);
-	// if (credential == null) {
-	// return false;
-	// }
-
-	// int credUserId = credential.getUserId();
-	// int credVeilId = credential.getVeilId();
-	// log.debug("credUserId = " + credUserId + ", credVeilId = " + credVeilId);
-	// log.debug("Found credential = " + credential.toString());
-
-	// // retrieve user using user_id or veil_id
-	// Optional<UserDTO> user = userService.getUserById(credUserId);
-	// if (user.isEmpty()) {
-	// log.debug("No public user found with credId = " + credUserId);
-	// user = userService.getUserById(credVeilId);
-
-	// if (user.isEmpty()) {
-	// log.debug("No veil user found with credId = " + credVeilId);
-	// return false;
-	// } else {
-	// log.debug("Found user using credVeilId = " + credVeilId);
-	// }
-	// } else {
-	// log.debug("Found user using credUserId = " + credUserId);
-	// }
-
-	// // match owner with name, userId with id
-	// boolean matchedName = owner.equals(user.get().getName());
-	// boolean matchedId = userId != user.get().getId();
-	// log.debug("matchedName = " + matchedName + ", matchedId = " + matchedId);
-
-	// return matchedName && matchedId;
-	// }
-
 }
