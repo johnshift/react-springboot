@@ -79,8 +79,8 @@ jobs:
 
   backend-integration-tests:
     name: Backend Integration Tests
-    needs: [detect-changes]
-    if: needs.detect-changes.outputs.backend == 'true'
+    # needs: [detect-changes]
+    # if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     environment:
       name: backend DEV
