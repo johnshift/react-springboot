@@ -143,3 +143,27 @@ jobs:
           #       The "HD_" string will be stripped when the app starts.
           #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.
           HD_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
+
+  create-pull-request:
+    name: Create Pull Request
+    needs: [backend-dev]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout feature branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: pull-request
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "main"
+          pr_title: ":tada: ${{ steps.extract-branch.outputs.branch }} :tada:"
+          pr_body: |
+            Automated PR
+          pr_assignee: "johnshift"
+          pr_label: "auto-pr"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
