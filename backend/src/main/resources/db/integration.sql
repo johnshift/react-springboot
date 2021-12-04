@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
 	name TEXT NOT NULL,
-	description TEXT NOT NULL,
+	description TEXT,
 	UNIQUE(id, name)
 );
 INSERT INTO users (name, description) VALUES
@@ -28,14 +28,16 @@ CREATE TABLE credentials (
 	email TEXT NOT NULL UNIQUE,
 	user_id INTEGER NOT NULL,
 	veil_id INTEGER NOT NULL,
+	is_verified BOOLEAN NOT NULL,
 	UNIQUE(username),
 	FOREIGN KEY (user_id, veil_id) REFERENCES user_veils (user_id, veil_id)
 		ON DELETE CASCADE
 );
-INSERT INTO credentials (username, password, email, user_id, veil_id) VALUES
+INSERT INTO credentials (username, password, email, user_id, veil_id, is_verified) VALUES
 	('batman', '$2a$10$v18wFJddnl9tGLu37kQcG.EYvp4scbebr9HDWxEjhqXVDVRvIbFre', 'batman@gmail.com', 
 		(SELECT id FROM users where name = 'ben affleck'), 
-		(SELECT id FROM users where name = 'B-A-T-M-A-N')	
+		(SELECT id FROM users where name = 'B-A-T-M-A-N'),
+		true
 	);
 
 DROP TABLE IF EXISTS sessions CASCADE;

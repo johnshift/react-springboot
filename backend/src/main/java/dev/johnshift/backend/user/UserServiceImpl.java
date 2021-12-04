@@ -10,7 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-	UserRepository userRepository;
+	private final UserRepository userRepository;
+	private final UserVeilRepository userVeilRepository;
 
 	@Override
 	public Optional<UserDTO> getUserById(int id) {
@@ -25,6 +26,22 @@ public class UserServiceImpl implements UserService {
 		log.debug("Found (by id) user = " + user.get().toString());
 
 		return Optional.of(UserDTO.of(user.get()));
+	}
+
+	@Override
+	public UserDTO createUser(UserDTO dto) {
+
+		User user = userRepository.save(User.of(dto));
+
+		return UserDTO.of(user);
+	}
+
+	@Override
+	public UserVeilDTO createUserVeil(UserVeilDTO dto) {
+
+		UserVeil uv = userVeilRepository.save(UserVeil.of(dto));
+
+		return UserVeilDTO.of(uv);
 	}
 
 }
