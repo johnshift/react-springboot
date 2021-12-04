@@ -20,7 +20,7 @@ public class Credential {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private int id;
 
 	@Column(name = "username")
 	private String username;
@@ -37,6 +37,9 @@ public class Credential {
 			@JoinColumn(name = "veil_id", referencedColumnName = "veil_id")
 	})
 	private UserVeil userVeil;
+
+	@Column(name = "is_verified")
+	private boolean isVerified;
 }
 
 

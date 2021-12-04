@@ -85,6 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			// public endpoints
 			.antMatchers(HttpMethod.GET, "/api/v1/session/csrf-token").permitAll()
 			.antMatchers(HttpMethod.GET, "/api/v1/security/permit-all").permitAll()
+			.antMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
 
 			// role-specific endpoints
 			.antMatchers(HttpMethod.GET, "/api/v1/security/user-only").hasAuthority("ROLE_USER")

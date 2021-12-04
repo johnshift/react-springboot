@@ -3,7 +3,7 @@ package dev.johnshift.backend.credential;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CredentialRepository extends JpaRepository<Credential, Long> {
+public interface CredentialRepository extends JpaRepository<Credential, Integer> {
 
 	Optional<Credential> findOneByUsername(String username);
 

@@ -49,16 +49,15 @@ public class Generator {
 
 
 		Credential newCredential = new Credential();
-		newCredential.setId(genLong());
+		newCredential.setId(genInt());
 		newCredential.setUsername(genString());
 		newCredential.setEmail(genString());
 		newCredential.setPassword(genString());
 
-		UserVeil uv = new UserVeil();
 		UserVeilId uvId = new UserVeilId();
 		uvId.setUserId(genInt());
 		uvId.setVeilId(genInt());
-		uv.setId(uvId);
+		UserVeil uv = new UserVeil(uvId);
 
 		newCredential.setUserVeil(uv);
 

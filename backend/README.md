@@ -8,21 +8,30 @@ All exceptions should be catched by `ExceptionHandlers`
 
 ## User workflows
 - Sessions
-	- If no session found in request, a public session is automatically created.
-	- Active session-ids are added into cookies with http-only and 1hr max-age.
-	- Public sessions don't have any roles and authorities. Principal is also empty.
+	- [x] If no session found in request, a public session is automatically created.
+	- [x] Active session-ids are added into cookies with http-only and 1hr max-age.
+	- [x] Public sessions don't have any roles and authorities. Principal is also empty.
 - CSRF
-	- Public sessions inherently passes csrf-filter (csrf-token is added via request attribute).
-	- Active sessions are required to explicitly add csrf-token into request headers.
-	- All mismatched csrf-tokens are unauthorized.
-	- `GET /csrf-token` -> returns csrf-token from current session.
+	- [x] Public sessions inherently passes csrf-filter (csrf-token is added via request attribute).
+	- [x] Active sessions are required to explicitly add csrf-token into request headers.
+	- [x] All mismatched csrf-tokens are unauthorized.
+	- [x] `GET /csrf-token` -> returns csrf-token from current session.
 - Login
-	- On successful login, promotes pub-session into active-session.  
-	All roles and permissions are retrieved and added as authorities into current session.
-	- Adds csrf-token into response headers to be used by clients on subsequent requests.
-
-## TODO
-- ( ? ? ? ) `uuid-ossp` postgres extension:
-	- Run `CREATE EXTENSION IF NOT EXISTS "uuid-ossp";` psql command in github CI/CD postgres instance;
-	- Enable `"uuid-ossp"` extension in heroku postgres.
-	- Note you might need to alter the db_user into SUPERUSER.
+	- [ ] Unverified Account:
+		1. 	Show info of email verification pending.
+		2.	Show resend verification option.
+	- [x] Verified Account: 
+		1. 	Promotes pub-session into active-session.  
+		2.	All roles and permissions are retrieved and added as authorities into current session.
+		3.	Adds csrf-token into response headers to be used by clients on subsequent requests.
+- Register
+	- [ ] Input fields: username, email, password, name, veil
+	- [ ] Register request Validation -> handle exception
+	- [ ] After Validated: 
+		-	Save name to `users` then retrieve id as `user_id`
+		- Save veil to `users` then retrieve id as `veil_id`
+		-	Save `user_id` and `veil_id` into `user_veils`
+		- Save `username`, `email`, `password`, `user_veil`, `is_verified = false` into `credentials`
+		- Send email verification link
+	- [ ] after Verified Link: 
+		- Set `is_verified = true` in `credentials`
