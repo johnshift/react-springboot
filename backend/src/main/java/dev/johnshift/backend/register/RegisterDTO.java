@@ -9,47 +9,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import static dev.johnshift.backend.constants.ValidationConstants.MIN_USERNAME_LENGTH;
+import static dev.johnshift.backend.constants.ValidationConstants.MAX_USERNAME_LENGTH;
+import static dev.johnshift.backend.constants.ValidationConstants.NEAT_URI_REGEXP;
+import static dev.johnshift.backend.constants.ValidationConstants.EMAIL_REGEXP;
+import static dev.johnshift.backend.constants.ValidationConstants.MIN_PASSWORD_LENGTH;
+import static dev.johnshift.backend.constants.ValidationConstants.MAX_PASSWORD_LENGTH;
+import static dev.johnshift.backend.constants.ValidationConstants.MIN_NAME_LENGTH;
+import static dev.johnshift.backend.constants.ValidationConstants.MAX_NAME_LENGTH;
+import static dev.johnshift.backend.constants.ValidationConstants.NAMES_REGEXP;
+import static dev.johnshift.backend.constants.ValidationConstants.MIN_VEIL_LENGTH;
+import static dev.johnshift.backend.constants.ValidationConstants.MAX_VEIL_LENGTH;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class RegisterDTO {
 
-	private static final int MIN_USERNAME_LENGTH = 4;
-	private static final int MAX_USERNAME_LENGTH = 64;
-
-	private static final int MIN_EMAIL_LENGTH = 3;
-	private static final int MAX_EMAIL_LENGTH = 64;
-
-	private static final int MIN_PASSWORD_LENGTH = 6;
-	private static final int MAX_PASSWORD_LENGTH = 64; // Bcrypt hard limit = 72
-
-	private static final int MIN_NAME_LENGTH = 4;
-	private static final int MAX_NAME_LENGTH = 36;
-
-	private static final int MIN_VEIL_LENGTH = 4;
-	private static final int MAX_VEIL_LENGTH = 36;
-
-	// allow only letters,numbers and "-" for neat path uri
-	private static final String NEAT_URI_REGEXP = "^[a-zA-Z0-9-]+$";
-
-	// reasonable regexp for names
-	private static final String NAMES_REGEXP = "^[a-zA-Z .'-]+$";
-
-	// OWASP email regexp
-	private static final String EMAIL_REGEXP =
-		"^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-
 	@NotEmpty(message = RegisterException.USERNAME_REQUIRED)
 	@Size(min = MIN_USERNAME_LENGTH, message = RegisterException.USERNAME_TOO_SHORT)
 	@Size(max = MAX_USERNAME_LENGTH, message = RegisterException.USERNAME_TOO_LONG)
-	@Pattern(regexp = NEAT_URI_REGEXP, message = RegisterException.USERNAME_INVALID_CHARS)
+	@Pattern(regexp = NEAT_URI_REGEXP, message = RegisterException.USERNAME_INVALID_FORMAT)
 	private String username;
 
 	@NotEmpty(message = RegisterException.EMAIL_REQUIRED)
-	@Size(min = MIN_EMAIL_LENGTH, message = RegisterException.EMAIL_TOO_SHORT)
-	@Size(max = MAX_EMAIL_LENGTH, message = RegisterException.EMAIL_TOO_LONG)
 	@Email(message = RegisterException.EMAIL_INVALID)
 	@Pattern(regexp = EMAIL_REGEXP, message = RegisterException.EMAIL_INVALID)
 	private String email;
@@ -68,6 +52,6 @@ public class RegisterDTO {
 	@NotEmpty(message = RegisterException.VEIL_REQUIRED)
 	@Size(min = MIN_VEIL_LENGTH, message = RegisterException.VEIL_TOO_SHORT)
 	@Size(max = MAX_VEIL_LENGTH, message = RegisterException.VEIL_TOO_LONG)
-	@Pattern(regexp = NEAT_URI_REGEXP, message = RegisterException.VEIL_INVALID) // veils are used in profile links
+	@Pattern(regexp = NEAT_URI_REGEXP, message = RegisterException.VEIL_INVALID_FORMAT)
 	private String veil;
 }
