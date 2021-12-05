@@ -1,5 +1,6 @@
 package dev.johnshift.backend.register;
 
+import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,12 @@ public class RegisterServiceImpl implements RegisterService {
 	private final CredentialRepository credentialRepository;
 	private final UserRepository userRepository;
 	private final UserVeilRepository userVeilRepository;
+	private final RegisterVerificationRepository registerVerificationRepository;
 
 
 	@Override
 	@Transactional
-	public void register(RegisterDTO dto) {
+	public int register(RegisterDTO dto) {
 
 		// save user
 		User user = new User(dto.getName());
@@ -59,6 +61,8 @@ public class RegisterServiceImpl implements RegisterService {
 		newCredential.setUsername(dto.getUsername());
 		newCredential.setEmail(dto.getEmail());
 		newCredential.setPassword(encodedPassword);
+		newCredential.setVeil(dto.getVeil());
+		newCredential.setName(dto.getName());
 		newCredential.setUserVeil(savedUv);
 		newCredential.setVerified(false);
 		log.debug("new credential = " + newCredential.toString());
@@ -66,7 +70,39 @@ public class RegisterServiceImpl implements RegisterService {
 		Credential savedCredential = credentialRepository.save(newCredential);
 		log.debug("saved credential = " + savedCredential.toString());
 
+		return savedCredential.getId();
+	}
 
+
+	@Override
+	public void saveVerificationToken(UUID token, int credentialId) {
+
+		log.debug("token = " + token, "\tcredential_id = " + credentialId);
+		RegisterVerification regVerification = new RegisterVerification();
+		regVerification.setToken(token);
+		regVerification.setCredentialId(credentialId);
+
+		registerVerificationRepository.save(regVerification);
+	}
+
+
+	@Override
+	public void confirmVerificationToken(String token) {
+
+		// find match for token
+		RegisterVerification regVerification = registerVerificationRepository.findById(
+			UUID.fromString(token)).orElseThrow(RegisterException::invalidVerification);
+
+		// find match for credential-id
+		Credential matchedCredential = credentialRepository.findById(regVerification.getCredentialId())
+			.orElseThrow(RegisterException::invalidVerification);
+
+		// update credential is_verified to true
+		matchedCredential.setVerified(true);
+		credentialRepository.save(matchedCredential);
+
+		// delete entry in register_verification
+		registerVerificationRepository.delete(regVerification);
 	}
 
 }

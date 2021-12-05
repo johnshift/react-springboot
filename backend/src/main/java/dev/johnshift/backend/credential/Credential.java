@@ -1,5 +1,6 @@
 package dev.johnshift.backend.credential;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +32,13 @@ public class Credential {
 	@Column(name = "password")
 	private String password;
 
-	@OneToOne
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "veil")
+	private String veil;
+
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumns({
 			@JoinColumn(name = "user_id", referencedColumnName = "user_id"),
 			@JoinColumn(name = "veil_id", referencedColumnName = "veil_id")

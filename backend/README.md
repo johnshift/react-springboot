@@ -25,13 +25,15 @@ All exceptions should be catched by `ExceptionHandlers`
 		2.	All roles and permissions are retrieved and added as authorities into current session.
 		3.	Adds csrf-token into response headers to be used by clients on subsequent requests.
 - Register
-	- [ ] Input fields: username, email, password, name, veil
-	- [ ] Register request Validation -> handle exception
-	- [ ] After Validated: 
+	- [x] Input fields: username, email, password, name, veil
+	- [x] Register request Validation -> handle exception
+	- [x] After Validated: 
 		-	Save name to `users` then retrieve id as `user_id`
 		- Save veil to `users` then retrieve id as `veil_id`
 		-	Save `user_id` and `veil_id` into `user_veils`
 		- Save `username`, `email`, `password`, `user_veil`, `is_verified = false` into `credentials`
+		- Save `token` and `credential_id` into `register_verification`
 		- Send email verification link
-	- [ ] after Verified Link: 
+	- [x] after Verified Link: 
 		- Set `is_verified = true` in `credentials`
+		- Delete entry in `register_verification`

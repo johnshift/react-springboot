@@ -30,12 +30,13 @@ public class LoggingFilter extends OncePerRequestFilter {
 			.append("method=")
 			.append(request.getMethod())
 			.append(", path=\"")
-			.append(request.getRequestURI() + "\"");
+			.append(request.getRequestURI());
 
 		String queryString = request.getQueryString();
 		if (queryString != null) {
 			msg.append("?").append(queryString);
 		}
+		msg.append("\"");
 
 		if (request.getAuthType() != null) {
 			msg.append(", authType=")
