@@ -27,7 +27,7 @@ import static dev.johnshift.backend.session.SessionConstants.SESSION_COOKIE_HTTP
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Sql({"/db/integration.sql"})
-public class SecurityTestIT {
+public class SecurityIT {
 
 	@Autowired
 	CredentialRepository credentialRepository;

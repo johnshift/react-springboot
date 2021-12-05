@@ -153,6 +153,91 @@ public class Generator {
 		return sb.toString();
 	}
 
+	public static String genString(int n) {
+
+		// chose a Character random from this String
+		String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			+ "0123456789"
+			+ "abcdefghijklmnopqrstuvxyz";
+
+		// create StringBuffer size of AlphaNumericString
+		StringBuilder sb = new StringBuilder(n);
+
+		for (int i = 0; i < n; i++) {
+
+			// generate a random number between
+			// 0 to AlphaNumericString variable length
+			int index = (int) (AlphaNumericString.length()
+				* Math.random());
+
+			// add Character one by one in end of sb
+			sb.append(AlphaNumericString
+				.charAt(index));
+		}
+
+		return sb.toString();
+	}
+
+	public static String genStringLettersOnly(int n) {
+
+		String AlphaString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz";
+		StringBuilder sb = new StringBuilder(n);
+
+		for (int i = 0; i < n; i++) {
+
+			// generate a random number between
+			// 0 to AlphaNumericString variable length
+			int index = (int) (AlphaString.length()
+				* Math.random());
+
+			// add Character one by one in end of sb
+			sb.append(AlphaString
+				.charAt(index));
+		}
+
+		return sb.toString();
+
+	}
+
+
+	public static String genString(int n, boolean startWithLetterOnly) {
+
+		// chose a Character random from this String
+		String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			+ "0123456789"
+			+ "abcdefghijklmnopqrstuvxyz";
+		String AlphaString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz";
+
+		// create StringBuffer size of AlphaNumericString
+		StringBuilder sb = new StringBuilder(n);
+
+
+		int finalN = n;
+		if (startWithLetterOnly) {
+			finalN = n - 1;
+
+			int index = (int) (AlphaString.length()
+				* Math.random());
+
+			sb.append(AlphaString
+				.charAt(index));
+		}
+
+		for (int i = 0; i < finalN; i++) {
+
+			// generate a random number between
+			// 0 to AlphaNumericString variable length
+			int index = (int) (AlphaNumericString.length()
+				* Math.random());
+
+			// add Character one by one in end of sb
+			sb.append(AlphaNumericString
+				.charAt(index));
+		}
+
+		return sb.toString();
+	}
+
 	public static List<String> genStringList() {
 
 		int numElements = 3;

@@ -45,7 +45,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 			"ConstraintViolationException",
 			getSqlErrorMessage(ex));
 
-		return buildResponseEntity(dto, HttpStatus.CONFLICT);
+		return buildResponseEntity(dto, HttpStatus.BAD_REQUEST);
 	}
 
 
