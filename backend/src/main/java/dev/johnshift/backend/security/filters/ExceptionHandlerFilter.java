@@ -25,6 +25,13 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 			log.debug("Exception: \t" + e.getMessage());
 			e.printStackTrace();
 
+			// write explicit login errors
+			Object fromUserPassFilter = request.getAttribute(UserPassFilter.FROM_USERPASS_FILTER_ATTRIBUTE_KEY);
+			if (fromUserPassFilter != null && (boolean) fromUserPassFilter) {
+				Utils.writeUnauthorizedResponse(response, e.getMessage());
+				return;
+			}
+
 			// only return ambiguous error for security
 			Utils.writeUnauthorizedResponse(response, "UNAUTHORIZED");
 		}

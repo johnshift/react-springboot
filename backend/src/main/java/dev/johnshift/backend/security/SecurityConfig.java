@@ -142,7 +142,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		List<String> allowedHeaders = Arrays.asList(
 			"content-type",
 			"x-veils-session",
-			"x-veils-csrf-token");
+			"x-veils-csrf-token",
+			"access-control-allow-origin");
 
 		List<String> allowedMethods = Arrays.asList(
 			HttpMethod.GET.name(),

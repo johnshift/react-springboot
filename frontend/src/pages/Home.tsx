@@ -4,10 +4,6 @@ import { useEffect } from 'preact/hooks';
 import { csrfTokenAtom } from '../jotai/csrfToken';
 import { route } from 'preact-router'
 
-type TokenRequest = {
-	token: string;
-}
-
 const Home = () => {
 
 	const [csrfToken, setCsrfToken] = useAtom(csrfTokenAtom);
@@ -18,15 +14,16 @@ const Home = () => {
 		const backendURL = 'http://localhost:8080'
 
 		const getToken = async () => {
-			await axios.get<TokenRequest>(
-				backendURL + '/csrf-token',
+			await axios.get<string>(
+				backendURL + '/api/v1/session/csrf-token',
 				{
 					// important to allow cookies to be sent
 					withCredentials: true
 				}
 			)
 				.then(res => {
-					setCsrfToken(res.data.token);
+					console.log('res.data: ', res.data);
+					setCsrfToken(res.data);
 				})
 				.catch(err => {
 					console.log('getToken catch: ', err.response);
