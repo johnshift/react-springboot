@@ -17,7 +17,7 @@ spring:
 # logging.level.org.springframework: DEBUG
 
 logging:
-  pattern: 
+  pattern:
     console: "%clr(%d{ISO8601}){faint} %clr([ ${LOG_LEVEL_PATTERN:%5p} ] ){yellow} %clr(%-40.40logger{39}:%M:%L) %msg%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
   level:
-    "[dev.johnshift.backend]":  DEBUG
+    "[dev.johnshift.backend]": DEBUG

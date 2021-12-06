@@ -1,15 +1,14 @@
+import { route } from 'preact-router';
 import { useState } from 'preact/hooks';
-import { useAtom } from 'jotai';
-import { csrfTokenAtom } from '../jotai/csrfToken';
-import { getCsrfToken } from '../api';
-import { apiLogin } from '../api/login';
-
-type SessionCsrfResponse = {
-  ['csrf-token']: string;
-};
+import { apiLogin, getLocalJwt } from '../api';
 
 const Login = () => {
-  const [csrfToken, setCsrfToken] = useAtom(csrfTokenAtom);
+  // redirect to homepage if already loggedin
+  if (getLocalJwt()) {
+    alert('you are already logged in!');
+    route('/', true);
+  }
+
   const [principal, setPrincipal] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -19,17 +18,12 @@ const Login = () => {
   };
 
   const login = async () => {
-    if (!csrfToken) {
-      console.log('fetching token ...');
-      const token = await getCsrfToken();
-      console.log('token: ', token);
-      setCsrfToken(token);
-    }
     console.log('principal: ', principal);
     console.log('password: ', password);
     console.log('login clicked');
 
-    await apiLogin(principal, password, csrfToken);
+    const token = await apiLogin(principal, password);
+    alert('token received ' + token);
   };
 
   return (
