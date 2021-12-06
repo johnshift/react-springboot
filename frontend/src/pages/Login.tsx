@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { JWT_HEADER_KEY, LOGIN_URI } from '../constants';
@@ -17,6 +17,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [err, setError] = useState('');
+  const [msg, setMsg] = useState('');
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -35,7 +36,7 @@ const Login = () => {
         }
       )
       .then((res) => {
-        alert('You have successfully loggedin!');
+        setMsg('You have successfully loggedin!');
 
         const token = res.headers[JWT_HEADER_KEY];
 
@@ -44,8 +45,10 @@ const Login = () => {
 
         setLocation('/');
       })
-      .catch((err) => {
-        setError(err.response.data.message);
+      .catch((error: AxiosError) => {
+        if (error.response) {
+          setError(error.response.data.message);
+        }
       });
   };
 
@@ -57,7 +60,18 @@ const Login = () => {
           <>
             <br />
             <br />
-            <p className="text-red-500">{err}</p>
+            <p className="text-red-500" data-testid="errmsg">
+              {err}
+            </p>
+          </>
+        )}
+        {msg && (
+          <>
+            <br />
+            <br />
+            <p className="text-green-500" data-testid="errmsg">
+              {msg}
+            </p>
           </>
         )}
         <br />
