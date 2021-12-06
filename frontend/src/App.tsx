@@ -1,8 +1,8 @@
 import 'virtual:windi.css';
 import { Route, Switch } from 'wouter';
+import Home from './pages/Home';
 import Login from './pages/Login';
 
-const Home = () => <h1>Home Page</h1>;
 const NotFound = () => <h1>Not Found</h1>;
 
 function App() {

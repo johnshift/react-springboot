@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@testing-library/react": "^12.1.2",
+    "axios": "^0.24.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "wouter": "^2.8.0-alpha.2"
