@@ -11,39 +11,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # detect-changes:
-  #   name: Detect Changes
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Extract branch name
-  #       shell: bash
-  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-  #       id: extract-branch
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ steps.extract-branch.outputs.branch }}
-  #         fetch-depth: 0
-  #     - name: Check changes on backend
-  #       id: check-backend
-  #       uses: tj-actions/changed-files@v10
-  #       with:
-  #         files: |
-  #           backend
-  #     - name: Check changes on frontend
-  #       id: check-frontend
-  #       uses: tj-actions/changed-files@v10
-  #       with:
-  #         files: |
-  #           frontend
-  #   outputs:
-  #     backend: ${{ steps.check-backend.outputs.any_changed }}
-  #     frontend: ${{ steps.check-frontend.outputs.any_changed }}
+  detect-changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+          fetch-depth: 0
+      - name: Check changes on backend
+        id: check-backend
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            backend
+      - name: Check changes on frontend
+        id: check-frontend
+        uses: tj-actions/changed-files@v10
+        with:
+          files: |
+            frontend
+    outputs:
+      backend: ${{ steps.check-backend.outputs.any_changed }}
+      frontend: ${{ steps.check-frontend.outputs.any_changed }}
 
   backend-unit-tests:
     name: Backend Unit Tests
-    # needs: [detect-changes]
-    # if: needs.detect-changes.outputs.backend == 'true'
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     environment:
       name: backend DEV
@@ -79,8 +79,8 @@ jobs:
 
   backend-integration-tests:
     name: Backend Integration Tests
-    # needs: [detect-changes]
-    # if: needs.detect-changes.outputs.backend == 'true'
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     environment:
       name: backend DEV
@@ -112,6 +112,35 @@ jobs:
       - name: Run Integration Tests
         working-directory: ./backend
         run: "mvn clean test-compile failsafe:integration-test"
+
+  frontend-tests:
+    name: Frontend Tests
+    needs: [detect-changes]
+    if: needs.detect-changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout feature branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Install pnpm
+        run: sudo npm i -g pnpm
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "pnpm"
+          cache-dependency-path: ./frontend/pnpm-lock.yaml
+      - name: Build
+        working-directory: ./frontend
+        run: pnpm i --frozen-lockfile
+      - name: Run Tests
+        working-directory: ./frontend
+        run: "pnpm test"
 
   backend-dev:
     name: Deploy Backend DEV

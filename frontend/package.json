@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "axios": "^0.24.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
@@ -26,6 +27,7 @@
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "@vitejs/plugin-react": "^1.0.0",
+    "axios-mock-adapter": "^1.20.0",
     "eslint": "^8.4.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
