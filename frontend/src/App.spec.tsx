@@ -5,6 +5,6 @@ describe('App', () => {
   test('should display Hello', () => {
     render(<App />);
 
-    expect(screen.getByText('Hello Vite + React!')).toBeInTheDocument();
+    expect(screen.getByText('Hello World!')).toBeInTheDocument();
   });
 });
