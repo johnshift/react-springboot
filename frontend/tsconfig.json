@@ -14,9 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact",
-    "types": ["node", "jest", "vite/client"]
+    "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": ["./src"]
 }
