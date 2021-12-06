@@ -11,39 +11,39 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  detect-changes:
-    name: Detect Changes
-    runs-on: ubuntu-latest
-    steps:
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract-branch
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ steps.extract-branch.outputs.branch }}
-          fetch-depth: 0
-      - name: Check changes on backend
-        id: check-backend
-        uses: tj-actions/changed-files@v10
-        with:
-          files: |
-            backend
-      - name: Check changes on frontend
-        id: check-frontend
-        uses: tj-actions/changed-files@v10
-        with:
-          files: |
-            frontend
-    outputs:
-      backend: ${{ steps.check-backend.outputs.any_changed }}
-      frontend: ${{ steps.check-frontend.outputs.any_changed }}
+  # detect-changes:
+  #   name: Detect Changes
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Extract branch name
+  #       shell: bash
+  #       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+  #       id: extract-branch
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: ${{ steps.extract-branch.outputs.branch }}
+  #         fetch-depth: 0
+  #     - name: Check changes on backend
+  #       id: check-backend
+  #       uses: tj-actions/changed-files@v10
+  #       with:
+  #         files: |
+  #           backend
+  #     - name: Check changes on frontend
+  #       id: check-frontend
+  #       uses: tj-actions/changed-files@v10
+  #       with:
+  #         files: |
+  #           frontend
+  #   outputs:
+  #     backend: ${{ steps.check-backend.outputs.any_changed }}
+  #     frontend: ${{ steps.check-frontend.outputs.any_changed }}
 
   backend-unit-tests:
     name: Backend Unit Tests
-    needs: [detect-changes]
-    if: needs.detect-changes.outputs.backend == 'true'
+    # needs: [detect-changes]
+    # if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     environment:
       name: backend DEV
@@ -79,8 +79,8 @@ jobs:
 
   backend-integration-tests:
     name: Backend Integration Tests
-    needs: [detect-changes]
-    if: needs.detect-changes.outputs.backend == 'true'
+    # needs: [detect-changes]
+    # if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     environment:
       name: backend DEV
@@ -115,8 +115,8 @@ jobs:
 
   frontend-tests:
     name: Frontend Tests
-    needs: [detect-changes]
-    if: needs.detect-changes.outputs.frontend == 'true'
+    # needs: [detect-changes]
+    # if: needs.detect-changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Extract branch name
@@ -174,8 +174,10 @@ jobs:
           HD_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
 
   create-pull-request:
+    # always run if either frontend/backend succeed and neither failed
+    if: always() && (needs.backend-dev.result == 'success' || needs.frontend-tests.result == 'success') && (needs.frontend-tests.result != 'failure' && needs.frontend-tests.result != 'failure')
     name: Create Pull Request
-    needs: [backend-dev]
+    needs: [backend-dev, frontend-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Extract branch name
