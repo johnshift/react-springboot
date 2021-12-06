@@ -1,0 +1,5 @@
+.gitignore
+**.svg
+vite.config.ts
+jest.config.js
+index.html
