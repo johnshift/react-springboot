@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { LOGIN_URI } from '../constants';
+import { LOGIN_INCORRECT_MSG, LOGIN_SUCCESS_MSG, LOGIN_URI } from '../constants';
 
 import Login from './Login';
 
@@ -28,11 +28,9 @@ describe('Login', () => {
   });
 
   test('Login Error', async () => {
-    const errmsg = 'Incorrect username/email or password';
-
     const errResponse = {
       type: 'AuthException',
-      message: errmsg,
+      message: LOGIN_INCORRECT_MSG,
       timestamp: 1235
     };
 
@@ -45,14 +43,14 @@ describe('Login', () => {
     });
 
     await waitFor(async () => {
-      expect(screen.getByText(errmsg)).toBeInTheDocument();
+      expect(screen.getByText(LOGIN_INCORRECT_MSG)).toBeInTheDocument();
     });
   });
 
   test('Login Success', async () => {
-    const msg = 'You have successfully loggedin!';
-
-    mock.onPost(LOGIN_URI).replyOnce(200);
+    mock.onPost(LOGIN_URI).replyOnce(200, undefined, {
+      authorization: 'FUCK_YOU'
+    });
 
     render(<Login />);
 
@@ -61,7 +59,7 @@ describe('Login', () => {
     });
 
     await waitFor(async () => {
-      expect(screen.getByText(msg)).toBeInTheDocument();
+      expect(screen.getByText(LOGIN_SUCCESS_MSG)).toBeInTheDocument();
     });
   });
 });
