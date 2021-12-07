@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { LOGIN_INCORRECT_MSG, LOGIN_SUCCESS_MSG, LOGIN_URI } from '../constants';
+import { LOGIN_INCORRECT_MSG, LOGIN_SUCCESS_MSG, LOGIN_URI } from '../common/constants';
 
 import Login from './Login';
 

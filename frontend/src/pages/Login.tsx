@@ -13,8 +13,8 @@ import {
 import axios, { AxiosError } from 'axios';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import PageCenter from '../components/PageCenter';
-import { JWT_HEADER_KEY, LOGIN_SUCCESS_MSG, LOGIN_URI } from '../constants';
+import PageCenter from '../common/components/PageCenter';
+import { JWT_HEADER_KEY, LOGIN_SUCCESS_MSG, LOGIN_URI } from '../common/constants';
 
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 
