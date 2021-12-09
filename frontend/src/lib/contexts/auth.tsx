@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import {
   createContext,
   ReactNode,
@@ -6,12 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import toast from "react-hot-toast";
-import {
-  AUTHORIZATION_KEY,
-  MSG_SUCCESSFUL_LOGOUT,
-  TOAST_OPTIONS,
-} from "../constants";
+import { AUTHORIZATION_KEY } from "../constants";
 
 type Props = {
   children: ReactNode;
@@ -22,6 +16,7 @@ type AuthContextT = {
   authLoading: boolean;
   authLogin: (token?: string) => void;
   authLogout: () => void;
+  setAuthLoading: (loading: boolean) => void;
 };
 
 const AuthContext = createContext<AuthContextT>({
@@ -29,10 +24,10 @@ const AuthContext = createContext<AuthContextT>({
   authLoading: true,
   authLogin: () => {},
   authLogout: () => {},
+  setAuthLoading: (loading: boolean) => {},
 });
 
 export const AuthProvider = ({ children }: Props) => {
-  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
 
@@ -49,27 +44,19 @@ export const AuthProvider = ({ children }: Props) => {
   }, []);
 
   const authLogin = (token?: string) => {
-    // no network calls. no need to display loaders
-
     setIsAuthenticated(true);
 
     if (token) {
       localStorage.setItem(AUTHORIZATION_KEY, token);
     }
 
-    setAuthLoading(false);
-
     // to-do: get info using claims token
   };
 
   const authLogout = () => {
-    // no network calls. no need to display loaders
-
+    setAuthLoading(true);
     setIsAuthenticated(false);
     localStorage.removeItem(AUTHORIZATION_KEY);
-    router.push("/login").then(() => {
-      toast.success(MSG_SUCCESSFUL_LOGOUT, TOAST_OPTIONS);
-    });
   };
 
   return (
@@ -79,6 +66,7 @@ export const AuthProvider = ({ children }: Props) => {
         authLoading,
         authLogin,
         authLogout,
+        setAuthLoading,
         // userDetails
       }}
     >

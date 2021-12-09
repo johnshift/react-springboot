@@ -1,7 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { MSG_PLEASE_LOGIN, TOAST_OPTIONS } from "../../lib/constants";
+import {
+  MSG_PLEASE_LOGIN,
+  MSG_SUCCESSFUL_LOGOUT,
+  TOAST_OPTIONS,
+} from "../../lib/constants";
 import { useAuth } from "../../lib/contexts/auth";
 import Button from "../common/Button";
 import Spinner from "../common/Spinner";
@@ -10,16 +14,18 @@ import PageCenter from "../layout/PageCenter";
 const Token = () => {
   const router = useRouter();
 
-  const { authLoading, isAuthenticated, authLogout } = useAuth();
+  const { authLoading, isAuthenticated, authLogout, setAuthLoading } =
+    useAuth();
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
+      setAuthLoading(true);
       router.replace("/login").then(() => {
+        setAuthLoading(false);
         toast(MSG_PLEASE_LOGIN, TOAST_OPTIONS);
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, authLoading]);
+  }, [isAuthenticated, authLoading, router, setAuthLoading]);
 
   if (authLoading || !isAuthenticated) {
     return (
@@ -33,7 +39,17 @@ const Token = () => {
     <div>
       <p>Home Page</p>
       <br />
-      <Button onClick={authLogout}>LOGOUT</Button>
+      <Button
+        onClick={() => {
+          authLogout();
+          router.push("/login").then(() => {
+            setAuthLoading(false);
+            toast.success(MSG_SUCCESSFUL_LOGOUT, TOAST_OPTIONS);
+          });
+        }}
+      >
+        LOGOUT
+      </Button>
     </div>
   );
 };

@@ -16,5 +16,5 @@ export const AUTHORIZATION_KEY = "authorization";
 
 export const TOAST_OPTIONS = {
   id: "1",
-  position: "bottom-center" as ToastPosition,
+  position: "top-center" as ToastPosition,
 };
