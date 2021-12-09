@@ -28,7 +28,7 @@ const Input = ({
       placeholder={placeholder}
       onChange={onChange}
       style={{
-        border: isInvalid ? "1px solid #b91c1c" : "1px solid #dee2e6",
+        border: isInvalid ? "1px solid #b91c1c" : "1px solid #d4d4d8",
       }}
     />
   );

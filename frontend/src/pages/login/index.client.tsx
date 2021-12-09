@@ -22,17 +22,17 @@ const Login = () => {
   const [principal, setPrincipal] = useState("");
   const [password, setPassword] = useState("");
 
-  const { authLogin, isAuthenticated, authLoading } = useAuth();
+  const { authLogin, isAuthenticated, authLoading, setAuthLoading } = useAuth();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!authLoading && isAuthenticated) {
+      setAuthLoading(true);
       router.replace("/").then(() => {
+        setAuthLoading(false);
         toast(MSG_ALREADY_LOGGEDIN, TOAST_OPTIONS);
       });
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+  }, [authLoading, isAuthenticated, router, setAuthLoading]);
 
   const onChangeHandler = (e: FormEvent<HTMLInputElement>) => {
     const targetName = e.currentTarget.name;
@@ -49,7 +49,6 @@ const Login = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    toast.dismiss();
     toast.loading("Logging in please wait", TOAST_OPTIONS);
 
     async function apiLogin() {
@@ -61,7 +60,6 @@ const Login = () => {
         }),
       });
 
-      toast.dismiss();
       setIsLoading(false);
 
       if (response.status !== 200) {
@@ -75,6 +73,7 @@ const Login = () => {
         if (token) {
           authLogin(token);
           router.push("/").then(() => {
+            setAuthLoading(false);
             toast.success(MSG_SUCCESSFUL_LOGIN, TOAST_OPTIONS);
           });
         }
