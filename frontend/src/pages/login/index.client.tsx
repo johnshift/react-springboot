@@ -5,8 +5,7 @@ import { LoginContext } from "../../components/login/LoginContext";
 import LoginForm from "../../components/login/LoginForm";
 import {
   AUTHORIZATION_KEY,
-  MSG_JUST_LOGGED_OUT,
-  MSG_PLEASE_LOGIN,
+  MSG_ALREADY_LOGGEDIN,
   MSG_SUCCESSFUL_LOGIN,
   TOAST_OPTIONS,
 } from "../../lib/constants";
@@ -23,34 +22,15 @@ const Login = () => {
   const [principal, setPrincipal] = useState("");
   const [password, setPassword] = useState("");
 
-  const {
-    authLoading,
-    authLogin,
-    isRedirected,
-    setIsRedirected,
-    isAuthenticated,
-    justLoggedOut,
-    setJustLoggedOut,
-  } = useAuth();
+  const { authLogin, isAuthenticated, authLoading } = useAuth();
 
   useEffect(() => {
-    if (isRedirected) {
-      setIsRedirected(false);
-      toast.dismiss();
-      toast(MSG_PLEASE_LOGIN, TOAST_OPTIONS);
-    }
-
     if (isAuthenticated) {
-      setIsRedirected(true);
-      router.replace("/");
+      router.replace("/").then(() => {
+        toast(MSG_ALREADY_LOGGEDIN, TOAST_OPTIONS);
+      });
     }
 
-    if (justLoggedOut) {
-      setJustLoggedOut(false);
-      toast(MSG_JUST_LOGGED_OUT, TOAST_OPTIONS);
-    }
-
-    // needs to only run once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
@@ -90,13 +70,12 @@ const Login = () => {
         toast.error(message, TOAST_OPTIONS);
       } else {
         setHasError(false);
-        toast.success(MSG_SUCCESSFUL_LOGIN, TOAST_OPTIONS);
         const token = response.headers.get(AUTHORIZATION_KEY);
         console.log("login success token: ", token);
         if (token) {
           authLogin(token);
           router.push("/").then(() => {
-            alert("ALERT AFTER SUCCESSFUL LOGIN");
+            toast.success(MSG_SUCCESSFUL_LOGIN, TOAST_OPTIONS);
           });
         }
       }
@@ -108,7 +87,7 @@ const Login = () => {
   return (
     <Page>
       <PageCenter>
-        {isAuthenticated ? (
+        {authLoading || isAuthenticated ? (
           // remove login flicker when navigating to /login if loggedin
           <Spinner />
         ) : (
