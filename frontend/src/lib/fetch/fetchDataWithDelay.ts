@@ -1,6 +1,4 @@
-const randDelay = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
+import { randDelay } from "../common/randDelay";
 
 export default async function fetchData(url: string) {
   const [res] = await Promise.all([

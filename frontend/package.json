@@ -6,19 +6,25 @@
     "build": "npm run compile-css && next build",
     "start": "next start",
     "lint": "next lint",
-    "compile-css": "windicss './src/**/*.tsx' -mto './styles/windi.min.css'"
+    "watch-css": "windicss './src/**/*.tsx' -mto './styles/windi.min.css' -f 'windi.config.js' --dev",
+    "compile-css": "windicss './src/**/*.tsx' -mto './styles/windi.min.css' -f 'windi.config.js'"
   },
   "dependencies": {
+    "jotai": "^1.4.7",
     "next": "^12.0.7",
     "postcss": "^8.4.4",
     "react": "^18.0.0-beta-c7917fe76-20211206",
-    "react-dom": "^18.0.0-beta-c7917fe76-20211206"
+    "react-dom": "^18.0.0-beta-c7917fe76-20211206",
+    "react-hot-toast": "^2.1.1",
+    "ts-md5": "^1.2.10"
   },
   "devDependencies": {
     "@types/node": "16.11.12",
     "@types/react": "17.0.37",
+    "@windicss/plugin-animations": "^1.0.9",
     "eslint": "8.4.1",
     "eslint-config-next": "12.0.7",
-    "typescript": "4.5.2"
+    "typescript": "4.5.2",
+    "windicss": "^3.2.1"
   }
 }
