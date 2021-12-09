@@ -1,6 +1,9 @@
 const cache: any = {};
 
-export default function useData(url: string, fetcher: () => any) {
+export default function cachedFetch<T>(
+  url: string,
+  fetcher: () => Promise<T>
+): T {
   if (!cache[url]) {
     let data: any;
     let promise: Promise<any>;
