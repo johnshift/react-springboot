@@ -5,7 +5,7 @@ import Page from "../components/layout/Page";
 
 const Home: NextPage = () => {
   return (
-    <Page>
+    <Page withNav>
       <Suspense fallback={<h1>Home Page Loading ...</h1>}>
         <Token />
       </Suspense>
