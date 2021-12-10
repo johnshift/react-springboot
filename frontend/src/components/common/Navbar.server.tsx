@@ -1,6 +1,6 @@
-import Center from "../layout/Center";
-import MenuSvg from "../svg/MenuSvg";
+import { Suspense } from "react";
 import SearchSvg from "../svg/SearchSvg";
+import MenuClient from "./Menu.client";
 
 const Brand = () => (
   <div className="w-8/24 md:w-12/24 xl:w-6/10">
@@ -36,17 +36,9 @@ const Searchbar = () => (
 
 const Menu = () => {
   return (
-    <div className="md:w-3/24 w-4/24 xl:w-1/10">
-      <Center>
-        <button
-          type="button"
-          aria-label="options menu"
-          className="p-3 rounded-lg hover:bg-light-800 hover:text-red-800"
-        >
-          <MenuSvg />
-        </button>
-      </Center>
-    </div>
+    <Suspense fallback={<p>Menu Client Loading ...</p>}>
+      <MenuClient />
+    </Suspense>
   );
 };
 
@@ -56,7 +48,9 @@ const Navbar = () => {
       <div className="flex lg:mx-auto lg:w-1100px">
         <Brand />
         <Searchbar />
-        <Menu />
+        <Suspense fallback={<p>Menu loading</p>}>
+          <Menu />
+        </Suspense>
       </div>
     </nav>
   );
