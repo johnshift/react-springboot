@@ -17,6 +17,8 @@ import {
   DEMO_PASSWORD,
   DEMO_PRINCIPAL,
   DEMO_WELCOME_MESSAGE,
+  MSG_SOMETHING_WENT_WRONG,
+  TOAST_STATUS_ERROR,
   TOAST_STATUS_SUCCESS,
 } from "../../lib/constants";
 
@@ -42,6 +44,14 @@ const LoginHero = () => {
         });
         await router.push("/").then(() => {
           setAuthLoading(false);
+        });
+      })
+      .catch(() => {
+        setAuthLoading(false);
+        toast({
+          title: MSG_SOMETHING_WENT_WRONG,
+          status: TOAST_STATUS_ERROR,
+          duration: DEFAULT_TOAST_DURATION,
         });
       });
   };
