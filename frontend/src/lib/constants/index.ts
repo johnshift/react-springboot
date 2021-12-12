@@ -22,3 +22,9 @@ export const TOAST_STATUS_SUCCESS = "success";
 export const TOAST_STATUS_ERROR = "error";
 export const TOAST_STATUS_INFO = "info";
 export const DEFAULT_TOAST_DURATION = 4000;
+
+export const DEMO_WELCOME_MESSAGE = "You have logged in for DEMO";
+export const DEMO_PRINCIPAL = "demo";
+export const DEMO_PASSWORD = "12345678";
+
+export const API_LOGIN_URL = "/api/login";

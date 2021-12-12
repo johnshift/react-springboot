@@ -23,6 +23,7 @@ import { FormEvent, ReactNode, useEffect, useState } from "react";
 import { BsFillEyeSlashFill, BsFillEyeFill } from "react-icons/bs";
 import { useAuth } from "../../context/AuthProvider";
 import {
+  API_LOGIN_URL,
   AUTHORIZATION_KEY,
   DEFAULT_TOAST_DURATION,
   MSG_ALREADY_LOGGED_IN,
@@ -86,7 +87,7 @@ const LoginForm = () => {
     let token: string | null = null;
 
     await axios
-      .post("/api/login", { principal, password })
+      .post(API_LOGIN_URL, { principal, password })
       .then((res: AxiosResponse<MessageResponse>) => {
         token = res.headers[AUTHORIZATION_KEY];
         console.log("received token: ", token);
@@ -112,13 +113,11 @@ const LoginForm = () => {
           console.log("withErr =", withErr, "  token =", token);
           setAuthLoading(true);
           await authLogin(token);
-          console.log("calling toast");
           toast({
             title: MSG_LOGIN_SUCCESSFUL,
             status: TOAST_STATUS_SUCCESS,
             duration: DEFAULT_TOAST_DURATION,
           });
-          console.log("done toast");
           await router.push("/").then(() => {
             setAuthLoading(false);
           });

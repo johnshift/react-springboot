@@ -1,6 +1,51 @@
-import { Box, Button, Center, Flex, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Heading,
+  Skeleton,
+  useToast,
+} from "@chakra-ui/react";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useAuth } from "../../context/AuthProvider";
+import {
+  API_LOGIN_URL,
+  AUTHORIZATION_KEY,
+  DEFAULT_TOAST_DURATION,
+  DEMO_PASSWORD,
+  DEMO_PRINCIPAL,
+  DEMO_WELCOME_MESSAGE,
+  TOAST_STATUS_SUCCESS,
+} from "../../lib/constants";
 
 const LoginHero = () => {
+  const toast = useToast();
+  const router = useRouter();
+  const { authLoading, setAuthLoading, authLogin } = useAuth();
+
+  const handleDemoLogin = async () => {
+    setAuthLoading(true);
+    await axios
+      .post(API_LOGIN_URL, {
+        principal: DEMO_PRINCIPAL,
+        password: DEMO_PASSWORD,
+      })
+      .then(async (res) => {
+        const token = res.headers[AUTHORIZATION_KEY];
+        await authLogin(token);
+        toast({
+          title: DEMO_WELCOME_MESSAGE,
+          status: TOAST_STATUS_SUCCESS,
+          duration: DEFAULT_TOAST_DURATION,
+        });
+        await router.push("/").then(() => {
+          setAuthLoading(false);
+        });
+      });
+  };
+
   return (
     <Box
       mt={["10", "0"]}
@@ -22,9 +67,9 @@ const LoginHero = () => {
               Share your secrets anonymously
             </Heading>
           </Box>
-          <Box>
-            <Button>demo</Button>
-          </Box>
+          <Skeleton isLoaded={!authLoading} w="80px">
+            <Button onClick={handleDemoLogin}>demo</Button>
+          </Skeleton>
         </Flex>
       </Center>
     </Box>
