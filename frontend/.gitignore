@@ -35,3 +35,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# we must not include this local.env in github (as it is only used locally and contains secrets)
+.env.local
