@@ -3,12 +3,13 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import Home from "../src/pages/index";
+import renderW from "../src/test-utils/renderW";
 
 describe("Home", () => {
   it("works", () => {
-    render(<Home />);
+    renderW(<Home />);
 
     const hello = screen.getByText("Hello NextJS");
 
