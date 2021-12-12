@@ -1,6 +1,5 @@
 import { Button, Skeleton, useToast } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import { route } from "next/dist/server/router";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuth } from "../context/AuthProvider";
