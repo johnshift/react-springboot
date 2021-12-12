@@ -3,7 +3,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { MessageResponse } from "../../types";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { LOGIN_URL } from "../../constants";
+import {
+  LOGIN_URL,
+  MSG_LOGIN_SUCCESSFUL,
+  MSG_SOMETHING_WENT_WRONG,
+} from "../../lib/constants";
+import { simulateDelay } from "../../lib/simulateDelay";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,6 +18,12 @@ export default async function handler(
     res.status(500);
     return;
   }
+
+  // NOTE: 	parse the jwt claims here so 3rd party js won't be included in bundle
+  //				send only useful data into clients
+
+  // simulate delay
+  await simulateDelay();
 
   await axios
     .post(
@@ -32,16 +43,17 @@ export default async function handler(
       return res
         .status(200)
         .setHeader("authorization", resp.headers["authorization"])
-        .json({ message: "You have successfully logged in" });
+        .json({ message: MSG_LOGIN_SUCCESSFUL });
     })
     .catch((err: AxiosError) => {
       if (err.response && err.response.status >= 400) {
         const status = err.response.status;
         const message = (err.response as AxiosResponse<MessageResponse>).data
           .message;
-        return res.status(status).json({ message });
+        res.status(status).json({ message });
+        return;
       }
 
-      return res.status(500).json({ message: "Something went wrong :(" });
+      res.status(500).json({ message: MSG_SOMETHING_WENT_WRONG });
     });
 }
