@@ -1,0 +1,36 @@
+---
+import BaseHead from "./BaseHead.astro"
+
+export interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { title, description } = Astro.props
+
+const border1 = 'border-2 border-red-500';
+const border2 = 'border-2 border-green-500';
+const border3 = 'border-2 border-blue-500';
+const border4 = 'border-2 border-orange-500';
+const border5 = 'border border-gray-200'
+
+---
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description}/>
+	</head>
+	<body>
+			<main class="flex flex-col h-screen md:justify-center md:items-center md:flex-row lg:px-56 hd:px-96">
+				<article class="md:h-1/2 md:w-1/2">
+					<slot 
+						name="hero"
+					/>
+				</article>
+				<section class="md:h-1/2 md:w-1/2">
+					<slot 
+						name="form" 
+					/>
+				</section>
+			</main>
+	</body>
+</html>
