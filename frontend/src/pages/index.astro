@@ -1,11 +1,12 @@
 ---
 import BaseHead from '../layouts/BaseHead.astro'
+import { BACKEND_API_URL } from '../lib/constants'
 ---
 <html lang="en">
 	<head>
 		<BaseHead />
 	</head>
 	<body>
-		<h1>Home</h1>
+		<p>backend url: <a href={BACKEND_API_URL}>{BACKEND_API_URL}</a></p>
 	</body>
 </html>
