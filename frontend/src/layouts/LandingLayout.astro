@@ -2,7 +2,7 @@
 import BaseLayout from './BaseLayout.astro'
 ---
 <BaseLayout>
-	<main slot='body' class="flex flex-col h-screen justify-center md:items-center md:flex-row md:px-10 lg:px-56 hd:px-96 -mt-24 md:mt-0">
+	<main slot='body' class="flex flex-col h-screen justify-center items-center md:flex-row md:px-10 lg:px-56 hd:px-96">
 		
 		<article class="h-40 md:h-1/2 md:w-1/2 flex md:flex-row md:justify-end">
 			<div class='h-full p-5 flex md:flex-col md:justify-center items-center md:items-start flex-wrap'>
@@ -23,7 +23,7 @@ import BaseLayout from './BaseLayout.astro'
 		</article>
 		
 		<section class="md:h-1/2 md:w-1/2 py-5 flex justify-center items-center md:justify-start">
-			<div class="p-10 rounded-lg shadow-md w-11/12 hd:w-8/12 border border-gray-300">
+			<div class="p-10 rounded-lg shadow-md w-11/12 lg:w-9/12 hd:w-8/12 border border-gray-300">
 				<slot name="right" />
 			</div>
 		</section>
