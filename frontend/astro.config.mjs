@@ -1,4 +1,4 @@
-// import { minifyHtml } from 'vite-plugin-html'
+import { minifyHtml } from 'vite-plugin-html'
 
 export default {
   // projectRoot: '.',     // Where to resolve all URLs relative to. Useful if you have a monorepo project.
@@ -20,7 +20,7 @@ export default {
     "@astrojs/renderer-svelte"
   ],
 
-	// vite: {
-	// 	plugins: [minifyHtml()],
-	// }
+	vite: {
+		plugins: [minifyHtml()],
+	}
 };
