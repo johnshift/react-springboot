@@ -1,4 +1,4 @@
-import { writable, Writable, derived, Readable } from "svelte/store";
+import { writable, derived, Readable } from "svelte/store";
 import { DEFAULT_NOTIFICATION_DURATION } from "../lib/constants";
 
 export type NotificationType = "success" | "info" | "error" | "loading";
@@ -8,16 +8,28 @@ type Notification = {
   type: NotificationType;
   show: boolean;
   id: number;
+  duration: number;
 };
 
 const createNotificationsStore = () => {
   const _state = writable({} as Notification);
 
   // call this to update the current state
-  const newNotification = (msg: string, type: NotificationType) => {
+  const newNotification = (
+    msg: string,
+    type: NotificationType,
+    duration = DEFAULT_NOTIFICATION_DURATION
+  ) => {
+    console.log("new notif: ", msg, type, duration);
+
     _state.update(() => {
-      // return { msg, type, show: true };
-      return { msg, type, show: true, id: Date.now() };
+      return {
+        msg,
+        type,
+        show: true,
+        id: Date.now(),
+        duration: type === "loading" ? 1000 * 999 : duration,
+      };
     });
   };
 
@@ -38,27 +50,13 @@ const createNotificationsStore = () => {
         _state.update((state) => {
           return { ...state, show: false };
         });
-      }, DEFAULT_NOTIFICATION_DURATION);
+      }, $_state.duration);
 
       // derived returns a call back function
       // when subscribed, call this to cleanup (automated if using '$')
       return () => {
         clearTimeout(timer);
       };
-
-      // if ($_state.show) {
-      //   const timer = setTimeout(() => {
-      //     _state.update((state) => {
-      //       return { ...state, show: false };
-      //     });
-      //   }, DEFAULT_NOTIFICATION_DURATION);
-
-      //   // derived returns a call back function
-      //   // when subscribed, call this to cleanup (automated if using '$')
-      //   return () => {
-      //     clearTimeout(timer);
-      //   };
-      // }
     }
   );
 

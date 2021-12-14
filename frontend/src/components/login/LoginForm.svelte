@@ -9,13 +9,14 @@
   let principal = "";
   let password = "";
 
-  let promise = Promise.resolve();
+  let promise = null;
   let message = "Something went wrong :(";
   let notificationType: NotificationType = "error";
   let hasError = false;
+  let isLoading = false;
 
   const submit = async (e: Event) => {
-    await sleep(500);
+    await sleep(2000);
 
     const formData = new FormData(e.target as HTMLFormElement);
 
@@ -25,57 +26,68 @@
       data[key] = value;
     }
 
-    // simulate error response
+    // todo: fetch request (simulate for now)
     message = "Incorrect username/email or password";
     hasError = true;
   };
 
   const handleSubmit = (e: Event) => {
-    dismissNotification();
-    promise = submit(e).then(() => notify(message, notificationType));
+    clear();
+    isLoading = true;
+    notify("Loading please wait", "loading");
+    promise = submit(e).then(() => {
+      isLoading = false;
+      notify(message, notificationType);
+    });
   };
 
   const clear = () => {
     hasError = false;
+    dismissNotification();
   };
 </script>
 
-<div class="flex flex-col p-10 rounded-lg shadow-md border">
-  {#await promise}
-    <div class="w-full">
-      <h1>Loading</h1>
+<!-- {#await promise}
+  <div class="w-full">
+    <h1>Loading</h1>
+  </div>
+{:then} -->
+<form
+  on:submit|preventDefault={handleSubmit}
+  on:change={clear}
+  class:disable={isLoading}
+>
+  <input
+    placeholder="Username or Email"
+    class="w-full mb-10"
+    class:border-red-300={hasError}
+    bind:value={principal}
+    on:focus={clear}
+    disabled={isLoading}
+  />
+
+  <input
+    placeholder="Password"
+    type="password"
+    class="w-full mb-10"
+    bind:value={password}
+    class:border-red-300={hasError}
+    disabled={isLoading}
+  />
+
+  <div class="flex justify-between items-center">
+    <div>
+      <a href="/signup">Create an account</a>
     </div>
-  {:then}
-    <form on:submit|preventDefault={handleSubmit} on:change={clear}>
-      <input
-        placeholder="Username or Email"
-        class="w-full mb-10"
-        class:border-red-300={hasError}
-        bind:value={principal}
-        on:focus={clear}
-      />
-
-      <input
-        placeholder="Password"
-        type="password"
-        class="w-full mb-10"
-        bind:value={password}
-        class:border-red-300={hasError}
-      />
-
-      <div class="flex justify-between items-center">
-        <div>
-          <a href="/signup">Create an account</a>
-        </div>
-        <div>
-          <button
-            type="submit"
-            class="w-24 text-white font-semibold bg-red-700 hover:bg-red-600 hover:text-white "
-          >
-            Login
-          </button>
-        </div>
-      </div>
-    </form>
-  {/await}
-</div>
+    <div>
+      <button
+        disabled={isLoading}
+        type="submit"
+        class="w-24 text-white font-semibold bg-red-700 hover:bg-red-600 hover:text-white "
+      >
+        Login
+      </button>
+    </div>
+  </div>
+</form>
+<!-- {/await} -->
