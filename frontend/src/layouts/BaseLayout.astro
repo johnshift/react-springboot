@@ -1,0 +1,14 @@
+---
+import BaseHead from "./BaseHead.astro"
+import Notification from '../components/notification/Notification.svelte' 
+
+---
+<html lang="en">
+	<head>
+		<BaseHead />
+	</head>
+	<body>
+		<slot name='body' />
+		<Notification client:visible />
+	</body>
+</html>

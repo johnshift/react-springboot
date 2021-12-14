@@ -1,12 +1,13 @@
 import { writable, Writable, derived, Readable } from "svelte/store";
-import { DEFAULT_NOTIFICATION_DURATION } from "../constants";
+import { DEFAULT_NOTIFICATION_DURATION } from "../lib/constants";
 
-type NotificationType = "success" | "info" | "error" | "loading";
+export type NotificationType = "success" | "info" | "error" | "loading";
 
 type Notification = {
   msg: string;
   type: NotificationType;
   show: boolean;
+  id: number;
 };
 
 const createNotificationsStore = () => {
@@ -15,7 +16,14 @@ const createNotificationsStore = () => {
   // call this to update the current state
   const newNotification = (msg: string, type: NotificationType) => {
     _state.update(() => {
-      return { msg, type, show: true };
+      // return { msg, type, show: true };
+      return { msg, type, show: true, id: Date.now() };
+    });
+  };
+
+  const dismiss = () => {
+    _state.update((prev) => {
+      return { ...prev, show: false };
     });
   };
 
@@ -26,19 +34,31 @@ const createNotificationsStore = () => {
       set($_state);
 
       // if notification is shown -> set show to false after certain time
-      if ($_state.show) {
-        const timer = setTimeout(() => {
-          _state.update((state) => {
-            return { ...state, show: false };
-          });
-        }, DEFAULT_NOTIFICATION_DURATION);
+      const timer = setTimeout(() => {
+        _state.update((state) => {
+          return { ...state, show: false };
+        });
+      }, DEFAULT_NOTIFICATION_DURATION);
 
-        // derived returns a call back function
-        // when subscribed, call this to cleanup (automated if using '$')
-        return () => {
-          clearTimeout(timer);
-        };
-      }
+      // derived returns a call back function
+      // when subscribed, call this to cleanup (automated if using '$')
+      return () => {
+        clearTimeout(timer);
+      };
+
+      // if ($_state.show) {
+      //   const timer = setTimeout(() => {
+      //     _state.update((state) => {
+      //       return { ...state, show: false };
+      //     });
+      //   }, DEFAULT_NOTIFICATION_DURATION);
+
+      //   // derived returns a call back function
+      //   // when subscribed, call this to cleanup (automated if using '$')
+      //   return () => {
+      //     clearTimeout(timer);
+      //   };
+      // }
     }
   );
 
@@ -50,10 +70,12 @@ const createNotificationsStore = () => {
   return {
     subscribe,
     newNotification,
+    dismiss,
   };
 };
 
 const NotificationStore = createNotificationsStore();
 
 export const notify = NotificationStore.newNotification;
+export const dismissNotification = NotificationStore.dismiss;
 export default NotificationStore;
