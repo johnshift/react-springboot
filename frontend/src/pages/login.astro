@@ -1,29 +1,29 @@
 ---
-import LoginLayout from '../layouts/LoginLayout.astro'
+import LandingLayout from '../layouts/LandingLayout.astro'
 import DemoButton from '../components/login/DemoButton.svelte'
 import LoginForm from '../components/login/LoginForm.svelte'
 ---
 
-<LoginLayout >
+<LandingLayout >
 
 
-	<div slot='hero' class='h-full p-5 flex flex-col justify-center'>
 
-			<h1 class="text-7xl font-bold text-red-700 mb-5 md:mb-10 ">
+			<h1 slot='title'>
 				veils
 			</h1>
 
-			<h2 class='text-xl lg:text-2xl hd:text-3xl font-medium mb-5 md:mb-10 '>
+			<!-- <h2 slot='subtitle' class='text-xl lg:text-2xl hd:text-3xl font-medium mb-5 md:mb-10'>
+				Share your secrets anonymously
+			</h2> -->
+			<h2 slot='subtitle'>
 				Share your secrets anonymously
 			</h2>
 
-			<DemoButton client:idle/>
-	</div>
+			<DemoButton client:idle slot='left-action'/>
 
-	<div slot='form' class='flex flex-row justify-start items-center h-full'>
+			<LoginForm client:visible slot='right'/>
 		
-			<LoginForm client:visible/>
-	</div>
-</LoginLayout>
+	
+</LandingLayout>
 
 
