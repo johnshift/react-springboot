@@ -1,0 +1,15 @@
+---
+import BaseHead from '../layouts/BaseHead.astro'
+import TestComponent from '../components/TestComponent.svelte'
+import Notification from '../components/notification/Notification.svelte'
+---
+<html>
+	<head>
+		<BaseHead />
+	</head>
+	<body>
+		<TestComponent client:visible/>
+
+		<Notification client:visible/>
+	</body>
+</html>
