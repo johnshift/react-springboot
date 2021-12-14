@@ -9,13 +9,16 @@
   let principal = "";
   let password = "";
 
-  let promise = null;
   let message = "Something went wrong :(";
   let notificationType: NotificationType = "error";
   let hasError = false;
   let isLoading = false;
 
   const submit = async (e: Event) => {
+    clear();
+    isLoading = true;
+    notify("Loading please wait", "loading");
+
     await sleep(2000);
 
     const formData = new FormData(e.target as HTMLFormElement);
@@ -29,16 +32,9 @@
     // todo: fetch request (simulate for now)
     message = "Incorrect username/email or password";
     hasError = true;
-  };
 
-  const handleSubmit = (e: Event) => {
-    clear();
-    isLoading = true;
-    notify("Loading please wait", "loading");
-    promise = submit(e).then(() => {
-      isLoading = false;
-      notify(message, notificationType);
-    });
+    isLoading = false;
+    notify(message, notificationType);
   };
 
   const clear = () => {
@@ -47,13 +43,8 @@
   };
 </script>
 
-<!-- {#await promise}
-  <div class="w-full">
-    <h1>Loading</h1>
-  </div>
-{:then} -->
 <form
-  on:submit|preventDefault={handleSubmit}
+  on:submit|preventDefault={submit}
   on:change={clear}
   class:disable={isLoading}
 >
@@ -90,4 +81,3 @@
     </div>
   </div>
 </form>
-<!-- {/await} -->
