@@ -1,4 +1,4 @@
-import { minifyHtml } from 'vite-plugin-html'
+// import { minifyHtml } from 'vite-plugin-html'
 
 export default {
   // projectRoot: '.',     // Where to resolve all URLs relative to. Useful if you have a monorepo project.
@@ -7,6 +7,7 @@ export default {
   // public: './public',   // A folder of static files Astro will copy to the root. Useful for favicons, images, and other files that don’t need processing.
   buildOptions: {
     // site: 'http://example.com',           // Your public domain, e.g.: https://my-site.dev/. Used to generate sitemaps and canonical URLs.
+		site: 'https://veils.vercel.app',
     sitemap: true,         // Generate sitemap (set to "false" to disable)
   },
   devOptions: {
@@ -19,7 +20,7 @@ export default {
     "@astrojs/renderer-svelte"
   ],
 
-	vite: {
-		plugins: [minifyHtml()],
-	}
+	// vite: {
+	// 	plugins: [minifyHtml()],
+	// }
 };

@@ -1,6 +1,6 @@
 module.exports = {
   mode: 'jit',
-  purge: ['./public/**/*.html', './src/**/*.{astro,js,jsx,svelte,ts,tsx,vue}'],
+  content: ['./public/**/*.html', './src/**/*.{astro,js,jsx,svelte,ts,tsx,vue}'],
 	theme: {
 		screens: {
 										// phones
@@ -10,7 +10,7 @@ module.exports = {
 		},
 		extend: {
 			animation: {
-				shake: 'shake 0.5s'
+				shake: 'shake 0.65s'
 			},
 			keyframes: {
 				shake: {
