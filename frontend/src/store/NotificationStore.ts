@@ -20,8 +20,6 @@ const createNotificationsStore = () => {
     type: NotificationType,
     duration = DEFAULT_NOTIFICATION_DURATION
   ) => {
-    console.log("new notif: ", msg, type, duration);
-
     _state.update(() => {
       return {
         msg,
