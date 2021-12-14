@@ -1,3 +1,22 @@
 @tailwind base;
+
+@layer base {
+  body {
+    @apply text-gray-700;
+  }
+
+  a {
+    @apply hover:underline hover:text-red-700;
+  }
+
+  button {
+    @apply px-4 py-2 active:translate-y-0.5 shadow-md active:shadow-sm rounded-lg active:transition-colors duration-200 ease-in-out;
+  }
+
+  input {
+    @apply p-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-gray-400 focus:bg-white outline-none transition-colors duration-300 ease-in-out;
+  }
+}
+
 @tailwind components;
 @tailwind utilities;
