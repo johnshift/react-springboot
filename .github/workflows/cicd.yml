@@ -210,6 +210,56 @@ jobs:
           #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.
           HD_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
 
+  e2e-tests:
+    name: End-to-End Tests
+    needs: [backend-dev, frontend-dev]
+    # always run if either frontend/backend succeed and neither failed
+    if: always() && (needs.backend-dev.result == 'success' || needs.frontend-dev.result == 'success') && (needs.frontend-dev.result != 'failure' && needs.frontend-dev.result != 'failure')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout feature branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Install pnpm
+        run: sudo npm i -g pnpm
+      - name: Cache Cypress
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/Cypress
+          # we use the exact restore key to avoid Cypress binary snowballing
+          # https://glebbahmutov.com/blog/do-not-let-cypress-cache-snowball/
+          key: cypress-${{ runner.os }}-cypress-${{ github.ref }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-cypress-${{ github.ref }}-${{ hashFiles('**/package.json') }}
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "pnpm"
+          cache-dependency-path: ./e2e-tests/pnpm-lock.yaml
+      - name: Build
+        working-directory: ./e2e-tests
+        run: pnpm i --frozen-lockfile
+      - name: Run End-to-End Tests
+        id: run-e2e-tests
+        uses: cypress-io/github-action@v2
+        env:
+          CYPRESS_BASE_URL: ${{ secrets.FRONTEND_DEV_URL }}
+          CYPRESS_BACKEND_API_URL: https://veils-dev.herokuapp.com/api/v1
+        with:
+          wait-on: ${{ secrets.FRONTEND_DEV_URL }}
+          wait-on-timeout: 30
+          browser: chrome
+          headless: true
+          working-directory: ./e2e-tests
+          install: false # already installed
+          command: pnpm test
+
   create-pull-request:
     # always run if either frontend/backend succeed and neither failed
     if: always() && (needs.backend-dev.result == 'success' || needs.frontend-tests.result == 'success') && (needs.frontend-tests.result != 'failure' && needs.frontend-tests.result != 'failure')
