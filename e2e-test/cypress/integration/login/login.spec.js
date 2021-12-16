@@ -4,60 +4,139 @@
 context('/login', () => {
   beforeEach(() => {
     cy.visit('/login');
+
+		// wait for html hydration
+		cy.wait(500)
+
+		cy.findByRole('button', { name: /demo/i }).as('demo-btn')
+		cy.findByRole('button', { name: /login/i }).as('login-btn')
+		cy.findByPlaceholderText(/username or email/i).as('principal')
+		cy.findByPlaceholderText(/password/i).as('password')
+		cy.findByRole('link', { name: /create an account/i }).as('signup-link')
   });
 
-	// it('renders all components', () => {
-	// 	// title
-	// 	cy.get('h1')
-	// 		.findByText('veils')
-	// 		.should('exist');
+	it('components visibility', () => {
+		// title
+		cy.get('h1')
+			.findByText('veils')
+			.should('be.visible');
 
-	// 	// subtitle
-	// 	cy.get('h2')
-	// 		.findByText('Share your secrets anonymously')
-	// 		.should('exist');
+		// subtitle
+		cy.get('h2')
+			.findByText('Share your secrets anonymously')
+			.should('be.visible');
 
-	// 	// demo button
-	// 	cy.findByRole('button', { name: /demo/i })
-	// 		.should('exist');
+		// demo button
+		cy.get('@demo-btn')
+			.should('be.visible');
 
-	// 	// username input
-	// 	cy.findByPlaceholderText(/username or email/i)
-	// 		.should('exist');
+		// username/email input
+		cy.get('@principal')
+			.should('be.visible');
 
-	// 	// password input
-	// 	cy.findByPlaceholderText(/password/i)
-	// 		.should('have.attr', 'type', 'password',);
+		// password input
+		cy.get('@password')
+			.should('have.attr', 'type', 'password',);
 
-	// 	// signup link
-	// 	cy.findByRole('link', { name: /create an account/i })
-	// 		.should('have.attr', 'href', '/signup');
+		// signup link
+		cy.get('@signup-link')
+			.should('have.attr', 'href', '/signup');
 
-	// 	// login button
-	// 	cy.findByRole('button', { name: /login/i })
-	// 		.should('have.attr', 'type', 'submit');
-	// });
+		// login button
+		cy.get('@login-btn')
+			.should('have.attr', 'type', 'submit');
+	});
 
-	// it('displays info when demo clicked', () => {
+	it('show info on demo', () => {
 
-	// 	cy.findByRole('button', { name: /demo/i }).click()
-	// 	cy.focused().click()
+		cy.get('@demo-btn').click()
+		cy.focused().click()
 
-	// 	cy.findByText(/work in progress. stay tuned!/i)
-	// 		.should('exist')
-	// })
-
-	it('shows error if empty', () => {
-
-		// immediately click login
-		// cy.findByRole('button', { name: /login/i})
-		// 	.click()
-
-		cy.get('form').submit()
-		cy.wait(5000)
-
-		// cy.findByRole('link', { name: /create an account/i })
-		// 	.click()
+		cy.contains(/work in progress. stay tuned!/i)
+			.should('be.visible')
 	})
 
+	it('can login using click or enter')
+
+	it('error on empty', () => {
+
+		// login with empty fields
+		cy.login('', '');
+
+		// check login loading status
+		cy.loginLoading();
+
+		// check login errors
+		cy.loginError(/incorrect username\/email or password/i);
+	})
+	
+	it('error on empty username/email', () => {
+
+		// login incorrect email
+		cy.login('', 'demo123')
+
+		// check loading status
+		cy.loginLoading()
+
+		// check login errors
+		cy.loginError(/incorrect username\/email or password/i);
+
+	})
+
+	
+	it('error on empty password', () => {
+
+		// login incorrect email
+		cy.login('demo', '')
+
+		// check loading status
+		cy.loginLoading()
+
+		// check login errors
+		cy.loginError(/incorrect username\/email or password/i);
+
+	})
+
+	it('error on incorrect username', () => {
+
+		// login incorrect username
+		cy.login('non-existing-username', 'demo123')
+
+		// check loading status
+		cy.loginLoading()
+
+		// check login errors
+		cy.loginError(/incorrect username\/email or password/i);
+
+	})
+	
+	it('error on incorrect email', () => {
+
+		// login incorrect email
+		cy.login('email@example.com', 'demo123')
+
+		// check loading status
+		cy.loginLoading()
+
+		// check login errors
+		cy.loginError(/incorrect username\/email or password/i);
+
+	})
+	
+	
+	it('error on incorrect password', () => {
+
+		// login incorrect email
+		cy.login('demo', 'demo1234')
+
+		// check loading status
+		cy.loginLoading()
+
+		// check login errors
+		cy.loginError(/incorrect username\/email or password/i);
+	})
+
+	it.skip('success workflow')
+
+	it.skip('redirect if already logged in')
 });

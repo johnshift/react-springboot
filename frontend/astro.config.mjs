@@ -13,6 +13,7 @@ export default {
   devOptions: {
 		hostname: '0.0.0.0',
 		port: 3000,
+		trailingSlash: 'ignore',
     // hostname: 'localhost',  // The hostname to run the dev server on.
     // port: 3000,             // The port to run the dev server on.
   },
