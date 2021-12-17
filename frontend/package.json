@@ -9,9 +9,10 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@astrojs/renderer-svelte": "^0.2.2",
-    "astro": "^0.21.12",
-    "tailwindcss": "^3.0.2",
-    "vite-plugin-html": "^2.1.1"
+    "@astrojs/renderer-react": "^0.3.1",
+    "@astrojs/renderer-svelte": "^0.2.3",
+    "astro": "^0.21.13",
+    "react-hot-toast": "^2.1.1",
+    "tailwindcss": "^3.0.6"
   }
 }

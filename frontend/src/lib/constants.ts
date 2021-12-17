@@ -1,3 +1,5 @@
+import { ToastOptions } from "react-hot-toast";
+
 const BACKEND_API_URL = import.meta.env.PUBLIC_BACKEND_API_URL;
 export const LOGIN_API_URL = BACKEND_API_URL + "/login";
 
@@ -10,4 +12,12 @@ export const MSG_SUCCESSFUL_LOGIN = "You have successfully loggedin";
 export const METHOD_POST = "POST";
 export const JSON_HEADERS = {
   "Content-Type": "application/json",
+};
+
+export const KEY_AUTHORIZATION = "authorization";
+
+export const TOAST_OPTIONS: ToastOptions = {
+  position: "bottom-center",
+  duration: 4000,
+  id: "1",
 };
