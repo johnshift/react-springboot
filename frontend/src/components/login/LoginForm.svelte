@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     JSON_HEADERS,
+    KEY_AUTHORIZATION,
     LOGIN_API_URL,
     MSG_SOMETHING_WENT_WRONG,
     MSG_SUCCESSFUL_LOGIN,
@@ -12,7 +13,6 @@
     dismissNotification,
   } from "../../store/NotificationStore";
   import sleep from "../../lib/utils/sleep";
-  import { MessageResponse } from "../../lib/types";
 
   let principal = "";
   let password = "";
@@ -23,6 +23,7 @@
 
   let hasError = false;
   let isLoading = false;
+  let token = null;
 
   const submit = async () => {
     clear();
@@ -30,21 +31,30 @@
     notify("Loading please wait", "loading");
 
     await sleep(2000);
+    let status = 500;
 
     try {
+      const jsonPayload = JSON.stringify({ principal, password });
+      console.log("jsonpayload: ", jsonPayload);
+
       const response = await fetch(LOGIN_API_URL, {
         method: "POST",
-        body: JSON.stringify({ principal, password }),
+        body: jsonPayload,
         headers: JSON_HEADERS,
       });
 
-      const jsonResponse = (await response.json()) as MessageResponse;
+      status = response.status;
+
+      // login with errors
       if (!response.ok) {
+        const jsonResponse = await response.json();
         throw jsonResponse.message;
       }
 
+      // successful login
       message = MSG_SUCCESSFUL_LOGIN;
       notificationType = "success";
+      token = response.headers.get(KEY_AUTHORIZATION);
     } catch (errmsg) {
       if (typeof errmsg === "string") {
         message = errmsg;
@@ -52,6 +62,13 @@
         return;
       }
     } finally {
+      // redirect if successful
+      if (status === 200) {
+        localStorage.setItem(KEY_AUTHORIZATION, token);
+        window.location.replace("/");
+        return;
+      }
+
       isLoading = false;
       notify(message, notificationType);
     }

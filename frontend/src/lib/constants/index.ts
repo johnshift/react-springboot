@@ -11,3 +11,5 @@ export const METHOD_POST = "POST";
 export const JSON_HEADERS = {
   "Content-Type": "application/json",
 };
+
+export const KEY_AUTHORIZATION = "authorization";

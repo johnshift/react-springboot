@@ -1,12 +1,21 @@
 ---
 import BaseHead from '../layouts/BaseHead.astro'
-import { LOGIN_API_URL } from '../lib/constants'
+import { LOGIN_API_URL} from '../lib/constants'
+import AuthChecker from '../components/auth/AuthChecker.svelte'
 ---
 <html lang="en">
 	<head>
 		<BaseHead />
+		<!-- <script>
+			if (!localStorage.getItem('authorization')) {
+				alert('YOU NEED TO LOGIN FIRST')
+				window.location.replace('/login')
+			}
+		</script> -->
 	</head>
 	<body>
 		<p>login api url: <a href={LOGIN_API_URL}>{LOGIN_API_URL}</a></p>
+
+		<AuthChecker client:load/>
 	</body>
 </html>

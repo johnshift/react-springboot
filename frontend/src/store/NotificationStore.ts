@@ -15,7 +15,7 @@ const createNotificationsStore = () => {
   const _state = writable({} as Notification);
 
   // call this to update the current state
-  const newNotification = (
+  const newNotification = async (
     msg: string,
     type: NotificationType,
     duration = DEFAULT_NOTIFICATION_DURATION
