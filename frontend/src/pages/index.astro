@@ -1,12 +1,11 @@
 ---
-import BaseHead from '../layouts/BaseHead.astro'
-import { LOGIN_API_URL } from '../lib/constants'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import ReactCounter from '../components/ReactCounter';
 ---
-<html lang="en">
-	<head>
-		<BaseHead />
-	</head>
-	<body>
-		<p>login api url: <a href={LOGIN_API_URL}>{LOGIN_API_URL}</a></p>
-	</body>
-</html>
+<BaseLayout>
+
+	<main slot='body'>
+		<ReactCounter client:visible />
+	</main>
+
+</BaseLayout>	

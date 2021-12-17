@@ -1,14 +1,17 @@
 ---
-import BaseHead from "./BaseHead.astro"
-import Notification from '../components/notification/Notification.svelte' 
-
+import {Toaster} from 'react-hot-toast'
 ---
 <html lang="en">
 	<head>
-		<BaseHead />
+		<meta charset="UTF-8" />
+		<title>Veils</title>
+		<meta name='description' content="Share your secrets anonymously" />
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<link rel="stylesheet" href={Astro.resolve('../styles/global.css')}>
 	</head>
 	<body>
 		<slot name='body' />
-		<Notification client:visible />
+
+		<Toaster client:idle />
 	</body>
 </html>
