@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class SampleController {
 
-	@Value("${FRONTEND_URL:frontend-url-env-undefined}")
+	@Value("${FRONTEND_URL:UNDEFINED}")
 	private String frontendUrl;
 
 	@GetMapping("/check")
