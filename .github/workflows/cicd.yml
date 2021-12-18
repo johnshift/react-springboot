@@ -252,7 +252,7 @@ jobs:
           CYPRESS_BASE_URL: ${{ secrets.FRONTEND_DEV_URL }}
           CYPRESS_BACKEND_URL: https://veils-dev.herokuapp.com/api/v1
         with:
-          wait-on: ${{ secrets.FRONTEND_DEV_URL }}, https://veils-dev.herokuapp.com/api/v1
+          wait-on: ${{ secrets.FRONTEND_DEV_URL }}, https://veils-dev.herokuapp.com/check
           wait-on-timeout: 180 # wait 3mins for heroku to spin-up
           browser: chrome
           headless: true
