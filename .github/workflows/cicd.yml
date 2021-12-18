@@ -249,10 +249,10 @@ jobs:
         id: run-e2e-tests
         uses: cypress-io/github-action@v2
         env:
-          CYPRESS_BASE_URL: ${{ secrets.FRONTEND_DEV_URL }}
+          CYPRESS_BASE_URL: https://veils-dev.vercel.app/
           CYPRESS_BACKEND_URL: https://veils-dev.herokuapp.com/api/v1
         with:
-          wait-on: ${{ secrets.FRONTEND_DEV_URL }}, https://veils-dev.herokuapp.com/check
+          wait-on: https://veils-dev.vercel.app/, https://veils-dev.herokuapp.com/check
           wait-on-timeout: 180 # wait 3mins for heroku to spin-up
           browser: chrome
           headless: true
