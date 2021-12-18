@@ -8,7 +8,6 @@ import {
   MSG_SUCCESSFUL_LOGIN,
   TOAST_OPTIONS,
 } from "../../lib/constants";
-import sleep from "../../lib/sleep";
 
 type LoginData = {
   principal: string;
@@ -37,6 +36,9 @@ const LoginForm = () => {
     setLoading(true);
     toast.loading("Loading please wait", TOAST_OPTIONS);
 
+    let loginErr = false;
+    let message = MSG_SOMETHING_WENT_WRONG;
+
     try {
       const response = await fetch(LOGIN_API_URL, {
         method: "POST",
@@ -46,23 +48,28 @@ const LoginForm = () => {
 
       // login with errors
       if (!response.ok) {
-        const json = await response.json();
-        throw json.message;
+        const jsonResp = await response.json();
+        throw jsonResp.message;
       }
 
       // successful login
-      toast.success(MSG_SUCCESSFUL_LOGIN);
+      message = MSG_SUCCESSFUL_LOGIN;
       localStorage.setItem(
         KEY_AUTHORIZATION,
         response.headers.get(KEY_AUTHORIZATION)
       );
     } catch (errmsg) {
-      setHasError(true);
-      toast.error(
-        typeof errmsg === "string" ? errmsg : MSG_SOMETHING_WENT_WRONG,
-        TOAST_OPTIONS
-      );
+      loginErr = true;
+      if (typeof errmsg === "string") {
+        setHasError(true);
+        message = errmsg;
+      }
     } finally {
+      if (loginErr || message === MSG_SOMETHING_WENT_WRONG) {
+        toast.error(message, TOAST_OPTIONS);
+      } else {
+        toast.success(message, TOAST_OPTIONS);
+      }
       setLoading(false);
     }
   };
