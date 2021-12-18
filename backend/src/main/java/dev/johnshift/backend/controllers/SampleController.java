@@ -2,6 +2,7 @@ package dev.johnshift.backend.controllers;
 
 import java.util.Enumeration;
 import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class SampleController {
 
+	@Value("${FRONTEND_URL:frontend-url-env-undefined}")
+	private String frontendUrl;
+
 	@GetMapping("/check")
 	public String handleCheck() {
-		return "OK";
+		return "frontendUrl = " + frontendUrl;
 	}
 
 	@GetMapping("/sample")
