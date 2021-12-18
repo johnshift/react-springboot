@@ -181,7 +181,7 @@ jobs:
 
   backend-dev:
     name: Deploy Backend DEV
-    needs: [backend-unit-tests, backend-integration-tests, frontend-dev]
+    needs: [backend-unit-tests, backend-integration-tests]
     runs-on: ubuntu-latest
     environment:
       name: backend DEV
@@ -208,7 +208,7 @@ jobs:
           #       However, it is only needed to differentiate from other environment variables.
           #       The "HD_" string will be stripped when the app starts.
           #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.
-          HD_FRONTEND_URL: ${{ secrets.FRONTEND_DEV_URL }}
+          HD_FRONTEND_URL: veils-dev.vercel.app # veils-dev since this is backend-dev
 
   e2e-tests:
     name: End-to-End Tests
