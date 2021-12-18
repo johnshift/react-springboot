@@ -171,7 +171,7 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           scope: ${{ secrets.VERCEL_ORG_ID }}
           # test: confirm if env is sent to deployment
-          vercel-args: --prod -b PUBLIC_BACKEND_API_URL=https://veils-dev.herokuapp.com
+          vercel-args: --prod -b PUBLIC_BACKEND_API_URL=https://veils-dev.herokuapp.com/api/v1
       - name: Update vercel url in secrets
         uses: hmanzur/actions-set-secret@v2.0.0
         with:
@@ -181,7 +181,7 @@ jobs:
 
   backend-dev:
     name: Deploy Backend DEV
-    needs: [backend-unit-tests, backend-integration-tests]
+    needs: [backend-unit-tests, backend-integration-tests, frontend-dev]
     runs-on: ubuntu-latest
     environment:
       name: backend DEV
