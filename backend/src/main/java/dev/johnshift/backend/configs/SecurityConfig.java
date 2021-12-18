@@ -9,9 +9,11 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 import dev.johnshift.backend.filters.JwtLoginFilter;
 import dev.johnshift.backend.filters.JwtVerifyFilter;
+import dev.johnshift.backend.filters.LogFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -32,6 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
+
+			.addFilterAfter(new LogFilter(), ChannelProcessingFilter.class)
 
 			.addFilter(new JwtLoginFilter(authenticationManager()))
 			.addFilterAfter(new JwtVerifyFilter(), JwtLoginFilter.class)
