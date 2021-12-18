@@ -37,8 +37,6 @@ const LoginForm = () => {
     setLoading(true);
     toast.loading("Loading please wait", TOAST_OPTIONS);
 
-    await sleep(500);
-
     try {
       const response = await fetch(LOGIN_API_URL, {
         method: "POST",
