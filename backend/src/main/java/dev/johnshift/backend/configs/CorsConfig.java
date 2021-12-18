@@ -9,12 +9,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 public class CorsConfig {
-
-	@Value("${FRONTEND_URL:UNDEFINED}")
-	private String frontendUrl;
 
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
@@ -22,9 +20,10 @@ public class CorsConfig {
 		CorsConfiguration config = new CorsConfiguration();
 
 		List<String> allowedOrigins = Arrays.asList(
-			frontendUrl,
-			"http://localhost:3000", // WARNING: remove localhost in production!
-			"http://localhost:5000" // WARNING: remove localhost in production!
+			"https://veils-dev.vercel.app",
+			"https://veils.vercel.app"
+		// "http://localhost:3000", // WARNING: remove localhost in production!
+		// "http://localhost:5000" // WARNING: remove localhost in production!
 		);
 
 		List<String> allowedHeaders = Arrays.asList(
