@@ -1,11 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import ReactCounter from '../components/ReactCounter';
+
+import { LOGIN_API_URL } from "../lib/constants";
 ---
 <BaseLayout>
 
 	<main slot='body'>
 		<ReactCounter client:visible />
+		<br/>
+		<p>login url: {LOGIN_API_URL}</p>
 	</main>
 
 </BaseLayout>	
