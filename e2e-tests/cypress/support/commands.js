@@ -44,20 +44,13 @@ Cypress.Commands.add('login', (principal, password) => {
 })
 
 Cypress.Commands.add('loginLoading', () => {
-	// form should be disabled
+	// form should not exist
 		cy.get('form')
-			.should('have.css', 'pointer-events', 'none')
-			.should('have.css', 'opacity')
+			.should('not.exist')
 		
-		// button disabled
-		cy.get('@login-btn')
-			.should('have.attr', 'disabled')
-
-		// input should be unclickable
-		cy.get('@principal')
-			.should('have.attr', 'disabled')
-		cy.get('@password')
-			.should('have.attr', 'disabled')
+		// login skeleton exists
+		cy.get('#login-skeleton')
+			.should('exist')
 
 		// should display loading status
 		cy.contains(/loading*/i)

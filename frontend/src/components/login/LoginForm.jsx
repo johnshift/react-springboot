@@ -9,7 +9,7 @@ import {
 
 const Skeleton = () => {
   return (
-    <div class="animate-pulse pb-1">
+    <div class="animate-pulse pb-1" id="login-skeleton">
       <div class="bg-gray-300 w-full mb-10 h-12 rounded-lg" />
       <div class="bg-gray-300 w-full mb-10 h-12 rounded-lg" />
       <div className="flex justify-between items-center">
