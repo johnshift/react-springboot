@@ -47,8 +47,6 @@ context("/login", () => {
     cy.contains(/work in progress. stay tuned!/i).should("be.visible");
   });
 
-  it.skip("can login using click or enter");
-
   it("error on empty", () => {
     // login with empty fields
     cy.login("", "");
@@ -56,14 +54,12 @@ context("/login", () => {
     // check login loading status
     cy.loginLoading();
 
-    console.log("FUCK YOU 1");
-
     // check login errors
     cy.loginError(/incorrect username\/email or password/i);
   });
 
-  it("error on empty username/email", () => {
-    // login incorrect email
+  it("error on empty principal", () => {
+    // login empty principal
     cy.login("", "demo123");
 
     // check loading status
@@ -74,8 +70,80 @@ context("/login", () => {
   });
 
   it("error on empty password", () => {
-    // login incorrect email
+    // login empty password
     cy.login("demo", "");
+
+    // check loading status
+    cy.loginLoading();
+
+    // check login errors
+    cy.loginError(/incorrect username\/email or password/i);
+  });
+
+  it("error on short principal", () => {
+    // login short principal
+    cy.login("asd", "demo123");
+
+    // check loading status
+    cy.loginLoading();
+
+    // check login errors
+    cy.loginError(/incorrect username\/email or password/i);
+  });
+
+  it("error on short password", () => {
+    // login short password
+    cy.login("demo", "12345");
+
+    // check loading status
+    cy.loginLoading();
+
+    // check login errors
+    cy.loginError(/incorrect username\/email or password/i);
+  });
+
+  it("error on long principal", () => {
+    // login long principal
+    cy.login(
+      "1234123412341234123412341234123412341234123412341234123412341234x",
+      "demo123"
+    );
+
+    // check loading status
+    cy.loginLoading();
+
+    // check login errors
+    cy.loginError(/incorrect username\/email or password/i);
+  });
+
+  it("error on long password", () => {
+    // login long password
+    cy.login(
+      "demo",
+      "1234123412341234123412341234123412341234123412341234123412341234x"
+    );
+
+    // check loading status
+    cy.loginLoading();
+
+    // check login errors
+    cy.loginError(/incorrect username\/email or password/i);
+  });
+
+  it("error on non-valid username", () => {
+    // login non-valid username
+    cy.login("1!demo", "demo123");
+
+    // check loading status
+    cy.loginLoading();
+
+    // check login errors
+    cy.loginError(/incorrect username\/email or password/i);
+  });
+
+  it("error on non-valid email", () => {
+    // login non-valid email
+    cy.login("asdf@x.c", "demo123");
 
     // check loading status
     cy.loginLoading();
@@ -86,10 +154,10 @@ context("/login", () => {
 
   it("error on incorrect username", () => {
     // login incorrect username
-    cy.login("non-existing-username", "demo123");
+    cy.login("non-existing-username", "demo1234");
 
-    // check loading status
-    cy.loginLoading();
+    // check loading status w/ skeleton
+    cy.loginLoading(true);
 
     // check login errors
     cy.loginError(/incorrect username\/email or password/i);
@@ -99,8 +167,8 @@ context("/login", () => {
     // login incorrect email
     cy.login("email@example.com", "demo123");
 
-    // check loading status
-    cy.loginLoading();
+    // check loading status w/ skeleton
+    cy.loginLoading(true);
 
     // check login errors
     cy.loginError(/incorrect username\/email or password/i);
@@ -110,14 +178,16 @@ context("/login", () => {
     // login incorrect email
     cy.login("demo", "demo1234");
 
-    // check loading status
-    cy.loginLoading();
+    // check loading status w/ skeleton
+    cy.loginLoading(true);
 
     // check login errors
     cy.loginError(/incorrect username\/email or password/i);
   });
 
   it.skip("success workflow");
+
+  it.skip("can login using click or enter");
 
   it.skip("redirect if already logged in");
 });

@@ -3,8 +3,14 @@ import { notify } from "../../store/NotificationStore";
 import {
   BACKEND_API_URL,
   KEY_AUTHORIZATION,
+  MAX_LOGIN_INPUT_LENGTH,
+  MIN_PASSWORD_LENGTH,
+  MIN_PRINCIPAL_LENGTH,
+  MSG_INCORRECT_LOGIN,
   MSG_LOADING,
   MSG_SOMETHING_WENT_WRONG,
+  REGEXP_EMAIL,
+  REGEXP_NEAT_URI,
 } from "../lib/constants";
 
 const Skeleton = () => {
@@ -42,13 +48,55 @@ const LoginForm = () => {
     }
   };
 
+  const validate = async (principal, password) => {
+    if (!principal) {
+      return MSG_INCORRECT_LOGIN;
+    }
+
+    if (!password) {
+      return MSG_INCORRECT_LOGIN;
+    }
+
+    if (
+      principal.length < MIN_PRINCIPAL_LENGTH ||
+      principal.length > MAX_LOGIN_INPUT_LENGTH
+    ) {
+      return MSG_INCORRECT_LOGIN;
+    }
+
+    if (
+      password.length < MIN_PASSWORD_LENGTH ||
+      password.length > MAX_LOGIN_INPUT_LENGTH
+    ) {
+      return MSG_INCORRECT_LOGIN;
+    }
+
+    // match regexp !neat_uri && !email
+    if (!REGEXP_NEAT_URI.test(principal) && !REGEXP_EMAIL.test(principal)) {
+      return MSG_INCORRECT_LOGIN;
+    }
+
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoadingIndicator(true);
-    await new Promise((r) => setTimeout(r, 1000));
 
     let notifType = "error";
     let notifMessage = MSG_SOMETHING_WENT_WRONG;
+
+    const errmsg = await validate(payload.principal, payload.password);
+    if (errmsg) {
+      notify(errmsg, "error");
+      setHasError(true);
+      setLoadingIndicator(false);
+      return;
+    } else {
+      setHasError(false);
+    }
+
+    setLoadingIndicator(true);
+    await new Promise((r) => setTimeout(r, 1000));
 
     try {
       const response = await fetch(BACKEND_API_URL + "/login", {
