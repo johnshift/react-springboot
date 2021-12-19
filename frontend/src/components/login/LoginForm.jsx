@@ -1,3 +1,4 @@
+import { h } from "preact";
 import { useState } from "preact/hooks";
 import { notify } from "../../store/NotificationStore";
 import {
@@ -31,6 +32,7 @@ const LoginForm = () => {
     principal: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -141,18 +143,36 @@ const LoginForm = () => {
             value={payload.principal}
           />
 
-          <input
+          {/* <input
             name="password"
             type="password"
             placeholder="Password"
             className={inputClassName}
             onChange={handleChange}
             value={payload.password}
-          />
+          /> */}
+          <div class="flex w-full mb-8">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={payload.password}
+              onChange={handleChange}
+              class="rounded-none rounded-l-lg block flex-1 min-w-0 w-full border-r-0"
+            />
+            <span
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
+              class="w-[60px] inline-flex items-center justify-center text-sm lg:text-md bg-gray-200 rounded-r-md border border-l-0 border-gray-300 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-gray-100 select-none"
+            >
+              {showPassword ? "hide" : "show"}
+            </span>
+          </div>
 
           <div className="flex justify-between items-center">
             <div>
-              <a href="/signup">Create an account</a>
+              <a href="/register">Create an account</a>
             </div>
             <div>
               <button

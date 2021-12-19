@@ -1,10 +1,10 @@
 ---
-import LandingLayout from '../layouts/LandingLayout.astro'
+import LoginLayout from '../layouts/LoginLayout.astro'
 import DemoButton from '../components/login/DemoButton.jsx'
 import LoginForm from '../components/login/LoginForm.jsx'
 ---
 
-<LandingLayout >
+<LoginLayout >
 
 			<h1 slot='title'>
 				veils
@@ -16,8 +16,8 @@ import LoginForm from '../components/login/LoginForm.jsx'
 
 			<DemoButton client:idle slot='left-action'/>
 
-			<LoginForm client:visible slot='right'/>
+			<LoginForm client:load slot='right'/>
 		
-</LandingLayout>
+</LoginLayout>
 
 
