@@ -1,18 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import ReactCounter from '../components/ReactCounter';
-
-import { LOGIN_API_URL } from "../lib/constants";
-
-const vercelLoginApi = import.meta.env.PUBLIC_VERCEL_LOGIN_API
 ---
 <BaseLayout>
-
-	<main slot='body'>
-		<ReactCounter client:visible />
-		<br/>
-		<p>login url: {LOGIN_API_URL}</p>
-		<p>vercel_login_api: {vercelLoginApi}</p>
-	</main>
-
-</BaseLayout>	
+	<div slot='body'>
+		<h1>FUCK YOU</h1>
+	</div>
+</BaseLayout>
