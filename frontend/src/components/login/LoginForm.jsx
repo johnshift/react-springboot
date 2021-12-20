@@ -128,6 +128,8 @@ const LoginForm = () => {
 
   const border = hasError ? " border-red-300" : "";
   const inputClassName = "w-full mb-10" + border;
+  const passwordClassName =
+    "rounded-none rounded-l-lg block flex-1 min-w-0 w-full border-r-0" + border;
 
   return (
     <div class="p-10 rounded-lg shadow-md w-11/12 lg:w-9/12 hd:w-8/12 border border-gray-300">
@@ -141,16 +143,9 @@ const LoginForm = () => {
             className={inputClassName}
             onChange={handleChange}
             value={payload.principal}
+            autoFocus
           />
 
-          {/* <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            className={inputClassName}
-            onChange={handleChange}
-            value={payload.password}
-          /> */}
           <div class="flex w-full mb-8">
             <input
               name="password"
@@ -158,9 +153,10 @@ const LoginForm = () => {
               placeholder="Password"
               value={payload.password}
               onChange={handleChange}
-              class="rounded-none rounded-l-lg block flex-1 min-w-0 w-full border-r-0"
+              class={passwordClassName}
             />
             <span
+              aria-label="show password"
               onClick={() => {
                 setShowPassword(!showPassword);
               }}
