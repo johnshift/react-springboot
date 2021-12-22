@@ -8,6 +8,7 @@ export const MSG_LOADING = "Loading please wait";
 export const MSG_INCORRECT_LOGIN = "Incorrect username/email or password";
 export const MIN_PRINCIPAL_LENGTH = 4;
 export const MIN_PASSWORD_LENGTH = 6;
+export const MAX_NAME_LENGTH = 36;
 export const MAX_LOGIN_INPUT_LENGTH = 64;
 export const REGEXP_NEAT_URI = /^[a-zA-Z][a-zA-Z0-9-]*$/;
 export const REGEXP_EMAIL = new RegExp(

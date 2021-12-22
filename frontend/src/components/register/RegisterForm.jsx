@@ -8,6 +8,7 @@ import {
   MSG_INVALID_PASSWORD,
   MSG_INVALID_NAME,
   MSG_INVALID_VEIL,
+  MSG_SOMETHING_WENT_WRONG,
   DEFAULT_FIELD_ERR,
   REGEXP_VALID_PRINCIPAL,
   REGEXP_VALID_NAME,
@@ -15,7 +16,9 @@ import {
   MIN_PASSWORD_LENGTH,
   MAX_LOGIN_INPUT_LENGTH,
   MIN_PRINCIPAL_LENGTH,
-} from "../lib/constants";
+  MAX_NAME_LENGTH,
+  BACKEND_API_URL,
+} from "../../lib/constants";
 
 const Skeleton = () => {
   return (
@@ -82,18 +85,39 @@ const RegisterForm = () => {
       return { field: 2, err: MSG_INVALID_PASSWORD };
     }
 
-    if (!REGEXP_VALID_NAME.test(name) || name.length < MIN_PRINCIPAL_LENGTH) {
+    if (
+      !REGEXP_VALID_NAME.test(name) ||
+      name.length < MIN_PRINCIPAL_LENGTH ||
+      name.length > MAX_NAME_LENGTH
+    ) {
       return { field: 3, err: MSG_INVALID_NAME };
     }
 
     if (
       !REGEXP_VALID_PRINCIPAL.test(veil) ||
-      veil.length < MIN_PRINCIPAL_LENGTH
+      veil.length < MIN_PRINCIPAL_LENGTH ||
+      veil.length > MAX_NAME_LENGTH
     ) {
       return { field: 4, err: MSG_INVALID_VEIL };
     }
 
     return null;
+  };
+
+  const getFieldErrNum = (errmsg) => {
+    if (errmsg.toLowerCase().includes("username")) {
+      return 0;
+    }
+
+    if (errmsg.toLowerCase().includes("email")) {
+      return 1;
+    }
+
+    if (errmsg.toLowerCase().includes("veil")) {
+      return 4;
+    }
+
+    return -1;
   };
 
   const handleChange = (e) => {
@@ -116,11 +140,39 @@ const RegisterForm = () => {
     }
 
     setLoadingIndicator(true);
+    // await new Promise((r) => setTimeout(r, 1000));
 
-    await new Promise((r) => setTimeout(r, 1000));
-    notify("fuck you", "info");
+    let fieldNum = -1;
+    let notifType = "error";
+    let notifMessage = MSG_SOMETHING_WENT_WRONG;
 
-    setLoadingIndicator(false);
+    try {
+      const response = await fetch(BACKEND_API_URL + "/register", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // login with errors
+      if (!response.ok) {
+        const { message } = await response.json();
+        fieldNum = getFieldErrNum(message);
+        setFieldErr({ field: fieldNum, err: message });
+        notifMessage = message;
+        return;
+      }
+
+      // successful register
+      notifType = "success";
+      notifMessage = "Register successful";
+      // todo save login details
+      // todo redirect
+    } finally {
+      notify(notifMessage, notifType);
+      setLoadingIndicator(false);
+    }
   };
 
   const errBorder = " border-red-300";

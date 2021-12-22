@@ -22,7 +22,7 @@ context("/register", () => {
     cy.get('[aria-label="show veil name').as("show-veil");
   });
 
-  it.skip("components visibility", () => {
+  it("components visibility", () => {
     cy.get("h1").findByText("veils").should("be.visible");
     cy.get("h2")
       .findByText("Share your secrets anonymously")
@@ -39,7 +39,7 @@ context("/register", () => {
     cy.get("@show-veil").should("be.visible");
   });
 
-  it.skip("show/hide password and veil", () => {
+  it("show/hide password and veil", () => {
     cy.get("@password").should("have.attr", "type", "password");
     cy.get("@veil").should("have.attr", "type", "password");
 
@@ -50,7 +50,7 @@ context("/register", () => {
     cy.get("@veil").should("have.attr", "type", "text");
   });
 
-  it.skip("error on empty username", () => {
+  it("error on empty username", () => {
     cy.get("@register-btn").focus().click();
 
     cy.registerLoading(false);
@@ -58,7 +58,7 @@ context("/register", () => {
     cy.registerError(/username is invalid/i, "username");
   });
 
-  it.skip("error on short username", () => {
+  it("error on short username", () => {
     cy.register("123");
 
     cy.registerLoading(false);
@@ -66,7 +66,7 @@ context("/register", () => {
     cy.registerError(/username is invalid/i, "username");
   });
 
-  it.skip("error on long username", () => {
+  it("error on long username", () => {
     cy.register(
       "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfx"
     );
@@ -76,7 +76,7 @@ context("/register", () => {
     cy.registerError(/username is invalid/i, "username");
   });
 
-  it.skip("error on empty email", () => {
+  it("error on empty email", () => {
     cy.register("demo");
 
     cy.registerLoading(false);
@@ -84,7 +84,7 @@ context("/register", () => {
     cy.registerError(/email is invalid/i, "email");
   });
 
-  it.skip("error on short email", () => {
+  it("error on short email", () => {
     cy.register("demo", "x@g.i");
 
     cy.registerLoading(false);
@@ -92,7 +92,7 @@ context("/register", () => {
     cy.registerError(/email is invalid/i, "email");
   });
 
-  it.skip("error on invalid email", () => {
+  it("error on invalid email", () => {
     cy.register("demo", "x@gmail.c");
 
     cy.registerLoading(false);
@@ -100,7 +100,7 @@ context("/register", () => {
     cy.registerError(/email is invalid/i, "email");
   });
 
-  it.skip("error on empty password", () => {
+  it("error on empty password", () => {
     cy.register("demo", "demo@example.com");
 
     cy.registerLoading(false);
@@ -108,7 +108,7 @@ context("/register", () => {
     cy.registerError(/password is invalid/i, "password");
   });
 
-  it.skip("error on short password", () => {
+  it("error on short password", () => {
     cy.register("demo", "demo@example.com", "12345");
 
     cy.registerLoading(false);
@@ -116,7 +116,7 @@ context("/register", () => {
     cy.registerError(/password is invalid/i, "password");
   });
 
-  it.skip("error on long password", () => {
+  it("error on long password", () => {
     cy.register(
       "demo",
       "demo@example.com",
@@ -128,7 +128,7 @@ context("/register", () => {
     cy.registerError(/password is invalid/i, "password");
   });
 
-  it.skip("error on empty name", () => {
+  it("error on empty name", () => {
     cy.register("demo", "demo@example.com", "demo123");
 
     cy.registerLoading(false);
@@ -136,7 +136,7 @@ context("/register", () => {
     cy.registerError(/name is invalid/i, "name");
   });
 
-  it.skip("error on short name", () => {
+  it("error on short name", () => {
     cy.register("demo", "demo@example.com", "demo123", "abc");
 
     cy.registerLoading(false);
@@ -144,7 +144,21 @@ context("/register", () => {
     cy.registerError(/name is invalid/i, "name");
   });
 
-  it.skip("error on invalid name", () => {
+  it("error on long name", () => {
+    cy.register(
+      "demo",
+      "demo@example.com",
+      "demo123",
+      "asdfasdfasdfasdfasdfasdfasdfasdfasdfx",
+      "anonymous1"
+    );
+
+    cy.registerLoading(false);
+
+    cy.registerError(/Full name is invalid/i, "name");
+  });
+
+  it("error on invalid name", () => {
     cy.register("demo", "demo@example.com", "demo123", "a23rd");
 
     cy.registerLoading(false);
@@ -152,7 +166,7 @@ context("/register", () => {
     cy.registerError(/name is invalid/i, "name");
   });
 
-  it.skip("error on empty veil", () => {
+  it("error on empty veil", () => {
     cy.register("demo", "demo@example.com", "demo123", "Demo User");
 
     cy.registerLoading(false);
@@ -160,7 +174,7 @@ context("/register", () => {
     cy.registerError(/veil name is invalid/i, "veil");
   });
 
-  it.skip("error on short veil", () => {
+  it("error on short veil", () => {
     cy.register("demo", "demo@example.com", "demo123", "Demo User", "abc");
 
     cy.registerLoading(false);
@@ -168,7 +182,21 @@ context("/register", () => {
     cy.registerError(/veil name is invalid/i, "veil");
   });
 
-  it.skip("error on invalid veil", () => {
+  it("error on long veil", () => {
+    cy.register(
+      "demo",
+      "demo@example.com",
+      "demo123",
+      "Demo User",
+      "asdfasdfasdfasdfasdfasdfasdfasdfasdfx"
+    );
+
+    cy.registerLoading(false);
+
+    cy.registerError(/veil name is invalid/i, "veil");
+  });
+
+  it("error on invalid veil", () => {
     cy.register("demo", "demo@example.com", "demo123", "Demo User", "1dnsa");
 
     cy.registerLoading(false);
@@ -176,7 +204,7 @@ context("/register", () => {
     cy.registerError(/veil name is invalid/i, "veil");
   });
 
-  it.skip("error on non-unique username", () => {
+  it("error on non-unique username", () => {
     cy.register(
       "demo",
       "demo@example.com",
@@ -185,14 +213,14 @@ context("/register", () => {
       "anonymous1"
     );
 
-    cy.registerLoading(false);
+    cy.registerLoading(true);
 
     cy.registerError(/username already exists/i, "username");
   });
 
-  it.skip("error on non-unique email", () => {
+  it("error on non-unique email", () => {
     cy.register(
-      "demo",
+      "demo2",
       "demo@example.com",
       "demo123",
       "Demo User",
@@ -204,10 +232,10 @@ context("/register", () => {
     cy.registerError(/email already exists/i, "email");
   });
 
-  it.skip("error on non-unique veil", () => {
+  it("error on non-unique veil", () => {
     cy.register(
-      "demo",
-      "demo@example.com",
+      "demo2",
+      "demo2@example.com",
       "demo123",
       "Demo User",
       "anonymous1"
@@ -215,10 +243,8 @@ context("/register", () => {
 
     cy.registerLoading(false);
 
-    cy.registerError(/veil name already exists/i, "veil");
+    cy.registerError(/veil already exists/i, "veil");
   });
 
-  it.skip("long veil");
-  it.skip("long name");
   it.skip("should redirect on successful register");
 });

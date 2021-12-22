@@ -12,7 +12,7 @@ import {
   MSG_SOMETHING_WENT_WRONG,
   REGEXP_EMAIL,
   REGEXP_NEAT_URI,
-} from "../lib/constants";
+} from "../../lib/constants";
 
 const Skeleton = () => {
   return (
@@ -98,7 +98,7 @@ const LoginForm = () => {
     }
 
     setLoadingIndicator(true);
-    await new Promise((r) => setTimeout(r, 1000));
+    // await new Promise((r) => setTimeout(r, 1000));
 
     try {
       const response = await fetch(BACKEND_API_URL + "/login", {
