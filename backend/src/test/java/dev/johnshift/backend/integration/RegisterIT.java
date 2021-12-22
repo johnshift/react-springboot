@@ -352,6 +352,65 @@ public class RegisterIT {
 	}
 
 	// non-unique username
+	@Test
+	void nonUniqueUsername_badRequest() {
+
+		RegisterDTO dto = new RegisterDTO();
+		dto.setUsername(validUsername);
+		dto.setEmail(validEmail);
+		dto.setPassword(validPassword);
+		dto.setName(validName);
+		dto.setVeil(validVeil);
+
+		webTestClient.post()
+			.uri(API_URI)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(BodyInserters.fromValue(dto))
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectBody()
+			.jsonPath("$.message").isEqualTo("Username already exists");
+	}
+
 	// non-unique email
+	@Test
+	void nonUniqueEmail_badRequest() {
+
+		RegisterDTO dto = new RegisterDTO();
+		dto.setUsername("demo2");
+		dto.setEmail(validEmail);
+		dto.setPassword(validPassword);
+		dto.setName(validName);
+		dto.setVeil(validVeil);
+
+		webTestClient.post()
+			.uri(API_URI)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(BodyInserters.fromValue(dto))
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectBody()
+			.jsonPath("$.message").isEqualTo("Email already exists");
+	}
+
 	// non-unique veil
+	@Test
+	void nonUniqueVeil_badRequest() {
+
+		RegisterDTO dto = new RegisterDTO();
+		dto.setUsername("demo2");
+		dto.setEmail("demo2@example.com");
+		dto.setPassword(validPassword);
+		dto.setName(validName);
+		dto.setVeil(validVeil);
+
+		webTestClient.post()
+			.uri(API_URI)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(BodyInserters.fromValue(dto))
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectBody()
+			.jsonPath("$.message").isEqualTo("Veil already exists");
+	}
 }
