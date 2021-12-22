@@ -134,6 +134,7 @@ const RegisterForm = () => {
             }
           />
           <span
+            aria-label="show password"
             onClick={() => {
               setTogglePassword({
                 ...togglePassword,
@@ -158,7 +159,6 @@ const RegisterForm = () => {
           <input
             name="veil"
             type={togglePassword.showVeil ? "text" : "password"}
-            placeholder="Password"
             placeholder="Veil name"
             value={veil}
             onChange={handleChange}
@@ -167,6 +167,7 @@ const RegisterForm = () => {
             }
           />
           <span
+            aria-label="show veil name"
             onClick={() => {
               setTogglePassword({
                 ...togglePassword,
