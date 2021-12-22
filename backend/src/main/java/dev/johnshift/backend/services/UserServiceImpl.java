@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 		UserDetails userDetails = new AppUserDetails(
 			principal,
-			(user.password()),
+			(user.getPassword()),
 			user.isEnabled());
 		log.debug("userDetails = {}", userDetails);
 
@@ -57,12 +57,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public UserDTO register(RegisterDTO dto) {
 
-		User newUser = new User()
-			.username(dto.getUsername())
-			.email(dto.getEmail())
-			.password(dto.getPassword())
-			.name(dto.getName())
-			.veil(dto.getVeil());
+		User newUser = new User();
+		newUser.setUsername(dto.getUsername());
+		newUser.setEmail(dto.getEmail());
+		newUser.setPassword(dto.getPassword());
+		newUser.setName(dto.getName());
+		newUser.setVeil(dto.getVeil());
 
 		User user = userRepository.save(newUser);
 

@@ -2,10 +2,8 @@ package dev.johnshift.backend.domains.dtos;
 
 import dev.johnshift.backend.domains.entities.User;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 @Data
-@Accessors(fluent = true)
 public class UserDTO {
 
 	private int id;
@@ -19,15 +17,17 @@ public class UserDTO {
 
 	public static UserDTO of(User user) {
 
-		return new UserDTO()
-			.id(user.id())
-			.username(user.username())
-			.email(user.email())
-			.password(user.password())
-			.name(user.name())
-			.veil(user.veil())
-			.description(user.description())
-			.isEnabled(user.isEnabled());
+		UserDTO dto = new UserDTO();
+		dto.setId(user.getId());
+		dto.setUsername(user.getUsername());
+		dto.setEmail(user.getEmail());
+		dto.setPassword(user.getPassword());
+		dto.setName(user.getName());
+		dto.setVeil(user.getVeil());
+		dto.setDescription(user.getDescription());
+		dto.isEnabled();
+
+		return dto;
 	}
 
 }
