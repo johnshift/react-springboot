@@ -45,7 +45,6 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 		// table_name, column_name, type_constraint
 		String[] strs = constraintName.split("_", 3);
 		log.debug("constraintName = {}", constraintName);
-		log.debug("strs = {}", strs);
 
 		return StringUtils.capitalize(strs[1]);
 	}
