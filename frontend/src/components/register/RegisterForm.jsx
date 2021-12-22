@@ -14,9 +14,34 @@ import {
   REGEXP_EMAIL,
   MIN_PASSWORD_LENGTH,
   MAX_LOGIN_INPUT_LENGTH,
+  MIN_PRINCIPAL_LENGTH,
 } from "../lib/constants";
 
+const Skeleton = () => {
+  return (
+    <div
+      id="register-skeleton"
+      class="animate-pulse p-10 py-11 rounded-lg shadow-md w-11/12 lg:w-9/12 hd:w-8/12 border border-gray-300"
+    >
+      <div class="bg-gray-300 w-full mb-8 h-12 rounded-lg" />
+      <div class="bg-gray-300 w-full mb-8 h-12 rounded-lg" />
+      <div class="bg-gray-300 w-full mb-8 h-12 rounded-lg" />
+      <div class="bg-gray-300 w-full mb-8 h-12 rounded-lg" />
+      <div class="bg-gray-300 w-full mb-8 h-12 rounded-lg" />
+      <div className="flex justify-between items-center">
+        <div class="bg-gray-300 w-6/12 h-6" />
+        <div class="bg-gray-300 w-24 px-4 h-10 rounded-lg" />
+      </div>
+    </div>
+  );
+};
+
 const RegisterForm = () => {
+  const [loading, setLoading] = useState(false);
+  if (loading) {
+    return <Skeleton />;
+  }
+
   const [payload, setPayload] = useState({
     username: "",
     email: "",
@@ -24,8 +49,6 @@ const RegisterForm = () => {
     name: "",
     veil: "",
   });
-
-  const [loading, setLoading] = useState(false);
 
   const [togglePassword, setTogglePassword] = useState({
     showPassword: false,
@@ -48,7 +71,7 @@ const RegisterForm = () => {
       return { field: 0, err: MSG_INVALID_USERNAME };
     }
 
-    if (!REGEXP_EMAIL.test(email)) {
+    if (!REGEXP_EMAIL.test(email) || email.length < MIN_PRINCIPAL_LENGTH) {
       return { field: 1, err: MSG_INVALID_EMAIL };
     }
 
@@ -59,11 +82,14 @@ const RegisterForm = () => {
       return { field: 2, err: MSG_INVALID_PASSWORD };
     }
 
-    if (!REGEXP_VALID_NAME.test(name)) {
+    if (!REGEXP_VALID_NAME.test(name) || name.length < MIN_PRINCIPAL_LENGTH) {
       return { field: 3, err: MSG_INVALID_NAME };
     }
 
-    if (!REGEXP_VALID_PRINCIPAL.test(veil)) {
+    if (
+      !REGEXP_VALID_PRINCIPAL.test(veil) ||
+      veil.length < MIN_PRINCIPAL_LENGTH
+    ) {
       return { field: 4, err: MSG_INVALID_VEIL };
     }
 
@@ -97,7 +123,7 @@ const RegisterForm = () => {
     setLoadingIndicator(false);
   };
 
-  const errBorder = " border-red-500";
+  const errBorder = " border-red-300";
   const inputClass = "w-full mb-8";
   const passwordClass =
     "rounded-none rounded-l-lg block flex-1 min-w-0 w-full border-r-0";
