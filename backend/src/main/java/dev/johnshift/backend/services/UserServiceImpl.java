@@ -57,6 +57,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public UserDTO register(RegisterDTO dto) {
 
+		log.debug("USERDTO register id = {}", dto.getId());
+
 		User newUser = new User()
 			.username(dto.getUsername())
 			.email(dto.getEmail())
