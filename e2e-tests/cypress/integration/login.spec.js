@@ -12,7 +12,7 @@ context("/login", () => {
     cy.findByRole("button", { name: /login/i }).as("login-btn");
     cy.get('input[name="principal"]').as("principal");
     cy.get('input[name="password"]').as("password");
-    cy.findByRole("link", { name: /create an account/i }).as("signup-link");
+    cy.findByRole("link", { name: /create an account/i }).as("register-link");
   });
 
   it("components visibility", () => {
@@ -33,8 +33,8 @@ context("/login", () => {
     // password input
     cy.get("@password").should("have.attr", "type", "password");
 
-    // signup link
-    cy.get("@signup-link").should("have.attr", "href", "/signup");
+    // register link
+    cy.get("@register-link").should("have.attr", "href", "/register");
 
     // login button
     cy.get("@login-btn").should("have.attr", "type", "submit");
@@ -185,9 +185,13 @@ context("/login", () => {
     cy.loginError(/incorrect username\/email or password/i);
   });
 
+  it("hide/show password", () => {
+    cy.get("@password").should("have.attr", "type", "password");
+    cy.get('[aria-label="show password"').click();
+    cy.get("@password").should("have.attr", "type", "text");
+  });
+
   it.skip("success workflow");
-
   it.skip("can login using click or enter");
-
   it.skip("redirect if already logged in");
 });
