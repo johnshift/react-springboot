@@ -103,6 +103,9 @@ public class RegisterController {
 
 		log.debug("HANDLER DTO = {}", dto);
 
+		// initiate id (non-existing for initial register)
+		dto.setId(-1);
+
 		validate(dto);
 
 		UserDTO savedUser = userService.register(dto);
