@@ -13,6 +13,7 @@ import {
   REGEXP_VALID_NAME,
   REGEXP_EMAIL,
   MIN_PASSWORD_LENGTH,
+  MAX_LOGIN_INPUT_LENGTH,
 } from "../lib/constants";
 
 const RegisterForm = () => {
@@ -51,7 +52,10 @@ const RegisterForm = () => {
       return { field: 1, err: MSG_INVALID_EMAIL };
     }
 
-    if (password.length < MIN_PASSWORD_LENGTH) {
+    if (
+      password.length < MIN_PASSWORD_LENGTH ||
+      password.length > MAX_LOGIN_INPUT_LENGTH
+    ) {
       return { field: 2, err: MSG_INVALID_PASSWORD };
     }
 
