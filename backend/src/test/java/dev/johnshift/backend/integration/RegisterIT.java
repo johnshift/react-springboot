@@ -356,7 +356,6 @@ public class RegisterIT {
 	void nonUniqueUsername_badRequest() {
 
 		RegisterDTO dto = new RegisterDTO();
-		dto.setId(-1);
 		dto.setUsername(validUsername);
 		dto.setEmail(validEmail);
 		dto.setPassword(validPassword);
@@ -378,7 +377,6 @@ public class RegisterIT {
 	void nonUniqueEmail_badRequest() {
 
 		RegisterDTO dto = new RegisterDTO();
-		dto.setId(-1);
 		dto.setUsername("demo2");
 		dto.setEmail(validEmail);
 		dto.setPassword(validPassword);
@@ -400,7 +398,6 @@ public class RegisterIT {
 	void nonUniqueVeil_badRequest() {
 
 		RegisterDTO dto = new RegisterDTO();
-		dto.setId(-1);
 		dto.setUsername("demo2");
 		dto.setEmail("demo2@example.com");
 		dto.setPassword(validPassword);

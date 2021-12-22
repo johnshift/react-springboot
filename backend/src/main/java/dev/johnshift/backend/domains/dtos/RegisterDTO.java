@@ -11,8 +11,6 @@ import lombok.ToString;
 @ToString
 public class RegisterDTO {
 
-	private int id;
-
 	// @Size(min = MIN_USERNAME_LENGTH, message = UserException.USERNAME_TOO_SHORT)
 	// @Size(max = MAX_USERNAME_LENGTH, message = UserException.USERNAME_TOO_LONG)
 	// @Pattern(regexp = NEAT_URI_REGEXP, message = UserException.USERNAME_INVALID_FORMAT)
