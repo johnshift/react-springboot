@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import dev.johnshift.backend.domains.dtos.RegisterDTO;
 import dev.johnshift.backend.domains.dtos.UserDTO;
 import dev.johnshift.backend.domains.entities.User;
 import dev.johnshift.backend.domains.models.AppUserDetails;
@@ -49,6 +50,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		User user = userRepository.findByUsername(username)
 			.orElseThrow(UserException::notFound);
 		log.debug("user = {}", user);
+
+		return UserDTO.of(user);
+	}
+
+	@Override
+	public UserDTO register(RegisterDTO dto) {
+
+		User newUser = new User()
+			.username(dto.getUsername())
+			.email(dto.getEmail())
+			.password(dto.getPassword())
+			.name(dto.getName())
+			.veil(dto.getVeil());
+
+		User user = userRepository.save(newUser);
 
 		return UserDTO.of(user);
 	}

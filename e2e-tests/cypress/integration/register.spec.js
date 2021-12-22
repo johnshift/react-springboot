@@ -218,5 +218,7 @@ context("/register", () => {
     cy.registerError(/veil name already exists/i, "veil");
   });
 
+  it.skip("long veil");
+  it.skip("long name");
   it.skip("should redirect on successful register");
 });
