@@ -9,5 +9,3 @@ create table users (
 	is_enabled boolean not null,
 	description text
 );
-INSERT INTO users (id, username, email, password, name, veil, is_enabled) VALUES
-	(99999,'demo', 'demo@example.com', '$2a$10$c4JbjbzXEIwC2fVqUIDzaen2qIUGuK7L8lq2LQpvnu2kNbrMwaa1G', 'Demo User', 'anonymous1', false)
