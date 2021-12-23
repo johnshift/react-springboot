@@ -18,10 +18,11 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@Column(name = "username")
+
+	@Column(name = "username", unique = true)
 	private String username;
 
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
 	private String email;
 
 	@Column(name = "password")
@@ -30,7 +31,7 @@ public class User {
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "veil")
+	@Column(name = "veil", unique = true)
 	private String veil;
 
 	@Column(name = "description")

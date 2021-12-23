@@ -211,7 +211,7 @@ jobs:
         id: run-e2e-tests
         uses: cypress-io/github-action@v2
         env:
-          CYPRESS_BASE_URL: https://veils-dev.vercel.app/
+          CYPRESS_BASE_URL: https://veils-dev.vercel.app
           CYPRESS_BACKEND_URL: https://veils-dev.herokuapp.com/api/v1
         with:
           wait-on: https://veils-dev.vercel.app/, https://veils-dev.herokuapp.com/check
