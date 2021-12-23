@@ -3,7 +3,8 @@
 		"test": "cypress run",
 		"test:local": "CYPRESS_BASE_URL='http://localhost:3000' CYPRESS_BACKEND_URL='http://localhost:8080/api/v1' cypress run",
 		"open": "cypress open",
-		"open:local": "CYPRESS_BASE_URL='http://localhost:5000' CYPRESS_BACKEND_URL='http://localhost:8080/api/v1' cypress open"
+		"open:local": "CYPRESS_BASE_URL='http://localhost:5000' CYPRESS_BACKEND_URL='http://localhost:8080/api/v1' cypress open",
+		"open:dev": "CYPRESS_BASE_URL='https://veils-dev.vercel.app' CYPRESS_BACKEND_URL='https://veils-dev.herokuapp.com/api/v1' cypress open"
 	},
 	"devDependencies": {
 		"cypress": "^9.1.1",
