@@ -11,10 +11,12 @@ spring:
           lob:
             "[non_contextual_creation]": true # ignore hibernate-postgres warnings on start
     hibernate:
-      ddl-auto: update # provided at @Sql in IT tests
+      # ddl-auto: update # provided at @Sql in IT tests
+      ddl-auto: none # initialize using scripts
     show-sql: false
-
-# logging.level.org.springframework: DEBUG
+  sql:
+    init:
+      mode: always # always initialize using scripts
 
 logging:
   pattern:

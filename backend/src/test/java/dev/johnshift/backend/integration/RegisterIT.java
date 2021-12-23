@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.jdbc.Sql;
+// import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -18,7 +18,7 @@ import dev.johnshift.backend.repositories.UserRepository;
 import dev.johnshift.backend.services.UserService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Sql({"/db/integration.sql"})
+// @Sql({"/db/integration.sql"})
 public class RegisterIT {
 
 	@Autowired
