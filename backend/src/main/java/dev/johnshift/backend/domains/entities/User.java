@@ -37,6 +37,6 @@ public class User {
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "is_enabled")
-	private boolean isEnabled;
+	@Column(name = "is_verified")
+	private boolean isVerified;
 }

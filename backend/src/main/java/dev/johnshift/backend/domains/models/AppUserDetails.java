@@ -13,7 +13,6 @@ public class AppUserDetails implements UserDetails {
 
 	private final String username; // alias for principal
 	private final String password;
-	private final boolean isEnabled;
 
 	/** Returns a simple ROLE_USER authority (no other permissions needed atm) */
 	@Override
@@ -36,6 +35,11 @@ public class AppUserDetails implements UserDetails {
 
 	@Override
 	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
 		return true;
 	}
 

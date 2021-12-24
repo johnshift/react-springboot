@@ -6,6 +6,6 @@ create table users (
 	password text not null,
 	name text not null,
 	veil text not null unique,
-	is_enabled boolean not null,
+	is_verified boolean not null,
 	description text
 );
