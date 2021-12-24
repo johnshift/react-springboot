@@ -191,7 +191,22 @@ context("/login", () => {
     cy.get("@password").should("have.attr", "type", "text");
   });
 
-  it.skip("success workflow");
-  it.skip("can login using click or enter");
+  it("success workflow", () => {
+    // correct login
+    cy.login("demo", "demo123");
+
+    // check loading status w/ skeleton
+    cy.loginLoading(true);
+
+    // check successful status
+    cy.contains(/login successful/i).should("exist");
+
+    // wait before redirection
+    cy.wait(1000);
+
+    // check if redirected on successful login
+    cy.url().should("equal", `${Cypress.config("baseUrl")}/`);
+  });
+
   it.skip("redirect if already logged in");
 });
