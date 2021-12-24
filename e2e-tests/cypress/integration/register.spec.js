@@ -227,7 +227,7 @@ context("/register", () => {
       "anonymous1"
     );
 
-    cy.registerLoading(false);
+    cy.registerLoading(true);
 
     cy.registerError(/email already exists/i, "email");
   });
@@ -241,10 +241,34 @@ context("/register", () => {
       "anonymous1"
     );
 
-    cy.registerLoading(false);
+    cy.registerLoading(true);
 
     cy.registerError(/veil already exists/i, "veil");
   });
 
-  it.skip("should redirect on successful register");
+  it("should redirect on successful register", () => {
+    // correct register details
+    cy.register(
+      "demo2",
+      "demo2@example.com",
+      "demo123",
+      "Demo User",
+      "anonymous2"
+    );
+
+    // check loading status
+    cy.registerLoading(true);
+
+    // check successful status
+    cy.contains(/register successful/i).should("exist");
+
+    // wait before redirection
+    cy.wait(1000);
+
+    // check if redirected on successful login
+    cy.url().should("equal", `${Cypress.config("baseUrl")}/`);
+
+    // check if authorization is added into localsotrage
+    cy.getAuthorization().should("exist");
+  });
 });
