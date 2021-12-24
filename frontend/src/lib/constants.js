@@ -28,6 +28,7 @@ export const MSG_INVALID_EMAIL = "Email is invalid";
 export const MSG_INVALID_PASSWORD = "Password is invalid";
 export const MSG_INVALID_NAME = "Full name is invalid";
 export const MSG_INVALID_VEIL = "Veil name is invalid";
+export const MSG_REGISTER_SUCCESSFUL = "Register successful";
 export const DEFAULT_FIELD_ERR = {
   field: -1,
   err: "",

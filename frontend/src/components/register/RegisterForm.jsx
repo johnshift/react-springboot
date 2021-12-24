@@ -18,6 +18,8 @@ import {
   MIN_PRINCIPAL_LENGTH,
   MAX_NAME_LENGTH,
   BACKEND_API_URL,
+  MSG_REGISTER_SUCCESSFUL,
+  KEY_AUTHORIZATION,
 } from "../../lib/constants";
 
 const Skeleton = () => {
@@ -166,12 +168,21 @@ const RegisterForm = () => {
 
       // successful register
       notifType = "success";
-      notifMessage = "Register successful";
-      // todo save login details
-      // todo redirect
+      notifMessage = MSG_REGISTER_SUCCESSFUL;
+      localStorage.setItem(
+        KEY_AUTHORIZATION,
+        response.headers.get(KEY_AUTHORIZATION)
+      );
     } finally {
       notify(notifMessage, notifType);
-      setLoadingIndicator(false);
+
+      if (notifMessage === MSG_REGISTER_SUCCESSFUL) {
+        setTimeout(() => {
+          window.location.replace("/");
+        }, 1000);
+      } else {
+        setLoadingIndicator(false);
+      }
     }
   };
 
