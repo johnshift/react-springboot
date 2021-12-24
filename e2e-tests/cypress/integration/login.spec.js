@@ -206,6 +206,9 @@ context("/login", () => {
 
     // check if redirected on successful login
     cy.url().should("equal", `${Cypress.config("baseUrl")}/`);
+
+    // check if authorization is added into localsotrage
+    cy.getAuthorization().should("exist");
   });
 
   it.skip("redirect if already logged in");
