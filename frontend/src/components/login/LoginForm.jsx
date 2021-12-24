@@ -9,6 +9,7 @@ import {
   MIN_PRINCIPAL_LENGTH,
   MSG_INCORRECT_LOGIN,
   MSG_LOADING,
+  MSG_LOGIN_SUCCESSFUL,
   MSG_SOMETHING_WENT_WRONG,
   REGEXP_EMAIL,
   REGEXP_NEAT_URI,
@@ -77,7 +78,6 @@ const LoginForm = () => {
     if (!REGEXP_NEAT_URI.test(principal) && !REGEXP_EMAIL.test(principal)) {
       return MSG_INCORRECT_LOGIN;
     }
-
     return null;
   };
 
@@ -98,7 +98,7 @@ const LoginForm = () => {
     }
 
     setLoadingIndicator(true);
-    // await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 1000));
 
     try {
       const response = await fetch(BACKEND_API_URL + "/login", {
@@ -115,14 +115,23 @@ const LoginForm = () => {
       }
 
       // successful login
-      notifMessage = "Login successful";
+      notifMessage = MSG_LOGIN_SUCCESSFUL;
+      notifType = "success";
       localStorage.setItem(
         KEY_AUTHORIZATION,
         response.headers.get(KEY_AUTHORIZATION)
       );
     } finally {
       notify(notifMessage, notifType);
-      setLoadingIndicator(false);
+
+      if (notifMessage === MSG_LOGIN_SUCCESSFUL) {
+        setTimeout(() => {
+          window.location.replace("/");
+        }, 1000);
+      } else {
+        // only display form back if not successful
+        setLoadingIndicator(false);
+      }
     }
   };
 
