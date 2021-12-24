@@ -1,5 +1,9 @@
 package dev.johnshift.backend.services;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,8 +40,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 		UserDetails userDetails = new AppUserDetails(
 			principal,
-			(user.getPassword()),
-			user.isEnabled());
+			(user.getPassword()));
 		log.debug("userDetails = {}", userDetails);
 
 		return userDetails;
@@ -67,6 +70,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		User user = userRepository.save(newUser);
 
 		return UserDTO.of(user);
+	}
+
+	@Override
+	public List<UserDTO> getAllUsers() {
+
+		List<User> allUsers = userRepository.findAll();
+		List<UserDTO> dtos = new ArrayList<>();
+		for (User user : allUsers) {
+
+			UserDTO dto = new UserDTO();
+			dto.setId(user.getId());
+			dto.setUsername(user.getUsername());
+			dto.setEmail(user.getEmail());
+			dto.setPassword(user.getPassword());
+			dto.setName(user.getName());
+			dto.setVeil(user.getVeil());
+			dto.setDescription(user.getDescription());
+			dto.setVerified(user.isVerified());
+
+			dtos.add(dto);
+
+		}
+
+		return dtos;
 	}
 
 }
