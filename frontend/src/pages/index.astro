@@ -2,12 +2,14 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 <BaseLayout>
+	
+	<script slot='head-script'>
+		if (!window.localStorage.getItem('authorization')) {
+			window.location.replace('/login');
+		}
+	</script>
+
 	<div slot='body'>
 		<h1>FUCK YOU</h1>
 	</div>
 </BaseLayout>
-<script>
-	if (!window.localStorage.getItem('authorization')) {
-		window.location.replace('/login');
-	}
-</script>
