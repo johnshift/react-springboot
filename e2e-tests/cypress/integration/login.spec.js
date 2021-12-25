@@ -211,5 +211,23 @@ context("/login", () => {
     cy.getAuthorization().should("exist");
   });
 
-  it.skip("redirect if already logged in");
+  it("redirect if already logged in", () => {
+    // correct login
+    cy.login("demo", "demo123");
+
+    // wait before redirection
+    cy.wait(1000);
+
+    // check if redirected on successful login
+    cy.url().should("equal", `${Cypress.config("baseUrl")}/`);
+
+    // revisit login page
+    cy.visit("/login");
+
+    // wait buffer
+    cy.wait(1000);
+
+    // check if redirected back to home page
+    cy.url().should("equal", `${Cypress.config("baseUrl")}/`);
+  });
 });
