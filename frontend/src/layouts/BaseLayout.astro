@@ -8,6 +8,8 @@ import Notification from '../components/notification/Notification.svelte'
 		<meta name='description' content="Share your secrets anonymously" />
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<link rel="stylesheet" href={Astro.resolve('../styles/global.css')}>
+
+		<slot name='head-script' />
 	</head>
 	<body>
 		<slot name='body' />
