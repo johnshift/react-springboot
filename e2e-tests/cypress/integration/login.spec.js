@@ -210,8 +210,13 @@ context("/login", () => {
     // check if authorization is added into localsotrage
     cy.getAuthorization().should("exist");
   });
+});
 
-  it("redirect if already logged in", () => {
+context("auth-redirect", () => {
+  it("redirect to '/' if already logged in", () => {
+    // visit login page
+    cy.visit("/login");
+
     // correct login
     cy.login("demo", "demo123");
 
@@ -229,5 +234,16 @@ context("/login", () => {
 
     // check if redirected back to home page
     cy.url().should("equal", `${Cypress.config("baseUrl")}/`);
+  });
+
+  it("redirect to '/login' if not logged in", () => {
+    // visit home page
+    cy.visit("/");
+
+    // wait before redirection
+    cy.wait(1000);
+
+    // check if redirected for login
+    cy.url().should("equal", `${Cypress.config("baseUrl")}/login`);
   });
 });
