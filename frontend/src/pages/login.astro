@@ -19,5 +19,10 @@ import LoginForm from '../components/login/LoginForm.jsx'
 			<LoginForm client:load slot='right'/>
 		
 </LoginLayout>
+<script>
+	if (window.localStorage.getItem('authorization')) {
+		window.location.replace('/');
+	}
+</script>
 
 

@@ -27,3 +27,7 @@
 Cypress.Commands.add("getAuthorization", () => {
   return window.localStorage.getItem("authorization");
 });
+
+Cypress.Commands.add("removeAuthorization", () => {
+  return window.localStorage.removeItem("authorization");
+});

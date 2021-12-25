@@ -6,3 +6,8 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 		<h1>FUCK YOU</h1>
 	</div>
 </BaseLayout>
+<script>
+	if (!window.localStorage.getItem('authorization')) {
+		window.location.replace('/login');
+	}
+</script>
