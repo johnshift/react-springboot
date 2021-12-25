@@ -15,9 +15,6 @@ Cypress.Commands.add("registerLoading", (showsSkeleton = false) => {
   console.log("showsSkeleton: ", showsSkeleton);
 
   if (showsSkeleton) {
-    // form should not exist
-    cy.get("form").should("not.exist");
-
     // register skeleton exists
     cy.get("#register-skeleton").should("exist");
 

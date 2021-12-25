@@ -18,7 +18,6 @@ import {
   MIN_PRINCIPAL_LENGTH,
   MAX_NAME_LENGTH,
   BACKEND_API_URL,
-  MSG_REGISTER_SUCCESSFUL,
   KEY_AUTHORIZATION,
 } from "../../lib/constants";
 
@@ -142,11 +141,12 @@ const RegisterForm = () => {
     }
 
     setLoadingIndicator(true);
-    // await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 200));
 
     let fieldNum = -1;
     let notifType = "error";
     let notifMessage = MSG_SOMETHING_WENT_WRONG;
+    let registerOK = false;
 
     try {
       const response = await fetch(BACKEND_API_URL + "/register", {
@@ -166,9 +166,7 @@ const RegisterForm = () => {
         return;
       }
 
-      // successful register
-      notifType = "success";
-      notifMessage = MSG_REGISTER_SUCCESSFUL;
+      registerOK = true;
       localStorage.setItem(
         KEY_AUTHORIZATION,
         response.headers.get(KEY_AUTHORIZATION)
@@ -176,10 +174,9 @@ const RegisterForm = () => {
     } finally {
       notify(notifMessage, notifType);
 
-      if (notifMessage === MSG_REGISTER_SUCCESSFUL) {
-        setTimeout(() => {
-          window.location.replace("/");
-        }, 1000);
+      // successful register
+      if (registerOK) {
+        window.location.replace("/");
       } else {
         setLoadingIndicator(false);
       }
