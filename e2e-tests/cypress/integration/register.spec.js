@@ -246,7 +246,7 @@ context("/register", () => {
     cy.registerError(/veil already exists/i, "veil");
   });
 
-  it("should redirect on successful register", () => {
+  it("successful register", () => {
     // correct register details
     cy.register(
       "demo2",
@@ -259,9 +259,6 @@ context("/register", () => {
     // check loading status
     cy.registerLoading(true);
 
-    // check successful status
-    cy.contains(/register successful/i).should("exist");
-
     // wait before redirection
     cy.wait(1000);
 
@@ -271,4 +268,6 @@ context("/register", () => {
     // check if authorization is added into localsotrage
     cy.getAuthorization().should("exist");
   });
+
+  // TODO: cleanup registered user
 });

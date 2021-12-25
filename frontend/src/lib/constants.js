@@ -1,7 +1,6 @@
 export const BACKEND_API_URL = import.meta.env.PUBLIC_BACKEND_API_URL;
 
 export const MSG_SOMETHING_WENT_WRONG = "Something went wrong :(";
-export const MSG_LOGIN_SUCCESSFUL = "Login successful";
 export const MSG_LOADING = "Loading please wait";
 
 // login related
@@ -28,7 +27,6 @@ export const MSG_INVALID_EMAIL = "Email is invalid";
 export const MSG_INVALID_PASSWORD = "Password is invalid";
 export const MSG_INVALID_NAME = "Full name is invalid";
 export const MSG_INVALID_VEIL = "Veil name is invalid";
-export const MSG_REGISTER_SUCCESSFUL = "Register successful";
 export const DEFAULT_FIELD_ERR = {
   field: -1,
   err: "",

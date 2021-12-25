@@ -9,7 +9,6 @@ import {
   MIN_PRINCIPAL_LENGTH,
   MSG_INCORRECT_LOGIN,
   MSG_LOADING,
-  MSG_LOGIN_SUCCESSFUL,
   MSG_SOMETHING_WENT_WRONG,
   REGEXP_EMAIL,
   REGEXP_NEAT_URI,
@@ -86,6 +85,7 @@ const LoginForm = () => {
 
     let notifType = "error";
     let notifMessage = MSG_SOMETHING_WENT_WRONG;
+    let loginOK = false;
 
     const errmsg = await validate(payload.principal, payload.password);
     if (errmsg) {
@@ -115,8 +115,7 @@ const LoginForm = () => {
       }
 
       // successful login
-      notifMessage = MSG_LOGIN_SUCCESSFUL;
-      notifType = "success";
+      loginOK = true;
       localStorage.setItem(
         KEY_AUTHORIZATION,
         response.headers.get(KEY_AUTHORIZATION)
@@ -124,10 +123,8 @@ const LoginForm = () => {
     } finally {
       notify(notifMessage, notifType);
 
-      if (notifMessage === MSG_LOGIN_SUCCESSFUL) {
-        setTimeout(() => {
-          window.location.replace("/");
-        }, 1000);
+      if (loginOK) {
+        window.location.replace("/");
       } else {
         // only display form back if not successful
         setLoadingIndicator(false);
