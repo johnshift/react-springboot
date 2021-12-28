@@ -121,12 +121,11 @@ const LoginForm = () => {
         response.headers.get(KEY_AUTHORIZATION)
       );
     } finally {
-      notify(notifMessage, notifType);
-
       if (loginOK) {
         window.location.replace("/");
       } else {
-        // only display form back if not successful
+        // only display feedback if not successful
+        notify(notifMessage, notifType);
         setLoadingIndicator(false);
       }
     }
