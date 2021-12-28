@@ -12,7 +12,11 @@ import Notification from '../components/notification/Notification.svelte'
 		<slot name='head-script' />
 	</head>
 	<body>
-		<slot name='body' />
+		<slot name='nav' />
+		<br/>
+		<div class='mt-14'>
+			<slot name='body' />
+		</div>
 		<Notification client:load />
 	</body>
 </html>
