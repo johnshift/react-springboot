@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import Nav from '../components/nav/Nav.jsx'
 ---
 <BaseLayout>
 	
@@ -9,7 +10,15 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 		}
 	</script>
 
-	<div slot='body'>
-		<h1>FUCK YOU</h1>
+	<div slot='nav'>
+		<Nav />
+	</div>
+
+	<div slot='body' class='flex justify-center'>
+		<div class='basis-11/12 md:basis-10/12 md:pr-10 lg:basis-8/12 lg:pr-20 hd:basis-7/12 md:p-5'>
+			<div class='w-full'>
+				<h1>FUCK YOU</h1>
+			</div>
+		</div>
 	</div>
 </BaseLayout>
