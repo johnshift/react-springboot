@@ -1,3 +1,4 @@
+// import LoginFormSkeleton from 'features/Login/LoginFormSkeleton'
 import { Suspense, lazy } from 'react'
 import { Route, Switch } from 'wouter'
 
@@ -7,6 +8,7 @@ const Register = lazy(() => import('../features/Register/RegisterPage'))
 
 import PageLoader from '../components/Loaders/PageLoader'
 import AuthRoute from './AuthRoute'
+import TestRoute from './TestRoute'
 
 const AppRouter = () => {
   return (
@@ -25,6 +27,9 @@ const AppRouter = () => {
         <Suspense fallback={<PageLoader />}>
           <Register />
         </Suspense>
+      </Route>
+      <Route path="/test">
+        <TestRoute />
       </Route>
       <Route>
         <Suspense fallback={<PageLoader />}>
