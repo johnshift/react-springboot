@@ -21,6 +21,11 @@
     pointer-events: none;
     opacity: 0.3;
   }
+
+  .animate-shimmer {
+    background: linear-gradient(to right, #ddd 4%, #e8e8e8 25%, #ddd 36%);
+    background-size: 1000px 100%;
+  }
 }
 
 @tailwind components;

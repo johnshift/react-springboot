@@ -1,8 +1,10 @@
+import Center from 'components/Center'
+
 const RegistePage = () => {
   return (
-    <div>
-      <h1>RegistePage</h1>
-    </div>
+    <Center h="screen">
+      <h1>Register Page</h1>
+    </Center>
   )
 }
 

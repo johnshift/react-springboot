@@ -1,8 +1,10 @@
+import Center from 'components/Center'
+
 const HomePage = () => {
   return (
-    <div>
-      <h1>HomePage</h1>
-    </div>
+    <Center h="screen">
+      <h1>Home Page</h1>
+    </Center>
   )
 }
 
