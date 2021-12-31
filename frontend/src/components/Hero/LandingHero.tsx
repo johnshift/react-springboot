@@ -1,13 +1,8 @@
-// import { Suspense, lazy } from 'react'
-// import toast from 'react-hot-toast'
-
-// const ToasterEl = lazy(() =>
-//   import('react-hot-toast').then((module) => {
-//     return { default: module.Toaster }
-//   })
-// )
+import { useToast } from 'context/ToastContext'
 
 const LandingHero = () => {
+  const { toast } = useToast()
+
   return (
     <>
       <div className="mr-5 mb-5 md:mb-10 text-7xl font-bold text-red-700">
@@ -22,7 +17,7 @@ const LandingHero = () => {
         <button
           className="md:w-24 font-semibold hover:text-white bg-white hover:bg-red-700 border border-gray-300"
           onClick={() => {
-            alert('Work in progress. Stay tuned!')
+            toast('Loading please wait', 'loading')
           }}
         >
           Demo

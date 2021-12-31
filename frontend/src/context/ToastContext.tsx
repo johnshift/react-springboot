@@ -1,4 +1,4 @@
-import { ToastMsg, ToastType } from 'components/Toaster'
+import Toaster, { ToastMsg, ToastType } from 'components/Toaster'
 import {
   createContext,
   ReactNode,
@@ -69,6 +69,7 @@ const ToastContext = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
+      <Toaster />
     </Ctx.Provider>
   )
 }
