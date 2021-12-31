@@ -1,3 +1,12 @@
+// import { Suspense, lazy } from 'react'
+// import toast from 'react-hot-toast'
+
+// const ToasterEl = lazy(() =>
+//   import('react-hot-toast').then((module) => {
+//     return { default: module.Toaster }
+//   })
+// )
+
 const LandingHero = () => {
   return (
     <>

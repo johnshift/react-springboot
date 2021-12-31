@@ -11,10 +11,19 @@ module.exports = {
     },
     extend: {
       animation: {
+        appear: 'appear 0.300s ease-out',
         shimmer: 'shimmer 2s infinite linear',
         shake: 'shake 0.65s'
       },
       keyframes: {
+        appear: {
+          '0%': {
+            transform: 'translateY(-15px)'
+          },
+          '100%': {
+            transform: 'translateY(0px)'
+          }
+        },
         shimmer: {
           '0%': {
             'background-position': '-1000px 0'

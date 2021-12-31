@@ -1,4 +1,4 @@
-import DelayedFallback from './DelayedFallback'
+import DelayedFallback from 'components/DelayedFallback'
 
 const PageLoader = () => (
   <DelayedFallback>

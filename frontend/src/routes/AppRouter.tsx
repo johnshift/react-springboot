@@ -1,4 +1,3 @@
-// import LoginFormSkeleton from 'features/Login/LoginFormSkeleton'
 import { Suspense, lazy } from 'react'
 import { Route, Switch } from 'wouter'
 
