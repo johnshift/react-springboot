@@ -13,7 +13,7 @@ type AuthCtx = {
   authLogout: () => void
 }
 
-const Ctx = createContext<AuthCtx>(undefined as any)
+const Ctx = createContext<AuthCtx>({} as AuthCtx)
 
 const AuthContext = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)

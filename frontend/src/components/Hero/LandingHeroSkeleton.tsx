@@ -1,6 +1,8 @@
+import DelayedFallback from 'components/DelayedFallback'
+
 const LandingHeroSkeleton = () => {
   return (
-    <>
+    <DelayedFallback>
       <div className="mt-5 mr-5 mb-5 md:mb-10 bg-gray-300 rounded-lg animate-shimmer">
         <div className="w-40 h-12"></div>
       </div>
@@ -12,7 +14,7 @@ const LandingHeroSkeleton = () => {
       <div className="order-2 md:order-3 bg-gray-300 rounded-lg animate-shimmer">
         <div className="w-20 md:w-24 h-10" />
       </div>
-    </>
+    </DelayedFallback>
   )
 }
 

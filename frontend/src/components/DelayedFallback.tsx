@@ -5,7 +5,8 @@ type Props = {
   delay?: number
 }
 
-const DelayedFallback = ({ children, delay = 300 }: Props) => {
+// only display fallback after 200ms (get rid of glitch-ux)
+const DelayedFallback = ({ children, delay = 200 }: Props) => {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
