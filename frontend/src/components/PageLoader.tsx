@@ -1,3 +1,4 @@
+import React from "react";
 import Center from "./Center";
 
 const PageLoader = () => {
