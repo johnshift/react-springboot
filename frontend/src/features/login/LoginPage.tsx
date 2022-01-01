@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import DelayedFallback from "../../components/DelayedFallback";
 import Modal from "../../components/Modal";
 
