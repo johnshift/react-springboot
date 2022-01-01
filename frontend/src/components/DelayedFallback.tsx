@@ -1,27 +1,27 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from "react";
 
 type Props = {
-  children: ReactNode
-  delay?: number
-}
+  children: ReactNode;
+  delay?: number;
+};
 
-// only display fallback after 200ms (get rid of glitch-ux)
-const DelayedFallback = ({ children, delay = 200 }: Props) => {
-  const [show, setShow] = useState(false)
+// only display fallback after 300ms (get rid of glitch-ux)
+const DelayedFallback = ({ children, delay = 300 }: Props) => {
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setShow(true)
-    }, delay)
+      setShow(true);
+    }, delay);
 
     return () => {
-      clearTimeout(timeout)
-    }
+      clearTimeout(timeout);
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
-  return <>{show && children}</>
-}
+  return <>{show && children}</>;
+};
 
-export default DelayedFallback
+export default DelayedFallback;

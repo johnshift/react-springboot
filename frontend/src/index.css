@@ -1,32 +1,39 @@
-@tailwind base;
+@import-normalize;
 
-@layer base {
-  body {
-    @apply text-gray-700;
-  }
+:root {
+  --sc-md: 48em;
+  --sc-lg: 66em;
+  --sc-hd: 98em;
 
-  a {
-    @apply hover:underline hover:text-red-700;
-  }
-
-  button {
-    @apply px-4 py-2 active:translate-y-0.5 shadow-md active:shadow-sm rounded-lg active:transition-colors duration-200 ease-in-out;
-  }
-
-  input {
-    @apply p-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-gray-400 focus:bg-white outline-none transition-colors duration-300 ease-in-out;
-  }
-
-  .disable {
-    pointer-events: none;
-    opacity: 0.3;
-  }
-
-  .animate-shimmer {
-    background: linear-gradient(to right, #ddd 4%, #e8e8e8 25%, #ddd 36%);
-    background-size: 1000px 100%;
-  }
+  --clr-border: #d1d5db;
+  --clr-red: #b91c1c;
+  --clr-dark: #3f3f46;
 }
 
-@tailwind components;
-@tailwind utilities;
+body {
+  font-family: "Roboto", sans-serif;
+  color: var(--clr-dark);
+}
+
+input {
+  padding: 1em;
+  outline: none;
+  border-radius: 0.75em;
+  border: 1px solid var(--clr-border);
+  font-size: inherit;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: var(--clr-red);
+  text-decoration: underline;
+}

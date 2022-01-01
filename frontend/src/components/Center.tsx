@@ -1,19 +1,15 @@
-import { ReactNode } from 'react'
-import { classNames } from 'utils'
-
-type Height = 'full' | 'screen'
+import { ReactNode } from "react";
 
 type Props = {
-  children: ReactNode
-  h?: Height
-}
+  children: ReactNode;
+};
 
-const Center = ({ children, h = 'full' }: Props): JSX.Element => (
-  <div
-    className={classNames('flex justify-center items-center mx-auto', 'h-' + h)}
-  >
-    {children}
-  </div>
-)
+const Center = ({ children }: Props) => {
+  return (
+    <div style={{ display: "grid", placeItems: "center", height: "100vh" }}>
+      {children}
+    </div>
+  );
+};
 
-export default Center
+export default Center;
