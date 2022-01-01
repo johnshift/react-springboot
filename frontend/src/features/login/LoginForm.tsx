@@ -89,7 +89,7 @@ const LoginForm = ({ onClose }: Props) => {
     return () => {
       document.body.removeEventListener("keydown", closeOnEsc);
     };
-  }, []);
+  }, [onClose]);
 
   return (
     <Wrapper>
