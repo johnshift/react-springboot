@@ -1,9 +1,13 @@
 import { FunctionalComponent, h } from "preact";
+import { lazy, Suspense } from "preact/compat";
 import { useEffect, useState } from "preact/hooks";
+import Modal from "../../components/modal";
 
 interface Props {
   user: string;
 }
+
+const LoginForm = lazy(() => import("../../features/login/loginForm"));
 
 const Profile: FunctionalComponent<Props> = (props: Props) => {
   const { user } = props;
@@ -25,6 +29,9 @@ const Profile: FunctionalComponent<Props> = (props: Props) => {
     setCount(count + 1);
   };
 
+  const [showLogin, setShowLogin] = useState(false);
+  const closeLogin = () => setShowLogin(false);
+
   return (
     <div>
       <h1>Profile: {user}</h1>
@@ -35,6 +42,24 @@ const Profile: FunctionalComponent<Props> = (props: Props) => {
       <p>
         <button onClick={increment}>Click Me</button> Clicked {count} times.
       </p>
+
+      <Modal onClose={closeLogin} show={showLogin}>
+        <Suspense fallback={null}>
+          <LoginForm onClose={closeLogin} />
+        </Suspense>
+      </Modal>
+
+      <div
+        style={{
+          position: "fixed",
+          bottom: "1em",
+          right: "1em",
+          cursor: "pointer",
+        }}
+        onClick={() => setShowLogin(true)}
+      >
+        show login
+      </div>
     </div>
   );
 };
