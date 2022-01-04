@@ -32,6 +32,7 @@
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "@vanilla-extract/css": "^1.6.8",
+    "@vanilla-extract/recipes": "^0.2.3",
     "@vanilla-extract/webpack-plugin": "^2.1.5",
     "eslint": "^6.8.0",
     "eslint-config-preact": "^1.1.1",

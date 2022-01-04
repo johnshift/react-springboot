@@ -1,5 +1,6 @@
 import { style } from "@vanilla-extract/css";
+import { vars } from "../../theme.css";
 
 export const title = style({
-  color: "red",
+  color: vars.colors.red,
 });
