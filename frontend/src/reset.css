@@ -29,6 +29,7 @@ small {
 
 img {
   border-style: none;
+  max-width: 100%;
 }
 
 button,
@@ -97,46 +98,30 @@ progress {
   font: inherit;
 }
 
+*:where(:not(iframe, canvas, img, svg, video):not(svg *, symbol *)) {
+  all: unset;
+  display: revert;
+}
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-* {
-  margin: 0;
+ol,
+ul,
+menu {
+  list-style: none;
 }
-html,
-body {
-  height: 100%;
+textarea {
+  white-space: revert;
 }
-body {
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+:where([hidden]) {
+  display: none;
 }
-img,
-picture,
-video,
-canvas,
-svg {
-  display: block;
-  max-width: 100%;
+:where([draggable="true"]) {
+  -webkit-user-drag: element;
 }
-input,
-button,
-textarea,
-select {
-  font: inherit;
-}
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  overflow-wrap: break-word;
-}
-#root,
-#__next {
-  isolation: isolate;
-}
+
+/* @media (prefers-color-scheme: dark) {
+  composes: '[data-theme="dark"]';
+} */
