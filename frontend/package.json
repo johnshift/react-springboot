@@ -23,7 +23,8 @@
   "dependencies": {
     "preact": "^10.3.1",
     "preact-render-to-string": "^5.1.4",
-    "preact-router": "^3.2.1"
+    "preact-router": "^3.2.1",
+    "zustand": "^3.6.8"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.1",

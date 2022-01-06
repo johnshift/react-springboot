@@ -7,7 +7,19 @@
 		<meta name="mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+		<meta name="description" content="Share your secrets anonymously" />
 		<% preact.headEnd %>
+		<script>
+			(function() {
+				try {
+					var theme = localStorage.getItem('theme');
+					var preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+					if (!theme && preferDark) document.documentElement.setAttribute('data-theme', 'dark');
+					if (!theme) return;
+					document.documentElement.setAttribute('data-theme', theme);
+				} catch (e) { }
+			})()
+		</script>
 	</head>
 	<body>
 		<% preact.bodyEnd %>
