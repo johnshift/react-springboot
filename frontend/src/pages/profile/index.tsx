@@ -1,4 +1,4 @@
-import { Link } from 'wouter-preact';
+import { Link } from 'preact-router';
 import * as styles from './profile.css';
 
 const Page = () => (

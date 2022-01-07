@@ -1,4 +1,4 @@
-import { Link } from 'wouter-preact';
+import { Link } from 'preact-router';
 import * as styles from './home.css';
 
 const Page = () => (
@@ -8,10 +8,9 @@ const Page = () => (
     <br />
     <br />
     <br />
+    <br />
+    <br />
     <Link href="/profile">PROFILE</Link>
-    <br />
-    <br />
-    <br />
   </div>
 );
 

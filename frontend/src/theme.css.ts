@@ -31,7 +31,7 @@ globalStyle('body', {
 });
 
 // needed for builtin page loader (change to logo soon)
-globalStyle('.pgld', {
+globalStyle('#pgld', {
   display: 'grid',
   placeItems: 'center',
   height: '100vh',
