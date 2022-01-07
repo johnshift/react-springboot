@@ -5,13 +5,37 @@
     <!-- <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
+		<style>
+			*:where(:not(iframe, canvas, img, svg, video):not(svg *, symbol *)) {
+				all: unset;
+				display: revert;
+			}
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+			}
+			ol,
+			ul,
+			menu {
+				list-style: none;
+			}
+			textarea {
+				white-space: revert;
+			}
+			:where([hidden]) {
+				display: none;
+			}
+			:where([draggable='true']) {
+				-webkit-user-drag: element;
+			}
+		</style>
   </head>
   <body>
-    <div id="app">
-			<div class="pgld">
-				<h1>BUILT IN PAGE LOADER</h1>
-			</div>
+		<div id="pgld">
+			<h1>BUILT IN PAGE LOADER</h1>
 		</div>
+    <div id="app" />
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
