@@ -1,0 +1,3 @@
+.gitignore
+**.svg
+# src/preact.d.ts
