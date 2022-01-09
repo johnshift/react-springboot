@@ -29,10 +29,3 @@ globalStyle('body', {
   color: colors.black,
   fontFamily: '"Arial", sans-serif',
 });
-
-// needed for builtin page loader (change to logo soon)
-globalStyle('#pgld', {
-  display: 'grid',
-  placeItems: 'center',
-  height: '100vh',
-});
