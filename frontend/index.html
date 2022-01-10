@@ -6,30 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
 		<style>
-			*:where(:not(iframe, canvas, img, svg, video):not(svg *, symbol *)) {
-				all: unset;
-				display: revert;
-			}
-			*,
-			*::before,
-			*::after {
+			*, *::before, *::after {
 				box-sizing: border-box;
 			}
-			ol,
-			ul,
-			menu {
-				list-style: none;
+			* {
+				margin: 0;
 			}
-			textarea {
-				white-space: revert;
+			html, body {
+				height: 100%;
 			}
-			:where([hidden]) {
-				display: none;
+			body {
+				line-height: 1.5;
+				-webkit-font-smoothing: antialiased;
 			}
-			:where([draggable='true']) {
-				-webkit-user-drag: element;
+			img, picture, video, canvas, svg {
+				display: block;
+				max-width: 100%;
 			}
-
+			input, button, textarea, select {
+				font: inherit;
+			}
+			p, h1, h2, h3, h4, h5, h6 {
+				overflow-wrap: break-word;
+			}
+			#app {
+				isolation: isolate;
+			}
 			#pgld {
 				display: grid;
 				place-items: center;
