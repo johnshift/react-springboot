@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <!-- <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="Share your secrets anonymously" />
     <title>Vite App</title>
 		<style>
 			*, *::before, *::after {
@@ -11,6 +12,7 @@
 			}
 			* {
 				margin: 0;
+				-webkit-tap-highlight-color: transparent;
 			}
 			html, body {
 				height: 100%;
@@ -19,6 +21,7 @@
 				line-height: 1.5;
 				-webkit-font-smoothing: antialiased;
 			}
+			button:focus {outline:0;}
 			img, picture, video, canvas, svg {
 				display: block;
 				max-width: 100%;
@@ -40,7 +43,7 @@
 		</style>
   </head>
   <body>
-		<div id="pgld">
+		<div id="pgld" hidden>
 			<h1>BUILT IN PAGE LOADER</h1>
 		</div>
     <div id="app" />
