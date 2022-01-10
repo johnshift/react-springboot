@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import Button from '../../components/button';
+import Input from '../../components/input';
 import * as styles from './login.css';
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 
 const LoginForm = ({ onClose }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const handleSubmit = (e: Event) => {
     e.preventDefault();
@@ -30,10 +32,15 @@ const LoginForm = ({ onClose }: Props) => {
     <div class={styles.wrapper}>
       <h1>veils</h1>
       <form onSubmit={handleSubmit}>
-        <input placeholder="Username or Email" />
+        <Input placeholder="Username or Email" />
 
         <div class={styles.passwordField}>
-          <input type={showPassword ? 'text' : 'password'} name="password" placeholder="Password" />
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            placeholder="Password"
+            hasError={hasError}
+          />
           <span
             onClick={() => setShowPassword(!showPassword)}
             role="button"
