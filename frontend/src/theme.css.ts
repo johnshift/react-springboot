@@ -34,14 +34,6 @@ globalStyle('body', {
   fontFamily: '"Arial", sans-serif',
 });
 
-globalStyle('input', {
-  padding: '0.75em',
-  outline: 'none',
-  borderRadius: '0.75em',
-  border: `1px solid ${colors.gray}`,
-  fontSize: 'inherit',
-});
-
 globalStyle('a', {
   color: 'inherit',
 });
