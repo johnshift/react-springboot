@@ -34,14 +34,18 @@ const LoginForm = ({ onClose }: Props) => {
 
         <div class={styles.passwordField}>
           <input type={showPassword ? 'text' : 'password'} name="password" placeholder="Password" />
-          <span onClick={() => setShowPassword(!showPassword)}>
+          <span
+            onClick={() => setShowPassword(!showPassword)}
+            role="button"
+            aria-label="show password"
+          >
             {showPassword ? 'hide' : 'show'}
           </span>
         </div>
 
         <div class={styles.actionW}>
           <a href="/register">Create an account</a>
-          <Button variants={{ color: 'primary' }}>Login</Button>
+          <Button variant="primary">Login</Button>
         </div>
       </form>
     </div>
