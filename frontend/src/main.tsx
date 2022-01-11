@@ -54,5 +54,8 @@ const App = () => (
   </>
 );
 
-document.getElementById('pgld')!.remove();
+const el = document.getElementById('pgld');
+if (el) {
+  el.remove();
+}
 render(<App />, document.getElementById('app')!);

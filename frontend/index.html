@@ -43,12 +43,34 @@
 				place-items: center;
 				height: 100vh
 			}
+
+			@keyframes pgld {
+				0% { 
+					-webkit-transform: scale(0);
+					transform: scale(0);
+				} 100% {
+					-webkit-transform: scale(1.0);
+					transform: scale(1.0);
+					opacity: 0;
+				}
+			}
+
+			#pgld > * {
+				width: 40px;
+				height: 40px;
+				margin: 100px auto;
+				background-color: #333;
+
+				border-radius: 100%;  
+				animation: pgld 1.0s infinite ease-in-out;
+			}
+
 		</style>
 		<script>setTimeout(function(){var el = document.getElementById('pgld');if(el){el.removeAttribute('hidden')}},200)</script>
   </head>
   <body>
 		<div id="pgld" hidden>
-			<h1>BUILT IN PAGE LOADER</h1>
+			<div></div>
 		</div>
     <div id="app" />
     <script type="module" src="/src/main.tsx"></script>

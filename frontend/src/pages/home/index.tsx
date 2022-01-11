@@ -4,7 +4,13 @@ import * as styles from './home.css';
 import Button from '../../components/button';
 import { useState } from 'preact/hooks';
 import Modal from '../../components/modal';
-import LoginForm from '../../features/login/LoginForm';
+import { Suspense } from 'preact/compat';
+
+// import LoginFormSkeleton from '../../features/login/LoginFormSkeleton';
+import minLazy from '../../utils/minLazy';
+import PageLoader from '../../components/loaders/pageLoader';
+// import LoginForm from '../../features/login/LoginForm';
+const LoginForm = minLazy(() => import('../../features/login/LoginForm'));
 
 const LoginButton = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -23,7 +29,9 @@ const LoginButton = () => {
       </div>
 
       <Modal show={showLogin} onClose={close}>
-        <LoginForm onClose={close} />
+        <Suspense fallback={<PageLoader />}>
+          <LoginForm onClose={close} />
+        </Suspense>
       </Modal>
     </>
   );

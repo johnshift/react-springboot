@@ -74,7 +74,7 @@ const shimmer = keyframes({
 });
 
 export const animateShimmer = style({
-  animation: `${shimmer} 2.2s infinite linear`,
+  animation: `${shimmer} 2.4s infinite linear`,
   background: 'linear-gradient(to right, #ddd 4%, #e8e8e8 25%, #ddd 36%) ',
   backgroundSize: '1000px 100%',
 });

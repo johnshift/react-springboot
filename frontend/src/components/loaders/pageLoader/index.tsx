@@ -1,12 +1,10 @@
-interface Props {
-  text?: string;
-}
-
-const PageLoader = ({ text = 'loading ...' }: Props) => {
+import { h } from 'preact';
+const PageLoader = () => {
   return (
     <div id="pgld">
       {/* replace this as logo / spinner */}
-      <h1>{text}</h1>
+      {/* <h1>{text}</h1> */}
+      <div />
     </div>
   );
 };
