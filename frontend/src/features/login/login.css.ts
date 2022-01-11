@@ -40,20 +40,21 @@ globalStyle(`${passwordField} > *`, {
 
 globalStyle(`${passwordField} > input`, {
   borderRight: 0,
-  borderRadius: '0.75em 0 0 0.75em',
+  borderRadius: '0.5em 0 0 0.5em',
   minWidth: 'calc(100% - 4em)',
   textIndent: '2em',
 });
 
 globalStyle(`${passwordField} > span`, {
   display: 'inline-flex',
+  width: '100%',
   justifyContent: 'center',
   alignItems: 'center',
   fontSize: '0.875rem',
   borderLeft: 0,
   cursor: 'pointer',
   minWidth: '4em',
-  borderRadius: '0 0.75em 0.75em 0',
+  borderRadius: '0 0.5em 0.5em 0',
 });
 
 export const actionW = style({

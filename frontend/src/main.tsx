@@ -4,6 +4,7 @@ import { Suspense } from 'preact/compat';
 import PageLoader from './components/loaders/pageLoader';
 
 import NotFound from './pages/404';
+import X from './pages/x';
 
 import minLazy from './utils/minLazy';
 const Home = minLazy(() => import('./pages/home'));
@@ -37,6 +38,7 @@ const App = () => (
           </Suspense>
         )}
       />
+      <Route path="/x" component={X} />
       <div default>
         <NotFound />
       </div>

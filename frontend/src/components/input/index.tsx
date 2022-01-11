@@ -10,7 +10,7 @@ const Input = ({ hasError = false, ...props }: Props) => {
   return (
     <input
       {...props}
-      class={[styles.base, styles.border[hasError ? 'default' : 'error']].join(' ')}
+      class={[styles.base, styles.border[hasError ? 'error' : 'default']].join(' ')}
     />
   );
 };
