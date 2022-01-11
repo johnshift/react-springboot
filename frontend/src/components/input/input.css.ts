@@ -4,7 +4,7 @@ import { colors } from '../../theme.css';
 export const base = style({
   padding: '0.75em',
   outline: 'none',
-  borderRadius: '0.75em',
+  borderRadius: '0.5em',
   fontSize: 'inherit',
 });
 
