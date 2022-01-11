@@ -12,5 +12,9 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
+	"globals": {
+		"NodeJS": true
+	},
   "rules": {}
+	
 }
