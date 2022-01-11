@@ -1,5 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css';
-import { colors } from '../../theme.css';
+import { animateShimmer, colors } from '../../theme.css';
 
 export const wrapper = style({
   display: 'flex',
@@ -63,3 +63,22 @@ export const actionW = style({
   alignItems: 'center',
   paddingLeft: '0.5em',
 });
+
+export const skeletonLink = style([
+  animateShimmer,
+  {
+    height: '2.5rem',
+    width: '133px',
+    marginLeft: '-0.4em',
+    borderRadius: '0.5em',
+  },
+]);
+
+export const skeletonLoginButton = style([
+  animateShimmer,
+  {
+    width: '76px',
+    height: '40px',
+    borderRadius: '0.5em',
+  },
+]);

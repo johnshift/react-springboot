@@ -1,10 +1,29 @@
 import { useEffect, useState } from 'preact/hooks';
 import Button from '../../components/button';
 import Input from '../../components/input';
+import { inputSkeleton } from '../../components/input/input.css';
 import * as styles from './login.css';
 
 type Props = {
   onClose: () => void;
+};
+
+export const Skeleton = () => {
+  return (
+    <div class={styles.wrapper}>
+      <h1>veils</h1>
+      <form>
+        <div class={inputSkeleton} />
+
+        <div class={inputSkeleton} />
+
+        <div class={styles.actionW}>
+          <div class={styles.skeletonLink} />
+          <div class={styles.skeletonLoginButton} />
+        </div>
+      </form>
+    </div>
+  );
 };
 
 const LoginForm = ({ onClose }: Props) => {

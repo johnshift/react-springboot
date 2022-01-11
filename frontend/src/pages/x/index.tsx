@@ -1,22 +1,36 @@
-import minLazy from '../../utils/minLazy';
+import { useState } from 'preact/hooks';
 import Button from '../../components/button';
-import { Suspense } from 'preact/compat';
-import { useNotif } from '../../components/notification/store';
-
-const Notification = minLazy(() => import('../../components/notification'), 0);
+import LoginForm, { Skeleton } from '../../features/login/LoginForm';
 
 const PageX = () => {
-  // const { error } = useNotif();
-  const { loading } = useNotif();
+  const [show, setShow] = useState(false);
+
+  const close = () => null;
+
+  let x = setTimeout(() => {
+    setShow(true);
+  }, 3000);
 
   return (
-    <div style={{ display: 'grid', placeItems: 'center', height: '100vh' }}>
-      <Suspense fallback={null}>
-        {/* <Button onClick={() => error('Incorrect username/email or password')}>toggle notif</Button> */}
-        <Button onClick={() => loading()}>toggle notif</Button>
-        <Notification />
-      </Suspense>
-    </div>
+    <>
+      <div style={{ display: 'fixed', top: 0, left: 0 }}>
+        <Button
+          onClick={() => {
+            clearTimeout(x);
+            setShow(!setShow);
+
+            x = setTimeout(() => {
+              setShow(true);
+            }, 1000);
+          }}
+        >
+          toggle
+        </Button>
+      </div>
+      <div style={{ display: 'grid', placeItems: 'center', height: '100vh' }}>
+        {show ? <LoginForm onClose={close} /> : <Skeleton />}
+      </div>
+    </>
   );
 };
 

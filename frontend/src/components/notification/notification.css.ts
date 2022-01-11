@@ -95,19 +95,6 @@ export const shake = style({
   animation: `0.6s ${shakeKF}`,
 });
 
-const pulseKF = keyframes({
-  '0%, 100%': {
-    opacity: 1,
-  },
-  '50%': {
-    opacity: 0.5,
-  },
-});
-
-export const pulse = style({
-  animation: `2s cubic-bezier(0.4, 0, 0.6, 1) infinite ${pulseKF}`,
-});
-
 export const appear = style({
   transform: 'translateY(-20px)',
   opacity: 0,

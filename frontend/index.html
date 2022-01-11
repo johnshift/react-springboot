@@ -32,6 +32,9 @@
 			p, h1, h2, h3, h4, h5, h6 {
 				overflow-wrap: break-word;
 			}
+			[hidden] {
+				visibility: hidden;
+			}
 			#app {
 				isolation: isolate;
 			}
@@ -41,6 +44,7 @@
 				height: 100vh
 			}
 		</style>
+		<script>setTimeout(function(){var el = document.getElementById('pgld');if(el){el.removeAttribute('hidden')}},200)</script>
   </head>
   <body>
 		<div id="pgld" hidden>

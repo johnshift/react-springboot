@@ -4,6 +4,7 @@ import { NOTIF_TYPE_ERROR, NOTIF_TYPE_LOADING, NOTIF_TYPE_LONG } from './constan
 import * as styles from './notification.css';
 import { useNotif } from './store';
 import { CSSTransition } from 'preact-transitioning';
+import { animatePulse } from '../../theme.css';
 
 const LoadingSvg = () => (
   <svg
@@ -48,7 +49,7 @@ const Notification = () => {
           class={classNames(
             styles.type[type],
             // type === NOTIF_TYPE_ERROR ? styles.shake : '',
-            isLoading ? styles.pulse : '',
+            isLoading ? animatePulse : '',
           )}
         >
           {isLoading && <LoadingSvg />}
