@@ -16,22 +16,28 @@ specifiers:
   eslint: ^8.6.0
   eslint-config-preact: ^1.3.0
   eslint-config-prettier: ^8.3.0
+  i: ^0.3.7
   identity-obj-proxy: ^3.0.0
   jest: ^27.4.7
   preact: ^10.6.4
   preact-router: ^4.0.0
+  preact-transitioning: ^1.3.1
   prettier: ^2.5.1
   ts-jest: ^27.1.2
   typescript: ^4.5.4
   vite: ^2.7.10
   vite-plugin-html: ^2.1.2
+  zustand: ^3.6.9
 
 dependencies:
   '@preact/preset-vite': 2.1.7_b836ec9e1856c0286f457d714a83da40
   cross-env: 7.0.3
+  i: 0.3.7
   preact: 10.6.4
   preact-router: 4.0.0_preact@10.6.4
+  preact-transitioning: 1.3.1_preact@10.6.4
   vite: 2.7.10
+  zustand: 3.6.9
 
 devDependencies:
   '@babel/core': 7.16.7
@@ -2514,6 +2520,11 @@ packages:
     engines: {node: '>=10.17.0'}
     dev: true
 
+  /i/0.3.7:
+    resolution: {integrity: sha512-FYz4wlXgkQwIPqhzC5TdNMLSE5+GS1IIDJZY/1ZiEPCT2S3COUVZeT5OW4BmW4r5LHLQuOosSwsvnroG9GR59Q==}
+    engines: {node: '>=0.4'}
+    dev: false
+
   /iconv-lite/0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
     engines: {node: '>=0.10.0'}
@@ -3744,6 +3755,14 @@ packages:
       preact: 10.6.4
     dev: false
 
+  /preact-transitioning/1.3.1_preact@10.6.4:
+    resolution: {integrity: sha512-1K3G9KoHBWpXfoiCS3qU24tdoAs4z2KtwsWAoWcrUiiH1hszhN72RajvgoOKuU2UIBDIVNNzcFiXnUxMSTqz/g==}
+    peerDependencies:
+      preact: ^10.0.0
+    dependencies:
+      preact: 10.6.4
+    dev: false
+
   /preact/10.6.4:
     resolution: {integrity: sha512-WyosM7pxGcndU8hY0OQlLd54tOU+qmG45QXj2dAYrL11HoyU/EzOSTlpJsirbBr1QW7lICxSsVJJmcmUglovHQ==}
     dev: false
@@ -4528,3 +4547,13 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zustand/3.6.9:
+    resolution: {integrity: sha512-OvDNu/jEWpRnEC7k8xh8GKjqYog7td6FZrLMuHs/IeI8WhrCwV+FngVuwMIFhp5kysZXr6emaeReMqjLGaldAQ==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      react: '>=16.8'
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dev: false
