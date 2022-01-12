@@ -1,11 +1,12 @@
 import { h } from 'preact';
+import DelayedFallback from '../delayedFallback';
 const PageLoader = () => {
   return (
-    <div id="pgld">
-      {/* replace this as logo / spinner */}
-      {/* <h1>{text}</h1> */}
-      <div />
-    </div>
+    <DelayedFallback delay={300}>
+      <div id="pgld">
+        <div />
+      </div>
+    </DelayedFallback>
   );
 };
 

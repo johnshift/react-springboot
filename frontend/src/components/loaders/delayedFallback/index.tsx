@@ -6,7 +6,6 @@ type Props = {
   delay: number;
 };
 
-// only display fallback after 300ms (get rid of glitch-ux)
 const DelayedFallback = ({ children, delay }: Props) => {
   const [show, setShow] = useState(false);
 
