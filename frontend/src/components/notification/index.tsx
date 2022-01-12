@@ -4,7 +4,7 @@ import { NOTIF_TYPE_ERROR, NOTIF_TYPE_LOADING, NOTIF_TYPE_LONG } from './constan
 import * as styles from './notification.css';
 import { useNotif } from './store';
 import { CSSTransition } from 'preact-transitioning';
-import { animatePulse } from '../../theme.css';
+import { animatePulse } from './notification.css';
 
 const LoadingSvg = () => (
   <svg

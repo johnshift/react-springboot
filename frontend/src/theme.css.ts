@@ -1,10 +1,4 @@
-import {
-  createGlobalTheme,
-  globalKeyframes,
-  globalStyle,
-  keyframes,
-  style,
-} from '@vanilla-extract/css';
+import { createGlobalTheme, globalStyle, keyframes, style } from '@vanilla-extract/css';
 
 export const colors = createGlobalTheme(':root', {
   black: 'hsl(0, 0%, 15%)',
@@ -49,19 +43,6 @@ globalStyle('a', {
 globalStyle('a:hover', {
   color: colors.red,
   textDecoration: 'underline',
-});
-
-globalKeyframes('pulse', {
-  '0%, 100%': {
-    opacity: 1,
-  },
-  '50%': {
-    opacity: 0.5,
-  },
-});
-
-export const animatePulse = style({
-  animation: `2s cubic-bezier(0.4, 0, 0.6, 1) infinite pulse`,
 });
 
 const shimmer = keyframes({

@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-    "types": ["node", "jest", "preact"]
+    "types": ["node", "jest", "preact", "vite/client"]
   },
   "include": ["src"]
 }

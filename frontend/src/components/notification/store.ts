@@ -1,10 +1,6 @@
 import create from 'zustand';
-import {
-  NOTIF_SOMETHING_WENT_WRONG,
-  NOTIF_TYPE_ERROR,
-  NOTIF_TYPE_LOADING,
-  NOTIF_TYPE_LONG,
-} from './constants';
+import { MSG_SOMETHING_WENT_WRONG } from '../../constants';
+import { NOTIF_TYPE_ERROR, NOTIF_TYPE_LOADING, NOTIF_TYPE_LONG } from './constants';
 import { ErrorMsg, NotifMessage, NotifType } from './types';
 
 interface NotifState {
@@ -13,8 +9,9 @@ interface NotifState {
   show: boolean;
 
   // eslint-disable-next-line no-unused-vars
-  error: (msg: ErrorMsg) => void;
-  loading: () => void;
+  notifyError: (msg: ErrorMsg) => void;
+  // eslint-disable-next-line no-unused-vars
+  notifyLoading: (callback?: Function) => void;
 }
 
 export const useNotif = create<NotifState>((set) => {
@@ -27,17 +24,22 @@ export const useNotif = create<NotifState>((set) => {
     clearTimeout(longTimeout);
     clearTimeout(smthTimeout);
 
+    set((state) => ({
+      ...state,
+      show: false,
+    }));
+
     // remove to trigger new animation
     document.getElementById('notif')?.remove();
   };
 
   return {
     // initial state
-    msg: NOTIF_SOMETHING_WENT_WRONG,
+    msg: MSG_SOMETHING_WENT_WRONG,
     type: NOTIF_TYPE_ERROR,
     show: false,
 
-    error: (msg: ErrorMsg) => {
+    notifyError: (msg: ErrorMsg) => {
       clear();
 
       set((state) => ({
@@ -52,7 +54,7 @@ export const useNotif = create<NotifState>((set) => {
       }, 3000);
     },
 
-    loading: () => {
+    notifyLoading: (callback?: Function) => {
       clear();
       set((state) => ({
         ...state,
@@ -71,6 +73,9 @@ export const useNotif = create<NotifState>((set) => {
 
       delayTimeout = setTimeout(() => {
         set((state) => ({ ...state, show: false }));
+        if (callback) {
+          callback();
+        }
       }, 23000);
     },
   };

@@ -6,6 +6,7 @@ export const container = style({
   bottom: '2em',
   display: 'flex',
   justifyContent: 'center',
+  width: '100%',
 });
 
 const base = style({
@@ -14,7 +15,6 @@ const base = style({
   padding: '1em 1.5em',
   color: colors.white,
   fontWeight: 600,
-  width: '100%',
   transition: 'all 0.3s',
 });
 
@@ -113,4 +113,17 @@ export const exit = style({
 export const exitActive = style({
   transform: 'translateY(20px)',
   opacity: 0,
+});
+
+const pulseKF = keyframes({
+  '0%, 100%': {
+    opacity: 1,
+  },
+  '50%': {
+    opacity: 0.5,
+  },
+});
+
+export const animatePulse = style({
+  animation: `2s cubic-bezier(0.4, 0, 0.6, 1) infinite ${pulseKF}`,
 });

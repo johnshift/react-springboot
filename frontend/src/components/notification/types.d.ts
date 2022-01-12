@@ -1,6 +1,6 @@
+import { MSG_SOMETHING_WENT_WRONG } from '../../constants';
+import { MSG_INCORRECT_LOGIN } from '../../features/login/constants';
 import {
-  NOTIF_SOMETHING_WENT_WRONG,
-  NOTIF_INCORRECT_LOGIN,
   NOTIF_LOADING,
   NOTIF_LOADING_LONGER,
   NOTIF_TYPE_ERROR,
@@ -12,7 +12,7 @@ import {
 
 export type LoadingMsg = typeof NOTIF_LOADING | typeof NOTIF_LOADING_LONGER;
 
-export type ErrorMsg = typeof NOTIF_SOMETHING_WENT_WRONG | typeof NOTIF_INCORRECT_LOGIN;
+export type ErrorMsg = typeof MSG_SOMETHING_WENT_WRONG | typeof MSG_INCORRECT_LOGIN | string;
 
 export type NotifMessage = LoadingMsg | ErrorMsg | null;
 

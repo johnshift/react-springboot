@@ -2,15 +2,17 @@ import { render } from 'preact';
 import { Route, Router } from 'preact-router';
 import { Suspense } from 'preact/compat';
 import PageLoader from './components/loaders/pageLoader';
-import Notification from './components/notification';
 
 import NotFound from './pages/404';
 import X from './pages/x';
+
+// import Notification from './components/notification';
 
 import minLazy from './utils/minLazy';
 const Home = minLazy(() => import('./pages/home'));
 const Profile = minLazy(() => import('./pages/profile'));
 const Counter = minLazy(() => import('./pages/counter'));
+const Notification = minLazy(() => import('./components/notification'));
 
 const AppRouter = () => (
   <Router>

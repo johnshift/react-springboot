@@ -1,10 +1,11 @@
 import { h } from 'preact';
-import PageLoader from '../../components/loaders/pageLoader';
+import { BACKEND_API_URL } from '../../constants';
 
 const PageX = () => {
+  console.log('backend: ', BACKEND_API_URL);
   return (
     <>
-      <PageLoader />
+      <p>env: {BACKEND_API_URL}</p>
     </>
   );
 };

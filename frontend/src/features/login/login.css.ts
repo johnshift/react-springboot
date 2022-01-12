@@ -33,7 +33,7 @@ export const passwordField = style({
   display: 'flex',
 });
 
-globalStyle(`${passwordField} > *`, {
+globalStyle(`${passwordField} > input,span`, {
   border: `1px solid ${colors.gray}`,
   textAlign: 'center',
 });
@@ -43,6 +43,11 @@ globalStyle(`${passwordField} > input`, {
   borderRadius: '0.5em 0 0 0.5em',
   minWidth: 'calc(100% - 4em)',
   textIndent: '2em',
+});
+
+globalStyle(`${passwordField}[data-has-error="true"] > *`, {
+  borderColor: `${colors.red} !important`,
+  // background: 'red',
 });
 
 globalStyle(`${passwordField} > span`, {

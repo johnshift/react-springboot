@@ -1,5 +1,7 @@
-export const NOTIF_SOMETHING_WENT_WRONG = 'Something went wrong :(';
-export const NOTIF_INCORRECT_LOGIN = 'Incorrect username/email or password';
+/**
+ * NOTE: Everything in here is included to critical JS.
+ */
+
 export const NOTIF_LOADING = 'Loading please wait';
 export const NOTIF_LOADING_LONGER = 'Loading longer than usual';
 
