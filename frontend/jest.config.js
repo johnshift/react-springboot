@@ -25,5 +25,9 @@ module.exports = {
   moduleNameMapper: {
     '.+\\.(css|sass|scss|png|jpg|ttf|woff|woff2|svg)$': 'identity-obj-proxy', // Return proxies objects
     '^@/(.*)$': '<rootDir>/src/$1', // To resolve typescript path aliases
+    '^react$': 'preact/compat',
+    '^react-dom/test-utils$': 'preact/test-utils',
+    '^react-dom$': 'preact/compat',
+    '^react/jsx-runtime$': 'preact/jsx-runtime',
   },
 };

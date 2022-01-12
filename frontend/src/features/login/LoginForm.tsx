@@ -1,3 +1,4 @@
+import { h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import Button from '../../components/button';
 import Input from '../../components/input';
