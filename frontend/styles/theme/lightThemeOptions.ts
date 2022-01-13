@@ -10,11 +10,14 @@ const lightThemeOptions: ThemeOptions = {
       main: "#d32f2f",
     },
   },
+  shape: {
+    borderRadius: 10,
+  },
   components: {
-    MuiPaper: {
+    MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          borderRadius: 5,
         },
       },
     },
