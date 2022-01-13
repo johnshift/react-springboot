@@ -10,6 +10,8 @@ import {
   Paper,
   Typography,
   Snackbar,
+  Skeleton,
+  Stack,
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
@@ -28,7 +30,47 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
 ) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  return (
+    <MuiAlert
+      elevation={6}
+      ref={ref}
+      variant="filled"
+      sx={
+        props.severity === "error"
+          ? {
+              animation: "0.6s shake",
+              "@keyframes shake": {
+                "40%": {
+                  transform: "translateX(0px)",
+                },
+                "55%": {
+                  transform: "translateX(6px)",
+                },
+                "60%": {
+                  transform: "translateX(-6px)",
+                },
+                "80%": {
+                  transform: "translateX(4px)",
+                },
+                "85%": {
+                  transform: "translateX(-4px)",
+                },
+                "90%": {
+                  transform: "translateX(2px)",
+                },
+                "95%": {
+                  transform: "translateX(-2px)",
+                },
+                "100%": {
+                  transform: "translateX(0px)",
+                },
+              },
+            }
+          : {}
+      }
+      {...props}
+    />
+  );
 });
 
 const LoginForm = () => {
@@ -40,6 +82,8 @@ const LoginForm = () => {
     msgSnackbar: "Incorrect username/email",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setState({
       ...state,
@@ -50,10 +94,15 @@ const LoginForm = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setState({
-      ...state,
-      showSnackbar: true,
-    });
+    setLoading(true);
+
+    setTimeout(() => {
+      setState({
+        ...state,
+        showSnackbar: true,
+      });
+      setLoading(false);
+    }, 3000);
   };
 
   const handleCloseSnackbar = (
@@ -66,6 +115,8 @@ const LoginForm = () => {
 
     setState({ ...state, showSnackbar: false });
   };
+
+  const severity = "error";
 
   return (
     <Fragment>
@@ -92,72 +143,128 @@ const LoginForm = () => {
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          <FormControl fullWidth sx={{ marginBottom: 3 }} variant="outlined">
-            <InputLabel htmlFor="login-principal">Username/Email</InputLabel>
-            <OutlinedInput
-              id="login-principal"
-              name="principal"
-              type={state.showPassword ? "text" : "password"}
-              value={state.principal}
-              onChange={handleChange}
-              label="Username/Email"
-            />
-          </FormControl>
+          <Stack spacing={3}>
+            {loading ? (
+              <>
+                <Skeleton
+                  variant="rectangular"
+                  sx={{
+                    height: 56,
+                    width: 265,
+                    borderRadius: "10px",
+                  }}
+                  animation="wave"
+                />
+                <Skeleton
+                  variant="rectangular"
+                  sx={{
+                    height: 56,
+                    width: 265,
+                    borderRadius: "10px",
+                  }}
+                  animation="wave"
+                />
 
-          <FormControl fullWidth sx={{ marginBottom: 3 }} variant="outlined">
-            <InputLabel htmlFor="login-password">Password</InputLabel>
-            <OutlinedInput
-              id="login-password"
-              name="password"
-              type={state.showPassword ? "text" : "password"}
-              value={state.password}
-              onChange={handleChange}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={() =>
-                      setState({
-                        ...state,
-                        showPassword: !state.showPassword,
-                      })
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Skeleton
+                    variant="rectangular"
+                    sx={{ width: 140, height: 25, borderRadius: "5px" }}
+                    animation="wave"
+                  />
+
+                  <Skeleton
+                    variant="rectangular"
+                    sx={{
+                      height: 36.5,
+                      width: 76,
+                      borderRadius: "10px",
+                    }}
+                    animation="wave"
+                  />
+                </Box>
+              </>
+            ) : (
+              <>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel htmlFor="login-principal">
+                    Username/Email
+                  </InputLabel>
+                  <OutlinedInput
+                    id="login-principal"
+                    name="principal"
+                    type={state.showPassword ? "text" : "password"}
+                    value={state.principal}
+                    onChange={handleChange}
+                    label="Username/Email"
+                  />
+                </FormControl>
+
+                <FormControl
+                  fullWidth
+                  sx={{ marginBottom: 3 }}
+                  variant="outlined"
+                >
+                  <InputLabel htmlFor="login-password">Password</InputLabel>
+                  <OutlinedInput
+                    id="login-password"
+                    name="password"
+                    type={state.showPassword ? "text" : "password"}
+                    value={state.password}
+                    onChange={handleChange}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() =>
+                            setState({
+                              ...state,
+                              showPassword: !state.showPassword,
+                            })
+                          }
+                          edge="end"
+                        >
+                          {state.showPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
                     }
-                    edge="end"
-                  >
-                    {state.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl>
+                    label="Password"
+                  />
+                </FormControl>
 
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            pl={0.5}
-            sx={{
-              borderRadius: 5,
-            }}
-          >
-            <Link href="/signup" passHref>
-              <MuiLink underline="hover">Signup</MuiLink>
-            </Link>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  pl={0.5}
+                >
+                  <Link href="/signup" passHref>
+                    <MuiLink underline="hover">Create an account</MuiLink>
+                  </Link>
 
-            <Button variant="contained" type="submit">
-              Login
-            </Button>
-          </Box>
+                  <Button variant="contained" type="submit">
+                    Login
+                  </Button>
+                </Box>
+              </>
+            )}
+          </Stack>
         </form>
       </Paper>
       <Snackbar
         open={state.showSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseSnackbar} severity="error">
+        <Alert onClose={handleCloseSnackbar} severity={severity}>
           {state.msgSnackbar}
         </Alert>
       </Snackbar>
