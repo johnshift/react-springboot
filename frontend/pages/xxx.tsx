@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import PageLoader from "../components/PageLoader";
 import loadable from "@loadable/component";
+import Head from "next/head";
 
 const LoginForm = loadable(() => import("../features/login/LoginForm"), {
   fallback: <PageLoader />,
@@ -13,6 +14,13 @@ const XXX = () => {
 
   return (
     <div>
+      <Head>
+        <title>Veils App</title>
+        <meta
+          name="description"
+          content="Share your darkest secrets - FEARLESSLY!"
+        />
+      </Head>
       <h1>hello</h1>
 
       <div style={{ position: "fixed", top: 10, right: 10 }}>
