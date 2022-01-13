@@ -1,29 +1,19 @@
-module.exports = {
-  // The root of the source code, `<rootDir>` is a token Jest substitutes
-  roots: ['<rootDir>/src/'],
+// jest.config.js
+const nextJest = require("next/jest");
 
-  // The test environment that will be used for testing, jsdom for browser environment
-  testEnvironment: 'jsdom',
+const createJestConfig = nextJest({
+  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
+  dir: "./",
+});
 
-  // Jest transformations -- this adds support for TypeScript using ts-jest
-  transform: {
-    '^.+\\.(ts|tsx)?$': 'ts-jest',
-  },
-
-  // Runs special logic, such as cleaning up components
-  // when using React Testing Library and adds special
-  // extended assertions to Jest
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
-
-  // Code coverage config
-  collectCoverageFrom: ['<rootDir>/src/**/*.{ts,tsx}'],
-  coverageDirectory: '<rootDir>/coverage/',
-  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '(.*).d.ts$'],
-
-  // Important: order matters, specific rules should be defined first
-  // See : https://jestjs.io/fr/docs/configuration#modulenamemapper-objectstring-string--arraystring
-  moduleNameMapper: {
-    '.+\\.(css|sass|scss|png|jpg|ttf|woff|woff2|svg)$': 'identity-obj-proxy', // Return proxies objects
-    '^@/(.*)$': '<rootDir>/src/$1', // To resolve typescript path aliases
-  },
+// Add any custom config to be passed to Jest
+const customJestConfig = {
+  // testEnvironment: "jsdom",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  // if using TypeScript with a baseUrl set to the root directory then you need the below for alias' to work
+  moduleDirectories: ["node_modules", "<rootDir>/"],
+  testEnvironment: "jest-environment-jsdom",
 };
+
+// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
+module.exports = createJestConfig(customJestConfig);
