@@ -8,12 +8,10 @@ import {
   Box,
   Paper,
   Typography,
-  Snackbar,
   Stack,
   Button,
-  Alert as MuiAlert,
+  AlertColor,
 } from "@mui/material";
-import { AlertProps, AlertColor } from "@mui/material/Alert";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -23,60 +21,13 @@ import {
   ChangeEvent,
   FormEvent,
   useState,
-  forwardRef,
   SyntheticEvent,
 } from "react";
 import Link from "next/link";
 import LoginFormSkeleton from "./LoginFormSkeleton";
 import { REGEXP_EMAIL, REGEXP_NEAT_URI } from "../../constants";
 import { MSG_INCORRECT_LOGIN } from "./constants";
-
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return (
-    <MuiAlert
-      elevation={6}
-      ref={ref}
-      variant="filled"
-      sx={
-        props.severity === "error"
-          ? {
-              animation: "0.6s shake",
-              "@keyframes shake": {
-                "40%": {
-                  transform: "translateX(0px)",
-                },
-                "55%": {
-                  transform: "translateX(6px)",
-                },
-                "60%": {
-                  transform: "translateX(-6px)",
-                },
-                "80%": {
-                  transform: "translateX(4px)",
-                },
-                "85%": {
-                  transform: "translateX(-4px)",
-                },
-                "90%": {
-                  transform: "translateX(2px)",
-                },
-                "95%": {
-                  transform: "translateX(-2px)",
-                },
-                "100%": {
-                  transform: "translateX(0px)",
-                },
-              },
-            }
-          : {}
-      }
-      {...props}
-    />
-  );
-});
+import Toast from "../../components/Toast";
 
 const LoginForm = () => {
   const [state, setState] = useState({
@@ -261,7 +212,13 @@ const LoginForm = () => {
           </form>
         )}
       </Paper>
-      <Snackbar
+      <Toast
+        onClose={handleCloseSnackbar}
+        show={state.toastShow}
+        msg={state.toastMsg}
+        severity={state.toastSeverity}
+      />
+      {/* <Snackbar
         open={state.toastShow}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
@@ -270,7 +227,7 @@ const LoginForm = () => {
         <Alert onClose={handleCloseSnackbar} severity={state.toastSeverity}>
           {state.toastMsg}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
     </Fragment>
   );
 };
