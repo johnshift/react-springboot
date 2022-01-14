@@ -1,24 +1,75 @@
-import { forwardRef, SyntheticEvent } from "react";
+import { forwardRef, SyntheticEvent, useEffect, useRef } from "react";
 
 import {
   Alert as MuiAlert,
   Snackbar,
-  SnackbarOrigin,
-  AlertColor,
   AlertProps,
   SnackbarCloseReason,
-  SvgIcon,
 } from "@mui/material";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CachedIcon from "@mui/icons-material/Cached";
 import InfoIcon from "@mui/icons-material/Info";
 import ErrorIcon from "@mui/icons-material/Error";
+import {
+  TOAST_MSG_LOADING,
+  TOAST_MSG_LONGER,
+} from "../features/toast/constants";
+
+import { useAppSelector, useAppDispatch } from "../store";
+import { toastClose, newToast } from "../features/toast/toastSlice";
+import { MSG_SOMETHING_WENT_WRONG } from "../constants";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
 ) {
+  let _sx = undefined;
+
+  if (props.severity === "error") {
+    _sx = {
+      animation: "0.6s shake",
+      "@keyframes shake": {
+        "40%": {
+          transform: "translateX(0px)",
+        },
+        "55%": {
+          transform: "translateX(6px)",
+        },
+        "60%": {
+          transform: "translateX(-6px)",
+        },
+        "80%": {
+          transform: "translateX(4px)",
+        },
+        "85%": {
+          transform: "translateX(-4px)",
+        },
+        "90%": {
+          transform: "translateX(2px)",
+        },
+        "95%": {
+          transform: "translateX(-2px)",
+        },
+        "100%": {
+          transform: "translateX(0px)",
+        },
+      },
+    };
+  } else if (props.severity === "warning") {
+    _sx = {
+      animation: "1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite pulse",
+      "@keyframes pulse": {
+        "0%, 100%": {
+          opacity: 1,
+        },
+        "50%": {
+          opacity: 0.6,
+        },
+      },
+    };
+  }
+
   return (
     <MuiAlert
       elevation={6}
@@ -45,39 +96,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
         ),
         error: <ErrorIcon fontSize="inherit" />,
       }}
-      sx={
-        props.severity === "error"
-          ? {
-              animation: "0.6s shake",
-              "@keyframes shake": {
-                "40%": {
-                  transform: "translateX(0px)",
-                },
-                "55%": {
-                  transform: "translateX(6px)",
-                },
-                "60%": {
-                  transform: "translateX(-6px)",
-                },
-                "80%": {
-                  transform: "translateX(4px)",
-                },
-                "85%": {
-                  transform: "translateX(-4px)",
-                },
-                "90%": {
-                  transform: "translateX(2px)",
-                },
-                "95%": {
-                  transform: "translateX(-2px)",
-                },
-                "100%": {
-                  transform: "translateX(0px)",
-                },
-              },
-            }
-          : {}
-      }
+      sx={_sx}
       {...props}
     />
   );
@@ -89,31 +108,47 @@ type snackbarOnClose = (
   reason: SnackbarCloseReason
 ) => void;
 
-interface Props {
-  show: boolean;
-  onClose: alertOnClose & snackbarOnClose;
-  severity: AlertColor;
-  msg: string;
-  vertical?: SnackbarOrigin["vertical"];
-  horizontal?: SnackbarOrigin["horizontal"];
-}
+const Toast = () => {
+  const { msg, severity, show } = useAppSelector((state) => state.toast.value);
+  const dispatch = useAppDispatch();
 
-const Toast = ({
-  show,
-  onClose,
-  severity,
-  msg,
-  vertical = "bottom",
-  horizontal = "center",
-}: Props) => {
+  const onClose = (_event: SyntheticEvent | Event, reason?: string) => {
+    console.log("onclose called");
+    if (reason === "clickaway") {
+      return;
+    }
+
+    dispatch(toastClose());
+  };
+
+  useEffect(() => {
+    let delay: NodeJS.Timeout;
+
+    if (msg === TOAST_MSG_LOADING) {
+      delay = setTimeout(() => {
+        dispatch(newToast({ severity: "warning", msg: TOAST_MSG_LONGER }));
+      }, 5000);
+    } else if (msg === TOAST_MSG_LONGER) {
+      delay = setTimeout(() => {
+        dispatch(
+          newToast({ severity: "error", msg: MSG_SOMETHING_WENT_WRONG })
+        );
+      }, 5000);
+    } else {
+      delay = setTimeout(() => dispatch(toastClose()), 3000);
+    }
+
+    return () => {
+      clearTimeout(delay);
+    };
+  }, [dispatch, msg]);
+
   return (
     <Snackbar
       key={msg}
       open={show}
-      autoHideDuration={3000}
-      resumeHideDuration={3000}
       onClose={onClose}
-      anchorOrigin={{ vertical, horizontal }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
     >
       <Alert onClose={onClose} severity={severity}>
         {msg}
