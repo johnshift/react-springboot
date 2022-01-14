@@ -1,4 +1,5 @@
 import { Box, Stack } from "@mui/material";
+
 import Skeleton from "../../components/Skeleton";
 
 const LoginFormSkeleton = () => {

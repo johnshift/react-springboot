@@ -1,4 +1,3 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
   InputLabel,
@@ -10,11 +9,14 @@ import {
   Paper,
   Typography,
   Snackbar,
-  Skeleton,
   Stack,
+  Button,
+  Alert as MuiAlert,
 } from "@mui/material";
-import Button from "@mui/material/Button";
-import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import { AlertProps } from "@mui/material/Alert";
+
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import {
   Fragment,
@@ -149,7 +151,7 @@ const LoginForm = () => {
             <Stack spacing={3}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel htmlFor="login-principal">
-                  Username/Email
+                  Username or Email
                 </InputLabel>
                 <OutlinedInput
                   id="login-principal"
@@ -157,7 +159,7 @@ const LoginForm = () => {
                   type={state.showPassword ? "text" : "password"}
                   value={state.principal}
                   onChange={handleChange}
-                  label="Username/Email"
+                  label="Username or Email"
                 />
               </FormControl>
 
