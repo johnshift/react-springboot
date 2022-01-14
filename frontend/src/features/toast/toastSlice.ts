@@ -1,5 +1,6 @@
 import { AlertColor } from "@mui/material";
 import { createSlice } from "@reduxjs/toolkit";
+import { TOAST_MSG_LOADING } from "./constants";
 
 const initialState = {
   value: {
@@ -14,40 +15,19 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     toastClose: (state) => {
+      console.log("toastClose called");
       state.value = { ...state.value, show: false };
     },
-    toastError: (state, action) => {
+    newToast: (state, action) => {
       state.value = {
-        severity: "error",
+        severity: action.payload.severity,
         show: true,
-        msg: action.payload,
-      };
-    },
-    toastLoading: (state) => {
-      state.value = {
-        severity: "warning",
-        show: true,
-        msg: "Loading please wait",
-      };
-    },
-    toastInfo: (state, action) => {
-      state.value = {
-        severity: "info",
-        show: true,
-        msg: action.payload,
-      };
-    },
-    toastSuccess: (state, action) => {
-      state.value = {
-        severity: "success",
-        show: true,
-        msg: action.payload,
+        msg: action.payload.msg,
       };
     },
   },
 });
 
-export const { toastSuccess, toastInfo, toastError, toastLoading, toastClose } =
-  userSlice.actions;
+export const { newToast, toastClose } = userSlice.actions;
 
 export const toastReducer = userSlice.reducer;
