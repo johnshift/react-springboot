@@ -25,6 +25,7 @@ import {
   SyntheticEvent,
 } from "react";
 import Link from "next/link";
+import LoginFormSkeleton from "./LoginFormSkeleton";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -141,122 +142,78 @@ const LoginForm = () => {
         >
           veils
         </Typography>
-
-        <form onSubmit={handleSubmit}>
-          <Stack spacing={3}>
-            {loading ? (
-              <>
-                <Skeleton
-                  variant="rectangular"
-                  sx={{
-                    height: 56,
-                    width: 265,
-                    borderRadius: "10px",
-                  }}
-                  animation="wave"
+        {loading ? (
+          <LoginFormSkeleton />
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <Stack spacing={3}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel htmlFor="login-principal">
+                  Username/Email
+                </InputLabel>
+                <OutlinedInput
+                  id="login-principal"
+                  name="principal"
+                  type={state.showPassword ? "text" : "password"}
+                  value={state.principal}
+                  onChange={handleChange}
+                  label="Username/Email"
                 />
-                <Skeleton
-                  variant="rectangular"
-                  sx={{
-                    height: 56,
-                    width: 265,
-                    borderRadius: "10px",
-                  }}
-                  animation="wave"
+              </FormControl>
+
+              <FormControl
+                fullWidth
+                sx={{ marginBottom: 3 }}
+                variant="outlined"
+              >
+                <InputLabel htmlFor="login-password">Password</InputLabel>
+                <OutlinedInput
+                  id="login-password"
+                  name="password"
+                  type={state.showPassword ? "text" : "password"}
+                  value={state.password}
+                  onChange={handleChange}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() =>
+                          setState({
+                            ...state,
+                            showPassword: !state.showPassword,
+                          })
+                        }
+                        edge="end"
+                      >
+                        {state.showPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
                 />
+              </FormControl>
 
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Skeleton
-                    variant="rectangular"
-                    sx={{ width: 140, height: 25, borderRadius: "5px" }}
-                    animation="wave"
-                  />
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                pl={0.5}
+              >
+                <Link href="/signup" passHref>
+                  <MuiLink underline="hover">Create an account</MuiLink>
+                </Link>
 
-                  <Skeleton
-                    variant="rectangular"
-                    sx={{
-                      height: 36.5,
-                      width: 76,
-                      borderRadius: "10px",
-                    }}
-                    animation="wave"
-                  />
-                </Box>
-              </>
-            ) : (
-              <>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel htmlFor="login-principal">
-                    Username/Email
-                  </InputLabel>
-                  <OutlinedInput
-                    id="login-principal"
-                    name="principal"
-                    type={state.showPassword ? "text" : "password"}
-                    value={state.principal}
-                    onChange={handleChange}
-                    label="Username/Email"
-                  />
-                </FormControl>
-
-                <FormControl
-                  fullWidth
-                  sx={{ marginBottom: 3 }}
-                  variant="outlined"
-                >
-                  <InputLabel htmlFor="login-password">Password</InputLabel>
-                  <OutlinedInput
-                    id="login-password"
-                    name="password"
-                    type={state.showPassword ? "text" : "password"}
-                    value={state.password}
-                    onChange={handleChange}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              showPassword: !state.showPassword,
-                            })
-                          }
-                          edge="end"
-                        >
-                          {state.showPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Password"
-                  />
-                </FormControl>
-
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  pl={0.5}
-                >
-                  <Link href="/signup" passHref>
-                    <MuiLink underline="hover">Create an account</MuiLink>
-                  </Link>
-
-                  <Button variant="contained" type="submit">
-                    Login
-                  </Button>
-                </Box>
-              </>
-            )}
-          </Stack>
-        </form>
+                <Button variant="contained" type="submit">
+                  Login
+                </Button>
+              </Box>
+            </Stack>
+          </form>
+        )}
       </Paper>
       <Snackbar
         open={state.showSnackbar}
