@@ -1,11 +1,5 @@
 import { forwardRef, SyntheticEvent, useEffect } from "react";
-
-import {
-  Alert as MuiAlert,
-  Snackbar,
-  AlertProps,
-  SnackbarCloseReason,
-} from "@mui/material";
+import { Alert as MuiAlert, Snackbar, AlertProps } from "@mui/material";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CachedIcon from "@mui/icons-material/Cached";
@@ -99,14 +93,8 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   );
 });
 
-type alertOnClose = (event: SyntheticEvent<Element, Event>) => void;
-type snackbarOnClose = (
-  event: Event | SyntheticEvent<any, Event>,
-  reason: SnackbarCloseReason
-) => void;
-
 const Toast = ({ ignoreClickAway = true }) => {
-  const { msg, severity, show, duration } = useAppSelector(
+  const { msg, severity, show, duration, params } = useAppSelector(
     (state) => state.toast.value
   );
   const dispatch = useAppDispatch();
@@ -128,10 +116,10 @@ const Toast = ({ ignoreClickAway = true }) => {
           newToast({
             severity: "warning",
             msg: TOAST_MSG_LONGER,
-            duration: 10000,
+            duration: params.stmhErrDelay,
           })
         );
-      }, 5000);
+      }, params.longDelay);
     } else if (msg === TOAST_MSG_LONGER) {
       delay = setTimeout(() => {
         dispatch(
@@ -141,13 +129,13 @@ const Toast = ({ ignoreClickAway = true }) => {
             duration: null, // do not hide smth-went-wrong error
           })
         );
-      }, 10000);
+      }, params.stmhErrDelay);
     }
 
     return () => {
       clearTimeout(delay);
     };
-  }, [dispatch, msg]);
+  }, [dispatch, msg, params.longDelay, params.stmhErrDelay]);
 
   return (
     <Snackbar
