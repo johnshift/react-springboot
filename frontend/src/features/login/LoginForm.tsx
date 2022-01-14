@@ -10,58 +10,40 @@ import {
   Typography,
   Stack,
   Button,
-  AlertColor,
 } from "@mui/material";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import {
-  Fragment,
-  ChangeEvent,
-  FormEvent,
-  useState,
-  SyntheticEvent,
-} from "react";
+import { Fragment, ChangeEvent, FormEvent, useState } from "react";
 import Link from "next/link";
 import LoginFormSkeleton from "./LoginFormSkeleton";
 import { REGEXP_EMAIL, REGEXP_NEAT_URI } from "../../constants";
 import { MSG_INCORRECT_LOGIN } from "./constants";
-import Toast from "../../components/Toast";
+import Toast from "../toast";
+import { useAppDispatch } from "../../store";
+import { newToast } from "../toast/toastSlice";
 
 const LoginForm = () => {
-  const [state, setState] = useState({
+  const dispatch = useAppDispatch();
+
+  const [payload, setPayload] = useState({
     principal: "",
     password: "",
-    showPassword: false,
-    toastShow: false,
-    toastMsg: "Incorrect username/email",
-    toastSeverity: "error" as AlertColor,
-    hasError: false,
   });
-
-  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [loading, _setLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setState({
-      ...state,
+    setPayload({
+      ...payload,
       [e.currentTarget.name]: e.currentTarget.value,
     });
   };
 
-  const handleCloseSnackbar = (
-    event: SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setState({ ...state, toastShow: false });
-  };
-
   const isValid = () => {
-    const { principal, password } = state;
+    const { principal, password } = payload;
 
     const MIN_PRINCIPAL_LENGTH = 4;
     const MIN_PASSWORD_LENGTH = 6;
@@ -96,21 +78,13 @@ const LoginForm = () => {
     return true;
   };
 
-  const toast = (toastMsg: string, toastSeverity: AlertColor) => {
-    setState({
-      ...state,
-      toastMsg,
-      toastSeverity,
-      toastShow: true,
-      hasError: toastSeverity === "error",
-    });
-  };
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setHasError(false);
 
     if (!isValid()) {
-      toast(MSG_INCORRECT_LOGIN, "error");
+      setHasError(true);
+      dispatch(newToast({ severity: "error", msg: MSG_INCORRECT_LOGIN }));
     }
   };
 
@@ -142,14 +116,14 @@ const LoginForm = () => {
         ) : (
           <form onSubmit={handleSubmit}>
             <Stack spacing={3}>
-              <FormControl fullWidth variant="outlined" error={state.hasError}>
+              <FormControl fullWidth variant="outlined" error={hasError}>
                 <InputLabel htmlFor="login-principal">
                   Username or Email
                 </InputLabel>
                 <OutlinedInput
                   id="login-principal"
                   name="principal"
-                  value={state.principal}
+                  value={payload.principal}
                   onChange={handleChange}
                   label="Username or Email"
                 />
@@ -159,32 +133,23 @@ const LoginForm = () => {
                 fullWidth
                 sx={{ marginBottom: 3 }}
                 variant="outlined"
-                error={state.hasError}
+                error={hasError}
               >
                 <InputLabel htmlFor="login-password">Password</InputLabel>
                 <OutlinedInput
                   id="login-password"
                   name="password"
-                  type={state.showPassword ? "text" : "password"}
-                  value={state.password}
+                  type={showPassword ? "text" : "password"}
+                  value={payload.password}
                   onChange={handleChange}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={() =>
-                          setState({
-                            ...state,
-                            showPassword: !state.showPassword,
-                          })
-                        }
+                        onClick={() => setShowPassword(!showPassword)}
                         edge="end"
                       >
-                        {state.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -212,22 +177,7 @@ const LoginForm = () => {
           </form>
         )}
       </Paper>
-      <Toast
-        onClose={handleCloseSnackbar}
-        show={state.toastShow}
-        msg={state.toastMsg}
-        severity={state.toastSeverity}
-      />
-      {/* <Snackbar
-        open={state.toastShow}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={state.toastSeverity}>
-          {state.toastMsg}
-        </Alert>
-      </Snackbar> */}
+      <Toast />
     </Fragment>
   );
 };

@@ -1,4 +1,4 @@
-import { forwardRef, SyntheticEvent, useEffect, useRef } from "react";
+import { forwardRef, SyntheticEvent, useEffect } from "react";
 
 import {
   Alert as MuiAlert,
@@ -11,14 +11,11 @@ import CheckIcon from "@mui/icons-material/Check";
 import CachedIcon from "@mui/icons-material/Cached";
 import InfoIcon from "@mui/icons-material/Info";
 import ErrorIcon from "@mui/icons-material/Error";
-import {
-  TOAST_MSG_LOADING,
-  TOAST_MSG_LONGER,
-} from "../features/toast/constants";
+import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "./constants";
 
-import { useAppSelector, useAppDispatch } from "../store";
-import { toastClose, newToast } from "../features/toast/toastSlice";
-import { MSG_SOMETHING_WENT_WRONG } from "../constants";
+import { useAppSelector, useAppDispatch } from "../../store";
+import { toastClose, newToast } from "./toastSlice";
+import { MSG_SOMETHING_WENT_WRONG } from "../../constants";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -109,11 +106,12 @@ type snackbarOnClose = (
 ) => void;
 
 const Toast = () => {
-  const { msg, severity, show } = useAppSelector((state) => state.toast.value);
+  const { msg, severity, show, duration } = useAppSelector(
+    (state) => state.toast.value
+  );
   const dispatch = useAppDispatch();
 
   const onClose = (_event: SyntheticEvent | Event, reason?: string) => {
-    console.log("onclose called");
     if (reason === "clickaway") {
       return;
     }
@@ -126,16 +124,23 @@ const Toast = () => {
 
     if (msg === TOAST_MSG_LOADING) {
       delay = setTimeout(() => {
-        dispatch(newToast({ severity: "warning", msg: TOAST_MSG_LONGER }));
+        dispatch(
+          newToast({
+            severity: "warning",
+            msg: TOAST_MSG_LONGER,
+            duration: 5000,
+          })
+        );
       }, 5000);
     } else if (msg === TOAST_MSG_LONGER) {
       delay = setTimeout(() => {
         dispatch(
-          newToast({ severity: "error", msg: MSG_SOMETHING_WENT_WRONG })
+          newToast({
+            severity: "error",
+            msg: MSG_SOMETHING_WENT_WRONG,
+          })
         );
       }, 5000);
-    } else {
-      delay = setTimeout(() => dispatch(toastClose()), 3000);
     }
 
     return () => {
@@ -149,6 +154,7 @@ const Toast = () => {
       open={show}
       onClose={onClose}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      autoHideDuration={duration}
     >
       <Alert onClose={onClose} severity={severity}>
         {msg}
