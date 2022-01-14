@@ -13,7 +13,7 @@ import {
   Button,
   Alert as MuiAlert,
 } from "@mui/material";
-import { AlertProps } from "@mui/material/Alert";
+import { AlertProps, AlertColor } from "@mui/material/Alert";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -28,6 +28,8 @@ import {
 } from "react";
 import Link from "next/link";
 import LoginFormSkeleton from "./LoginFormSkeleton";
+import { REGEXP_EMAIL, REGEXP_NEAT_URI } from "../../constants";
+import { MSG_INCORRECT_LOGIN } from "./constants";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -81,8 +83,10 @@ const LoginForm = () => {
     principal: "",
     password: "",
     showPassword: false,
-    showSnackbar: false,
-    msgSnackbar: "Incorrect username/email",
+    toastShow: false,
+    toastMsg: "Incorrect username/email",
+    toastSeverity: "error" as AlertColor,
+    hasError: false,
   });
 
   const [loading, setLoading] = useState(false);
@@ -94,20 +98,6 @@ const LoginForm = () => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setLoading(true);
-
-    setTimeout(() => {
-      setState({
-        ...state,
-        showSnackbar: true,
-      });
-      setLoading(false);
-    }, 3000);
-  };
-
   const handleCloseSnackbar = (
     event: SyntheticEvent | Event,
     reason?: string
@@ -116,10 +106,62 @@ const LoginForm = () => {
       return;
     }
 
-    setState({ ...state, showSnackbar: false });
+    setState({ ...state, toastShow: false });
   };
 
-  const severity = "error";
+  const isValid = () => {
+    const { principal, password } = state;
+
+    const MIN_PRINCIPAL_LENGTH = 4;
+    const MIN_PASSWORD_LENGTH = 6;
+    const MAX_LOGIN_INPUT_LENGTH = 64;
+
+    if (!principal) {
+      return false;
+    }
+
+    if (!password) {
+      return false;
+    }
+
+    if (
+      principal.length < MIN_PRINCIPAL_LENGTH ||
+      principal.length > MAX_LOGIN_INPUT_LENGTH
+    ) {
+      return false;
+    }
+
+    if (
+      password.length < MIN_PASSWORD_LENGTH ||
+      password.length > MAX_LOGIN_INPUT_LENGTH
+    ) {
+      return false;
+    }
+
+    if (!REGEXP_NEAT_URI.test(principal) && !REGEXP_EMAIL.test(principal)) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const toast = (toastMsg: string, toastSeverity: AlertColor) => {
+    setState({
+      ...state,
+      toastMsg,
+      toastSeverity,
+      toastShow: true,
+      hasError: toastSeverity === "error",
+    });
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!isValid()) {
+      toast(MSG_INCORRECT_LOGIN, "error");
+    }
+  };
 
   return (
     <Fragment>
@@ -149,14 +191,13 @@ const LoginForm = () => {
         ) : (
           <form onSubmit={handleSubmit}>
             <Stack spacing={3}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth variant="outlined" error={state.hasError}>
                 <InputLabel htmlFor="login-principal">
                   Username or Email
                 </InputLabel>
                 <OutlinedInput
                   id="login-principal"
                   name="principal"
-                  type={state.showPassword ? "text" : "password"}
                   value={state.principal}
                   onChange={handleChange}
                   label="Username or Email"
@@ -167,6 +208,7 @@ const LoginForm = () => {
                 fullWidth
                 sx={{ marginBottom: 3 }}
                 variant="outlined"
+                error={state.hasError}
               >
                 <InputLabel htmlFor="login-password">Password</InputLabel>
                 <OutlinedInput
@@ -206,7 +248,9 @@ const LoginForm = () => {
                 pl={0.5}
               >
                 <Link href="/signup" passHref>
-                  <MuiLink underline="hover">Create an account</MuiLink>
+                  <MuiLink underline="hover" color="inherit">
+                    Create an account
+                  </MuiLink>
                 </Link>
 
                 <Button variant="contained" type="submit">
@@ -218,13 +262,13 @@ const LoginForm = () => {
         )}
       </Paper>
       <Snackbar
-        open={state.showSnackbar}
+        open={state.toastShow}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={severity}>
-          {state.msgSnackbar}
+        <Alert onClose={handleCloseSnackbar} severity={state.toastSeverity}>
+          {state.toastMsg}
         </Alert>
       </Snackbar>
     </Fragment>
