@@ -4,6 +4,7 @@ import Head from "next/head";
 import Button from "@mui/material/Button";
 
 import LoginForm from "../features/login/LoginForm";
+import { BACKEND_API_URL } from "../constants";
 
 const Skeleton = () => {
   return <h1>waitx ...</h1>;
@@ -33,6 +34,7 @@ const XXX = () => {
         />
       </Head>
       <h1>hello</h1>
+      <p>backend: {BACKEND_API_URL}</p>
 
       <div style={{ position: "fixed", top: 10, right: 10 }}>
         <Button onClick={handleClick}>toggle</Button>
