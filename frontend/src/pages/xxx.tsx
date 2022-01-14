@@ -2,7 +2,7 @@ import Head from "next/head";
 
 import { Button, Stack } from "@mui/material";
 import { newToast } from "../features/toast/toastSlice";
-import Toast from "../components/Toast";
+import Toast from "../features/toast";
 
 import { useAppDispatch } from "../store";
 import { TOAST_MSG_LOADING } from "../features/toast/constants";
@@ -46,7 +46,11 @@ const XXX = () => {
             variant="contained"
             onClick={() =>
               dispatch(
-                newToast({ severity: "warning", msg: TOAST_MSG_LOADING })
+                newToast({
+                  severity: "warning",
+                  msg: TOAST_MSG_LOADING,
+                  duration: 5000,
+                })
               )
             }
           >
