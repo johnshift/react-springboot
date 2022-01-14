@@ -6,7 +6,7 @@ const initialState = {
     severity: "" as AlertColor,
     show: false,
     msg: "",
-    duration: 3000,
+    duration: 3000 as number | null,
   },
 };
 
@@ -18,11 +18,17 @@ export const userSlice = createSlice({
       state.value = { ...state.value, show: false };
     },
     newToast: (state, action) => {
+      // duration can be any number, null (for no autohide) or default
+      let duration = action.payload.duration || 3000;
+      if (action.payload.duration === null) {
+        duration = null;
+      }
+
       state.value = {
         severity: action.payload.severity,
         show: true,
         msg: action.payload.msg,
-        duration: action.payload.duration || 3000,
+        duration,
       };
     },
   },
