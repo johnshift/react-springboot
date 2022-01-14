@@ -1,14 +1,25 @@
-import { AlertColor } from "@mui/material";
-import { createSlice } from "@reduxjs/toolkit";
+import { AlertProps } from "@mui/material";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   value: {
-    severity: "" as AlertColor,
+    severity: undefined as AlertProps["severity"],
     show: false,
     msg: "",
-    duration: 3000 as number | null,
+    duration: null as null | number,
+    params: {
+      defaultDelay: 3000,
+      longDelay: 5000,
+      stmhErrDelay: 10000,
+    },
   },
 };
+
+export interface NewToastAction {
+  severity: AlertProps["severity"] | undefined;
+  msg: string;
+  duration?: number | null;
+}
 
 export const userSlice = createSlice({
   name: "toast",
@@ -17,14 +28,16 @@ export const userSlice = createSlice({
     toastClose: (state) => {
       state.value = { ...state.value, show: false };
     },
-    newToast: (state, action) => {
+    newToast: (state, action: PayloadAction<NewToastAction>) => {
       // duration can be any number, null (for no autohide) or default
-      let duration = action.payload.duration || 3000;
+      let duration =
+        action.payload.duration || state.value.params.defaultDelay || null;
       if (action.payload.duration === null) {
         duration = null;
       }
 
       state.value = {
+        ...state.value,
         severity: action.payload.severity,
         show: true,
         msg: action.payload.msg,
