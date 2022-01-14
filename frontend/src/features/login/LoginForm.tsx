@@ -15,7 +15,7 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import { Fragment, ChangeEvent, FormEvent, useState } from "react";
+import { Fragment, ChangeEvent, FormEvent, useState, useEffect } from "react";
 import Link from "next/link";
 import LoginFormSkeleton from "./LoginFormSkeleton";
 import {
@@ -26,14 +26,18 @@ import {
 } from "../../constants";
 import { MSG_INCORRECT_LOGIN } from "./constants";
 import Toast from "../toast";
-import { useAppDispatch } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { newToast } from "../toast/toastSlice";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { sleep } from "../../utils/sleep";
-import { TOAST_MSG_LOADING } from "../toast/constants";
+import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "../toast/constants";
 
 const LoginForm = () => {
+  const { params: toastParams, msg: toastMsg } = useAppSelector(
+    (state) => state.toast.value
+  );
+
   const dispatch = useAppDispatch();
 
   const [payload, setPayload] = useState({
@@ -43,6 +47,17 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // auto set loading to false if type is not loading or longer
+    if (
+      loading &&
+      toastMsg !== TOAST_MSG_LONGER &&
+      toastMsg !== TOAST_MSG_LOADING
+    ) {
+      setLoading(false);
+    }
+  }, [loading, toastMsg, toastParams.stmhErrDelay]);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setPayload({
@@ -87,7 +102,8 @@ const LoginForm = () => {
     return true;
   };
 
-  const login = async () => {
+  // we need to wrap login into a promise to get rid of flicker loading
+  const login = async (): Promise<Function> => {
     const KEY_AUTHORIZATION = "authorization";
 
     let errmsg = MSG_SOMETHING_WENT_WRONG;
@@ -95,9 +111,11 @@ const LoginForm = () => {
     await axios
       .post(`${BACKEND_API_URL}/login`, payload)
       .then((res: AxiosResponse) => {
+        // set token into localStorage
         const token = res.headers[KEY_AUTHORIZATION];
-        console.log("login token: ", token);
         localStorage.setItem(KEY_AUTHORIZATION, token);
+
+        // no need to return a promise since we destroy page and redirect to another
         window.location.replace("/");
       })
       .catch((err: AxiosError) => {
@@ -105,10 +123,13 @@ const LoginForm = () => {
         if (response?.data.message) {
           errmsg = response.data.message;
         }
-
-        setHasError(errmsg !== MSG_SOMETHING_WENT_WRONG);
-        dispatch(newToast({ severity: "error", msg: errmsg }));
       });
+
+    return Promise.resolve(() => {
+      setLoading(false);
+      setHasError(errmsg !== MSG_SOMETHING_WENT_WRONG);
+      dispatch(newToast({ severity: "error", msg: errmsg }));
+    });
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -125,7 +146,13 @@ const LoginForm = () => {
     dispatch(
       newToast({ severity: "warning", msg: TOAST_MSG_LOADING, duration: 5000 })
     );
-    await Promise.all([login(), sleep(300)]).then(() => setLoading(false));
+
+    await Promise.all([login(), sleep(300)]).then(([fn]) => {
+      // fn is the resolved function to call after Promise.all executed
+      if (fn) {
+        fn();
+      }
+    });
   };
 
   return (
