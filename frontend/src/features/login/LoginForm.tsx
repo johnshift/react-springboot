@@ -18,11 +18,20 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Fragment, ChangeEvent, FormEvent, useState } from "react";
 import Link from "next/link";
 import LoginFormSkeleton from "./LoginFormSkeleton";
-import { REGEXP_EMAIL, REGEXP_NEAT_URI } from "../../constants";
+import {
+  BACKEND_API_URL,
+  MSG_SOMETHING_WENT_WRONG,
+  REGEXP_EMAIL,
+  REGEXP_NEAT_URI,
+} from "../../constants";
 import { MSG_INCORRECT_LOGIN } from "./constants";
 import Toast from "../toast";
 import { useAppDispatch } from "../../store";
 import { newToast } from "../toast/toastSlice";
+
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { sleep } from "../../utils/sleep";
+import { TOAST_MSG_LOADING } from "../toast/constants";
 
 const LoginForm = () => {
   const dispatch = useAppDispatch();
@@ -33,7 +42,7 @@ const LoginForm = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [loading, _setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setPayload({
@@ -78,14 +87,45 @@ const LoginForm = () => {
     return true;
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const login = async () => {
+    const KEY_AUTHORIZATION = "authorization";
+
+    let errmsg = MSG_SOMETHING_WENT_WRONG;
+
+    await axios
+      .post(`${BACKEND_API_URL}/login`, payload)
+      .then((res: AxiosResponse) => {
+        const token = res.headers[KEY_AUTHORIZATION];
+        console.log("login token: ", token);
+        localStorage.setItem(KEY_AUTHORIZATION, token);
+        window.location.replace("/");
+      })
+      .catch((err: AxiosError) => {
+        const response = err.response;
+        if (response?.data.message) {
+          errmsg = response.data.message;
+        }
+
+        setHasError(errmsg !== MSG_SOMETHING_WENT_WRONG);
+        dispatch(newToast({ severity: "error", msg: errmsg }));
+      });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setHasError(false);
 
     if (!isValid()) {
       setHasError(true);
       dispatch(newToast({ severity: "error", msg: MSG_INCORRECT_LOGIN }));
+      return;
     }
+
+    setLoading(true);
+    dispatch(
+      newToast({ severity: "warning", msg: TOAST_MSG_LOADING, duration: 5000 })
+    );
+    await Promise.all([login(), sleep(300)]).then(() => setLoading(false));
   };
 
   return (
@@ -177,7 +217,7 @@ const LoginForm = () => {
           </form>
         )}
       </Paper>
-      <Toast />
+      <Toast ignoreClickAway={false} />
     </Fragment>
   );
 };

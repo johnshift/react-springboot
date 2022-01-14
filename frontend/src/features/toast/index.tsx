@@ -105,14 +105,14 @@ type snackbarOnClose = (
   reason: SnackbarCloseReason
 ) => void;
 
-const Toast = () => {
+const Toast = ({ ignoreClickAway = true }) => {
   const { msg, severity, show, duration } = useAppSelector(
     (state) => state.toast.value
   );
   const dispatch = useAppDispatch();
 
   const onClose = (_event: SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") {
+    if (reason === "clickaway" && ignoreClickAway) {
       return;
     }
 
@@ -128,7 +128,7 @@ const Toast = () => {
           newToast({
             severity: "warning",
             msg: TOAST_MSG_LONGER,
-            duration: 5000,
+            duration: 10000,
           })
         );
       }, 5000);
@@ -138,9 +138,10 @@ const Toast = () => {
           newToast({
             severity: "error",
             msg: MSG_SOMETHING_WENT_WRONG,
+            duration: null, // do not hide smth-went-wrong error
           })
         );
-      }, 5000);
+      }, 10000);
     }
 
     return () => {
@@ -155,6 +156,7 @@ const Toast = () => {
       onClose={onClose}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       autoHideDuration={duration}
+      resumeHideDuration={-1}
     >
       <Alert onClose={onClose} severity={severity}>
         {msg}
