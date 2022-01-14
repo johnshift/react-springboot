@@ -6,7 +6,7 @@ import LoginForm from "./LoginForm";
 
 describe("LoginForm", () => {
   let title: HTMLElement;
-  let usernameField: HTMLElement;
+  let principalField: HTMLElement;
   let passwordField: HTMLElement;
   let togglePasswordBtn: HTMLElement;
   let signupLink: HTMLElement;
@@ -15,7 +15,7 @@ describe("LoginForm", () => {
   beforeEach(() => {
     render(<LoginForm />);
     title = screen.getByText("veils");
-    usernameField = screen.getByLabelText(/^username or email$/i);
+    principalField = screen.getByLabelText(/^username or email$/i);
     passwordField = screen.getByLabelText(/^password$/i);
     togglePasswordBtn = screen.getByRole("button", {
       name: "toggle password visibility",
@@ -31,8 +31,8 @@ describe("LoginForm", () => {
     expect(title).toBeInTheDocument();
 
     // username field
-    expect(usernameField).toBeInTheDocument();
-    expect(usernameField).toHaveAttribute("type", "text");
+    expect(principalField).toBeInTheDocument();
+    expect(principalField).toHaveAttribute("type", "text");
 
     // password field
     expect(passwordField).toBeInTheDocument();
@@ -67,13 +67,95 @@ describe("LoginForm", () => {
     });
   });
 
-  //   test.todo("empty password");
-  //   test.todo("short principal");
-  //   test.todo("short password");
-  //   test.todo("long principal");
-  //   test.todo("long password");
-  //   test.todo("principal neat-uri");
-  //   test.todo("principal invalid email");
+  test("empty password", async () => {
+    await act(async () => {
+      userEvent.type(principalField, "demo");
+      userEvent.click(loginBtn);
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByText(MSG_INCORRECT_LOGIN)).toBeInTheDocument();
+    });
+  });
+
+  test("short principal", async () => {
+    await act(async () => {
+      userEvent.type(principalField, "dem");
+      userEvent.type(passwordField, "demo123");
+      userEvent.click(loginBtn);
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByText(MSG_INCORRECT_LOGIN)).toBeInTheDocument();
+    });
+  });
+
+  test("short password", async () => {
+    await act(async () => {
+      userEvent.type(principalField, "demo");
+      userEvent.type(passwordField, "demo12");
+      userEvent.click(loginBtn);
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByText(MSG_INCORRECT_LOGIN)).toBeInTheDocument();
+    });
+  });
+
+  test("long principal", async () => {
+    await act(async () => {
+      userEvent.type(
+        principalField,
+        "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfx"
+      );
+      userEvent.type(passwordField, "demo123");
+      userEvent.click(loginBtn);
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByText(MSG_INCORRECT_LOGIN)).toBeInTheDocument();
+    });
+  });
+
+  test("long password", async () => {
+    await act(async () => {
+      userEvent.type(principalField, "demo");
+      userEvent.type(
+        passwordField,
+        "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfx"
+      );
+      userEvent.click(loginBtn);
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByText(MSG_INCORRECT_LOGIN)).toBeInTheDocument();
+    });
+  });
+
+  test("principal neat-uri", async () => {
+    await act(async () => {
+      userEvent.type(principalField, "demo!");
+      userEvent.type(passwordField, "demo123");
+      userEvent.click(loginBtn);
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByText(MSG_INCORRECT_LOGIN)).toBeInTheDocument();
+    });
+  });
+
+  test("principal invalid email", async () => {
+    await act(async () => {
+      userEvent.type(principalField, "demo@x.i");
+      userEvent.type(passwordField, "demo123");
+      userEvent.click(loginBtn);
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByText(MSG_INCORRECT_LOGIN)).toBeInTheDocument();
+    });
+  });
+
   //   test.todo("backend network error");
   //   test.todo("show loading when valid submit");
   //   test.todo("show loading longer than usual");
