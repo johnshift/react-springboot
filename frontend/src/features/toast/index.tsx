@@ -110,7 +110,12 @@ const Toast = ({ ignoreClickAway = true }) => {
   useEffect(() => {
     let delay: NodeJS.Timeout;
 
+    const clear = () => {
+      clearTimeout(delay);
+    };
+
     if (msg === TOAST_MSG_LOADING) {
+      clear();
       delay = setTimeout(() => {
         dispatch(
           newToast({
@@ -121,6 +126,7 @@ const Toast = ({ ignoreClickAway = true }) => {
         );
       }, params.longDelay);
     } else if (msg === TOAST_MSG_LONGER) {
+      clear();
       delay = setTimeout(() => {
         dispatch(
           newToast({
@@ -130,6 +136,8 @@ const Toast = ({ ignoreClickAway = true }) => {
           })
         );
       }, params.stmhErrDelay);
+    } else {
+      clear();
     }
 
     return () => {

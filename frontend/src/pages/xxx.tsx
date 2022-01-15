@@ -67,8 +67,6 @@ const XXX = () => {
           </Button>
         </Stack>
       </div>
-
-      <Toast />
     </div>
   );
 };

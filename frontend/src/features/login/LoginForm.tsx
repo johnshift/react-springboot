@@ -19,19 +19,18 @@ import { Fragment, ChangeEvent, FormEvent, useState, useEffect } from "react";
 import Link from "next/link";
 import LoginFormSkeleton from "./LoginFormSkeleton";
 import {
-  BACKEND_API_URL,
   MSG_SOMETHING_WENT_WRONG,
   REGEXP_EMAIL,
   REGEXP_NEAT_URI,
 } from "../../constants";
-import { MSG_INCORRECT_LOGIN } from "./constants";
-import Toast from "../toast";
+import { LOGIN_MSG_INCORRECT, LOGIN_MSG_OK } from "./constants";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { newToast } from "../toast/toastSlice";
 
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { sleep } from "../../utils/sleep";
 import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "../toast/constants";
+import apiLogin from "./apiLogin";
 
 const LoginForm = () => {
   const { params: toastParams, msg: toastMsg } = useAppSelector(
@@ -104,31 +103,36 @@ const LoginForm = () => {
 
   // we need to wrap login into a promise to get rid of flicker loading
   const login = async (): Promise<Function> => {
+    console.log("fuck you");
     const KEY_AUTHORIZATION = "authorization";
 
+    let success = false;
     let errmsg = MSG_SOMETHING_WENT_WRONG;
 
-    await axios
-      .post(`${BACKEND_API_URL}/login`, payload)
-      .then((res: AxiosResponse) => {
-        // set token into localStorage
-        const token = res.headers[KEY_AUTHORIZATION];
-        localStorage.setItem(KEY_AUTHORIZATION, token);
+    const thenFn = (res: AxiosResponse) => {
+      // set token into localStorage
+      const token = res.headers[KEY_AUTHORIZATION];
+      localStorage.setItem(KEY_AUTHORIZATION, token);
 
-        // no need to return a promise since we destroy page and redirect to another
-        window.location.replace("/");
-      })
-      .catch((err: AxiosError) => {
-        const response = err.response;
-        if (response?.data.message) {
-          errmsg = response.data.message;
-        }
-      });
+      success = true;
+    };
+
+    const catchFn = (err: Error | AxiosError) => {
+      if (axios.isAxiosError(err) && err.response) {
+        errmsg = err.response.data.message;
+      }
+    };
+
+    await apiLogin({ thenFn, catchFn, payload });
 
     return Promise.resolve(() => {
       setLoading(false);
-      setHasError(errmsg !== MSG_SOMETHING_WENT_WRONG);
-      dispatch(newToast({ severity: "error", msg: errmsg }));
+      if (!success) {
+        setHasError(errmsg !== MSG_SOMETHING_WENT_WRONG);
+        dispatch(newToast({ severity: "error", msg: errmsg }));
+      } else {
+        dispatch(newToast({ severity: "success", msg: LOGIN_MSG_OK }));
+      }
     });
   };
 
@@ -138,7 +142,7 @@ const LoginForm = () => {
 
     if (!isValid()) {
       setHasError(true);
-      dispatch(newToast({ severity: "error", msg: MSG_INCORRECT_LOGIN }));
+      dispatch(newToast({ severity: "error", msg: LOGIN_MSG_INCORRECT }));
       return;
     }
 
@@ -147,12 +151,7 @@ const LoginForm = () => {
       newToast({ severity: "warning", msg: TOAST_MSG_LOADING, duration: 5000 })
     );
 
-    await Promise.all([login(), sleep(300)]).then(([fn]) => {
-      // fn is the resolved function to call after Promise.all executed
-      if (fn) {
-        fn();
-      }
-    });
+    await Promise.all([login(), sleep(300)]).then(([fn]) => fn());
   };
 
   return (
@@ -244,7 +243,6 @@ const LoginForm = () => {
           </form>
         )}
       </Paper>
-      <Toast ignoreClickAway={false} />
     </Fragment>
   );
 };
