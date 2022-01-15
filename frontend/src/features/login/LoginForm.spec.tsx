@@ -101,10 +101,10 @@ describe("LoginForm", () => {
   });
 
   test("empty principal", async () => {
-    await act(async () => {
-      userEvent.type(passwordField, "123456");
-      userEvent.click(loginBtn);
-    });
+    userEvent.type(passwordField, "123456");
+    userEvent.click(loginBtn);
+
+    expect(screen.queryByTestId("loginForm-skl")).toBeNull();
 
     await waitFor(async () => {
       checkInvalidLoginState();
@@ -112,10 +112,10 @@ describe("LoginForm", () => {
   });
 
   test("empty password", async () => {
-    await act(async () => {
-      userEvent.type(principalField, "demo");
-      userEvent.click(loginBtn);
-    });
+    userEvent.type(principalField, "demo");
+    userEvent.click(loginBtn);
+
+    expect(screen.queryByTestId("loginForm-skl")).toBeNull();
 
     await waitFor(async () => {
       checkInvalidLoginState();
@@ -123,11 +123,11 @@ describe("LoginForm", () => {
   });
 
   test("short principal", async () => {
-    await act(async () => {
-      userEvent.type(principalField, "dem");
-      userEvent.type(passwordField, "demo123");
-      userEvent.click(loginBtn);
-    });
+    userEvent.type(principalField, "dem");
+    userEvent.type(passwordField, "demo123");
+    userEvent.click(loginBtn);
+
+    expect(screen.queryByTestId("loginForm-skl")).toBeNull();
 
     await waitFor(async () => {
       checkInvalidLoginState();
@@ -135,11 +135,11 @@ describe("LoginForm", () => {
   });
 
   test("short password", async () => {
-    await act(async () => {
-      userEvent.type(principalField, "demo");
-      userEvent.type(passwordField, "demo12");
-      userEvent.click(loginBtn);
-    });
+    userEvent.type(principalField, "demo");
+    userEvent.type(passwordField, "demo1");
+    userEvent.click(loginBtn);
+
+    expect(screen.queryByTestId("loginForm-skl")).toBeNull();
 
     await waitFor(async () => {
       checkInvalidLoginState();
@@ -147,14 +147,14 @@ describe("LoginForm", () => {
   });
 
   test("long principal", async () => {
-    await act(async () => {
-      userEvent.type(
-        principalField,
-        "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfx"
-      );
-      userEvent.type(passwordField, "demo123");
-      userEvent.click(loginBtn);
-    });
+    userEvent.type(
+      principalField,
+      "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfx"
+    );
+    userEvent.type(passwordField, "demo123");
+    userEvent.click(loginBtn);
+
+    expect(screen.queryByTestId("loginForm-skl")).toBeNull();
 
     await waitFor(async () => {
       checkInvalidLoginState();
@@ -162,14 +162,14 @@ describe("LoginForm", () => {
   });
 
   test("long password", async () => {
-    await act(async () => {
-      userEvent.type(principalField, "demo");
-      userEvent.type(
-        passwordField,
-        "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfx"
-      );
-      userEvent.click(loginBtn);
-    });
+    userEvent.type(principalField, "demo");
+    userEvent.type(
+      passwordField,
+      "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfx"
+    );
+    userEvent.click(loginBtn);
+
+    expect(screen.queryByTestId("loginForm-skl")).toBeNull();
 
     await waitFor(async () => {
       checkInvalidLoginState();
@@ -177,11 +177,11 @@ describe("LoginForm", () => {
   });
 
   test("principal neat-uri", async () => {
-    await act(async () => {
-      userEvent.type(principalField, "demo!");
-      userEvent.type(passwordField, "demo123");
-      userEvent.click(loginBtn);
-    });
+    userEvent.type(principalField, "demo!");
+    userEvent.type(passwordField, "demo123");
+    userEvent.click(loginBtn);
+
+    expect(screen.queryByTestId("loginForm-skl")).toBeNull();
 
     await waitFor(async () => {
       checkInvalidLoginState();
@@ -189,11 +189,11 @@ describe("LoginForm", () => {
   });
 
   test("principal invalid email", async () => {
-    await act(async () => {
-      userEvent.type(principalField, "demo@x.i");
-      userEvent.type(passwordField, "demo123");
-      userEvent.click(loginBtn);
-    });
+    userEvent.type(principalField, "demo@x.i");
+    userEvent.type(passwordField, "demo123");
+    userEvent.click(loginBtn);
+
+    expect(screen.queryByTestId("loginForm-skl")).toBeNull();
 
     await waitFor(async () => {
       checkInvalidLoginState();
@@ -205,6 +205,7 @@ describe("LoginForm", () => {
     userEvent.type(passwordField, "demo123");
     userEvent.click(loginBtn);
 
+    // valid login should show skeleton
     await screen.findByTestId("loginForm-skl");
 
     await waitFor(async () => {
