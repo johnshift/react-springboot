@@ -1,6 +1,20 @@
 import { AlertProps } from "@mui/material";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export type ToastSlice = {
+  value: {
+    severity: AlertProps["severity"] | undefined;
+    show: boolean;
+    msg: string;
+    duration: number | null;
+    params: {
+      defaultDelay: number;
+      longDelay: number;
+      stmhErrDelay: number;
+    };
+  };
+};
+
 const initialState = {
   value: {
     severity: undefined as AlertProps["severity"],
@@ -50,3 +64,5 @@ export const userSlice = createSlice({
 export const { newToast, toastClose } = userSlice.actions;
 
 export const toastReducer = userSlice.reducer;
+
+export const selectToast = (state: ToastSlice) => state.value;
