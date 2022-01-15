@@ -15,10 +15,11 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import { Fragment, ChangeEvent, FormEvent, useState, useEffect } from "react";
+import { Fragment, FormEvent, useState, useEffect } from "react";
 import Link from "next/link";
 import LoginFormSkeleton from "./LoginFormSkeleton";
 import {
+  BACKEND_API_URL,
   MSG_SOMETHING_WENT_WRONG,
   REGEXP_EMAIL,
   REGEXP_NEAT_URI,
@@ -27,10 +28,14 @@ import { LOGIN_MSG_INCORRECT, LOGIN_MSG_OK } from "./constants";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { newToast } from "../toast/toastSlice";
 
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 import { sleep } from "../../utils/sleep";
 import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "../toast/constants";
-import apiLogin from "./apiLogin";
+
+export interface LoginPayload {
+  principal: string;
+  password: string;
+}
 
 const LoginForm = () => {
   const { params: toastParams, msg: toastMsg } = useAppSelector(
@@ -39,10 +44,8 @@ const LoginForm = () => {
 
   const dispatch = useAppDispatch();
 
-  const [payload, setPayload] = useState({
-    principal: "",
-    password: "",
-  });
+  const [principal, setPrincipal] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -58,16 +61,7 @@ const LoginForm = () => {
     }
   }, [loading, toastMsg, toastParams.stmhErrDelay]);
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setPayload({
-      ...payload,
-      [e.currentTarget.name]: e.currentTarget.value,
-    });
-  };
-
   const isValid = () => {
-    const { principal, password } = payload;
-
     const MIN_PRINCIPAL_LENGTH = 4;
     const MIN_PASSWORD_LENGTH = 6;
     const MAX_LOGIN_INPUT_LENGTH = 64;
@@ -109,21 +103,21 @@ const LoginForm = () => {
     let success = false;
     let errmsg = MSG_SOMETHING_WENT_WRONG;
 
-    const thenFn = (res: AxiosResponse) => {
-      // set token into localStorage
+    try {
+      const res = await axios.post(`${BACKEND_API_URL}/login`, {
+        principal,
+        password,
+      });
+
       const token = res.headers[KEY_AUTHORIZATION];
       localStorage.setItem(KEY_AUTHORIZATION, token);
 
       success = true;
-    };
-
-    const catchFn = (err: Error | AxiosError) => {
+    } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         errmsg = err.response.data.message;
       }
-    };
-
-    await apiLogin({ thenFn, catchFn, payload });
+    }
 
     return Promise.resolve(() => {
       setLoading(false);
@@ -148,7 +142,11 @@ const LoginForm = () => {
 
     setLoading(true);
     dispatch(
-      newToast({ severity: "warning", msg: TOAST_MSG_LOADING, duration: 5000 })
+      newToast({
+        severity: "warning",
+        msg: TOAST_MSG_LOADING,
+        duration: 5000,
+      })
     );
 
     await Promise.all([login(), sleep(300)]).then(([fn]) => fn());
@@ -189,8 +187,8 @@ const LoginForm = () => {
                 <OutlinedInput
                   id="login-principal"
                   name="principal"
-                  value={payload.principal}
-                  onChange={handleChange}
+                  value={principal}
+                  onChange={(e) => setPrincipal(e.target.value)}
                   label="Username or Email"
                 />
               </FormControl>
@@ -206,8 +204,8 @@ const LoginForm = () => {
                   id="login-password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  value={payload.password}
-                  onChange={handleChange}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton

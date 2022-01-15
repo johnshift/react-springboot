@@ -15,7 +15,7 @@ export type ToastSlice = {
   };
 };
 
-const initialState = {
+export const initialState = {
   value: {
     severity: undefined as AlertProps["severity"],
     show: false,
