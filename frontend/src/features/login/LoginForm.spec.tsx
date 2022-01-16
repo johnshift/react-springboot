@@ -1,7 +1,12 @@
-import renderW from "../../utils/test-utils/renderW";
-import { screen, act, waitFor } from "@testing-library/react";
+import renderW, { AppWrapper } from "../../utils/test-utils/renderW";
+import {
+  screen,
+  act,
+  waitFor,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { LOGIN_MSG_INCORRECT } from "./constants";
+import { LOGIN_MSG_INCORRECT, LOGIN_MSG_OK } from "./constants";
 
 import LoginForm, { LoginPayload } from "./LoginForm";
 import { BACKEND_API_URL, MSG_SOMETHING_WENT_WRONG } from "../../constants";
@@ -12,14 +17,24 @@ import { rest } from "msw";
 import { setupServer } from "msw/node";
 import fakeLocalStorage from "../../utils/test-utils/fakeLocalStorage";
 
+import { renderHook, act as hookAct } from "@testing-library/react-hooks/dom";
+import { useAppDispatch } from "../../store";
+import { setDelayParams } from "../toast/toastSlice";
+import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "../toast/constants";
+
 const server = setupServer(
   rest.post(`${BACKEND_API_URL}/login`, (req, res, ctx) => {
     const { principal, password } = req.body as LoginPayload;
 
     if (principal === "networkError") {
-      return res.networkError("FUCK YOU");
+      return res.networkError("Network Error");
+    } else if (principal === "long") {
+      return res(ctx.status(400), ctx.delay(1000));
     } else if (principal === "demo" && password === "demo123") {
-      return res(ctx.status(200));
+      return res(
+        ctx.status(200),
+        ctx.set("authorization", "test-authorization")
+      );
     } else {
       return res(ctx.status(400), ctx.json({ message: LOGIN_MSG_INCORRECT }));
     }
@@ -213,7 +228,55 @@ describe("LoginForm", () => {
     });
   });
 
-  test.todo("show loading longer than usual");
-  test.todo("incorrect login");
-  test.todo("successful login + token persist");
+  test("incorrect login", async () => {
+    await userEvent.type(principalField, "demox");
+    await userEvent.type(passwordField, "demo123");
+    userEvent.click(loginBtn);
+
+    await screen.findByTestId("loginForm-skl");
+    await waitForElementToBeRemoved(screen.getByText(TOAST_MSG_LOADING));
+
+    await screen.findByText(LOGIN_MSG_INCORRECT);
+  });
+
+  test("show loading longer than usual", async () => {
+    const { result: appDispatchResult } = renderHook(() => useAppDispatch(), {
+      wrapper: AppWrapper,
+    });
+    const dispatch = appDispatchResult.current;
+
+    // adjust delay params to make tests short
+    await hookAct(async () => {
+      dispatch(
+        setDelayParams({
+          longDelay: 600,
+          smthErrDelay: 800,
+        })
+      );
+    });
+
+    await userEvent.type(principalField, "long");
+    await userEvent.type(passwordField, "demo123");
+    userEvent.click(loginBtn);
+
+    await screen.findByTestId("loginForm-skl");
+    await waitForElementToBeRemoved(screen.getByText(TOAST_MSG_LOADING));
+    await waitForElementToBeRemoved(screen.getByText(TOAST_MSG_LONGER));
+
+    await screen.findByText(MSG_SOMETHING_WENT_WRONG);
+  });
+
+  test("successful login + token persist", async () => {
+    await userEvent.type(principalField, "demo");
+    await userEvent.type(passwordField, "demo123");
+    userEvent.click(loginBtn);
+
+    await screen.findByTestId("loginForm-skl");
+    await waitForElementToBeRemoved(screen.getByText(TOAST_MSG_LOADING));
+
+    expect(screen.getByText(LOGIN_MSG_OK)).toBeInTheDocument();
+    expect(window.localStorage.getItem("authorization")).toBe(
+      "test-authorization"
+    );
+  });
 });

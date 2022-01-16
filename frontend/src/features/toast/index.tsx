@@ -94,7 +94,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const Toast = ({ ignoreClickAway = true }) => {
-  const { msg, severity, show, duration, params } = useAppSelector(
+  const { msg, severity, show, duration, delayParams } = useAppSelector(
     (state) => state.toast.value
   );
   const dispatch = useAppDispatch();
@@ -108,26 +108,19 @@ const Toast = ({ ignoreClickAway = true }) => {
   };
 
   useEffect(() => {
-    let delay: NodeJS.Timeout;
-
-    const clear = () => {
-      clearTimeout(delay);
-    };
-
     if (msg === TOAST_MSG_LOADING) {
-      clear();
-      delay = setTimeout(() => {
+      const longDelay = setTimeout(() => {
         dispatch(
           newToast({
             severity: "warning",
             msg: TOAST_MSG_LONGER,
-            duration: params.stmhErrDelay,
+            duration: delayParams.smthErrDelay,
           })
         );
-      }, params.longDelay);
+        clearTimeout(longDelay);
+      }, delayParams.longDelay as number);
     } else if (msg === TOAST_MSG_LONGER) {
-      clear();
-      delay = setTimeout(() => {
+      const smthDelay = setTimeout(() => {
         dispatch(
           newToast({
             severity: "error",
@@ -135,15 +128,10 @@ const Toast = ({ ignoreClickAway = true }) => {
             duration: null, // do not hide smth-went-wrong error
           })
         );
-      }, params.stmhErrDelay);
-    } else {
-      clear();
+        clearTimeout(smthDelay);
+      }, delayParams.smthErrDelay as number);
     }
-
-    return () => {
-      clearTimeout(delay);
-    };
-  }, [dispatch, msg, params.longDelay, params.stmhErrDelay]);
+  }, [dispatch, msg, delayParams.longDelay, delayParams.smthErrDelay]);
 
   return (
     <Snackbar

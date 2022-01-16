@@ -38,7 +38,7 @@ export interface LoginPayload {
 }
 
 const LoginForm = () => {
-  const { params: toastParams, msg: toastMsg } = useAppSelector(
+  const { delayParams: toastDelayParams, msg: toastMsg } = useAppSelector(
     (state) => state.toast.value
   );
 
@@ -59,7 +59,7 @@ const LoginForm = () => {
     ) {
       setLoading(false);
     }
-  }, [loading, toastMsg, toastParams.stmhErrDelay]);
+  }, [loading, toastMsg, toastDelayParams.smthErrDelay]);
 
   const isValid = () => {
     const MIN_PRINCIPAL_LENGTH = 4;
@@ -97,7 +97,6 @@ const LoginForm = () => {
 
   // we need to wrap login into a promise to get rid of flicker loading
   const login = async (): Promise<Function> => {
-    console.log("fuck you");
     const KEY_AUTHORIZATION = "authorization";
 
     let success = false;
@@ -145,7 +144,7 @@ const LoginForm = () => {
       newToast({
         severity: "warning",
         msg: TOAST_MSG_LOADING,
-        duration: 5000,
+        // duration: 5000,
       })
     );
 
