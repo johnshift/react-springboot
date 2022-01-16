@@ -54,7 +54,6 @@ const XXX = () => {
 
       dispatch(
         setDelayParams({
-          loadingDelay: 300,
           longDelay: 500,
           smthErrDelay: 900,
         })
