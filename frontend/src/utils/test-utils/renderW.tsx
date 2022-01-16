@@ -9,15 +9,23 @@ import AppStore from "../../store";
 //     ...options,
 //   });
 
+export const AppWrapper: React.FC = ({ children }) => (
+  <Provider store={AppStore}>{children}</Provider>
+);
+
 const renderW = (ui: ReactElement) => {
   const { rerender, ...result } = rtlRender(
-    <Provider store={AppStore}>{ui}</Provider>
+    // <Provider store={AppStore}>{ui}</Provider>
+    <AppWrapper>{ui}</AppWrapper>
   );
 
   return {
     ...result,
-    rerender: (rUI: ReactElement) =>
-      rerender(<Provider store={AppStore}>{rUI}</Provider>),
+    rerender: (rui: ReactElement) =>
+      rerender(
+        // <Provider store={AppStore}>{rUI}</Provider>
+        <AppWrapper>{rui}</AppWrapper>
+      ),
   };
 };
 
