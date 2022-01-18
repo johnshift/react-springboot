@@ -29,3 +29,14 @@ Every piece of code has tradeoffs. For veils, its the following:
 - Veils frontend is engineered for what users perceive (aesthetics/perception) vs raw lighthouse score.  
   To cure the itch of lighthouse performance, my portfolio is built with perfect 100 score.  
   This project utilizes react suspense + skeletons to give a sense of perceived performance.
+
+## Best Practices
+
+- Enforce custom hooks on component logic. This separates logic and view aspect of component.  
+  This also improves code behavior since you can test the hooks separately.  
+  This is enforced by the `use-encapsulation` eslint plugin.
+
+## Issues
+
+    - userEvent inside act inconsistent behaviour: `https://github.com/testing-library/user-event/issues/387`
+    	- never wrap `userEvent` and `fireEvent` in `act`. See https://twitter.com/kentcdodds/status/1330937800321974272?lang=en

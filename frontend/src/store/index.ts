@@ -1,11 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { toastReducer } from "../features/toast/toastSlice";
 
 const store = configureStore({
-  reducer: {
-    toast: toastReducer,
-  },
+  reducer: {},
 });
 
 export default store;

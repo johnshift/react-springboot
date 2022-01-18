@@ -12,7 +12,6 @@ import "@fontsource/roboto/700.css";
 
 import { Provider } from "react-redux";
 import store from "../store";
-import Toast from "../features/toast";
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -31,8 +30,6 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
         <CssBaseline />
         <Provider store={store}>
           <Component {...pageProps} />
-
-          <Toast />
         </Provider>
       </ThemeProvider>
     </CacheProvider>

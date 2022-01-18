@@ -1,4 +1,7 @@
 {
+	"plugins": [
+		"use-encapsulation"
+	],
   "extends": "next/core-web-vitals",
 	"rules": {
 		"no-restricted-imports": [
@@ -9,6 +12,15 @@
 					"!@mui/material/test-utils/*"
 				]
 			}
+		],
+		"use-encapsulation/prefer-custom-hooks": [
+			"error",
+			{
+				"block": [
+					"useMyCustomHook"
+				]
+			}
 		]
 	}
+	
 }
