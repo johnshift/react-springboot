@@ -102,7 +102,13 @@ jobs:
         run: npm ci --frozen-lockfile
       - name: Run Tests
         working-directory: ./frontend
-        run: "npm run test"
+        run: "npm run test -- --coverage"
+      - name: Frontend Codecov Report
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./frontend
+          fail_ci_if_error: true
 
   frontend-dev:
     name: Deploy Frontend DEV
