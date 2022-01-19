@@ -3,7 +3,6 @@ import { useReducer } from "react";
 import { MSG_SOMETHING_WENT_WRONG } from "../../constants";
 import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "./constants";
 import { initState, toastReducer } from "./reducer";
-import { ToastState } from "./types";
 
 describe("toastReducer", () => {
   test("initial state works correctly", () => {

@@ -43,14 +43,14 @@ const useToast = () => {
     toastClose: () => {
       dispatch({ type: "close" });
     },
-    toastLoading: () => {
-      dispatch({ type: "loading" });
-    },
     toastError: (errMsg: string) => {
       dispatch({ type: "error", payload: errMsg });
     },
     toastSetDuration: (dismiss: number, loading: number) => {
       setDurations({ dismiss, loading });
+    },
+    toastLoading: () => {
+      dispatch({ type: "loading" });
     },
   };
 };
