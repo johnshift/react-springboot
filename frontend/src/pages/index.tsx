@@ -21,7 +21,13 @@ const Home = () => {
 
       <br />
       <br />
-      <Toast show={show} msg={msg} severity={severity} onExited={toastClose} />
+      <Toast
+        show={show}
+        msg={msg}
+        severity={severity}
+        onExited={toastClose}
+        ignoreClickAway={false}
+      />
     </div>
   );
 };
