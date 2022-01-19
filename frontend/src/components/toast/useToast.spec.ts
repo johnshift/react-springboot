@@ -1,6 +1,5 @@
 import { renderHook, act as hookAct } from "@testing-library/react-hooks";
 import { MSG_SOMETHING_WENT_WRONG } from "../../constants";
-import { sleep } from "../../utils/sleep";
 import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "./constants";
 import { initState } from "./reducer";
 import useToast from "./useToast";
@@ -53,7 +52,6 @@ describe("useToast", () => {
     hookAct(() => {
       // setDurations for shorter waiting time
       toastSetDuration(300, 300);
-
       toastLoading();
     });
 
@@ -70,7 +68,6 @@ describe("useToast", () => {
     hookAct(() => {
       // setDurations for shorter waiting time
       toastSetDuration(300, 300);
-
       toastLoading();
     });
 
