@@ -2,12 +2,13 @@
 
 <p align="center">
   <a href="https://codecov.io/gh/johnshift/veils">
-		<img src="https://codecov.io/gh/johnshift/veils/branch/main/graph/badge.svg?token=VEGDX3IKZE"/>
-	</a>
-	<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/johnshift/veils?logo=github" />
-	<img alt='Github build' src="https://img.shields.io/github/workflow/status/johnshift/veils/Production?style=flat-square" />
+  <img src="https://codecov.io/gh/johnshift/veils/branch/main/graph/badge.svg?token=VEGDX3IKZE"/>
+ </a>
+ <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/johnshift/veils?logo=github" />
+ <img alt='Github build' src="https://img.shields.io/github/workflow/status/johnshift/veils/Production?style=flat-square" />
 </p>
-## Selected Frameworks
+
+## Frameworks
 
 - NextJS
 - MUI
@@ -15,7 +16,7 @@
 - React Query
 - `@testing-library` + `cypress`
 
-### Framework Critieria
+### Why these frameworks?
 
 - Stability:
   - No weird issues that costs time to fix during development.  
@@ -46,4 +47,4 @@ Every piece of code has tradeoffs. For veils, its the following:
 ## Issues
 
     - userEvent inside act inconsistent behaviour: `https://github.com/testing-library/user-event/issues/387`
-    	- never wrap `userEvent` and `fireEvent` in `act`. See https://twitter.com/kentcdodds/status/1330937800321974272?lang=en
+     - never wrap `userEvent` and `fireEvent` in `act`. See https://twitter.com/kentcdodds/status/1330937800321974272?lang=en
