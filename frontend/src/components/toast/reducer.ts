@@ -1,3 +1,4 @@
+import { MSG_SOMETHING_WENT_WRONG } from "../../constants";
 import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "./constants";
 import { ToastAction, ToastState } from "./types";
 
@@ -37,7 +38,7 @@ export const toastReducer = (
     case "timeout":
       return {
         ...state,
-        msg: "Something went wrong :(",
+        msg: MSG_SOMETHING_WENT_WRONG,
         severity: "error",
         show: true,
       };
