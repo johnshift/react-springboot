@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import useToast from "../../components/toast/useToast";
 import { REGEXP_EMAIL, REGEXP_NEAT_URI } from "../../constants";
 import { Payload } from "./types";
 
@@ -12,6 +13,8 @@ const useLoginForm = () => {
     password: "",
   });
 
+  const { toastLoading } = useToast();
+
   const onChangeHandler = (e: FormEvent<HTMLInputElement>) => {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
@@ -24,6 +27,11 @@ const useLoginForm = () => {
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const loadingIndicator = (isLoading: boolean) => {
+    setLoading(isLoading);
+    toastLoading();
   };
 
   const isValid = (principal: string, password: string) => {
@@ -68,7 +76,7 @@ const useLoginForm = () => {
     hasError,
     setHasError,
     loading,
-    setLoading,
+    loadingIndicator,
     isValid,
   };
 };
