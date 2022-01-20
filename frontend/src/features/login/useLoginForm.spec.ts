@@ -29,17 +29,24 @@ describe("useLoginForm", () => {
     expect(newValue).toBe(true);
   });
 
-  test("loading, setLoading", () => {
+  test("loading, loadingIndicator", () => {
     const { result } = renderHook(() => useLoginForm());
-    const { loading, setLoading } = result.current;
+    const { loading, loadingIndicator } = result.current;
 
     expect(loading).toBe(false);
     hookAct(() => {
-      setLoading(true);
+      loadingIndicator(true);
     });
 
     const { loading: newValue } = result.current;
     expect(newValue).toBe(true);
+
+    hookAct(() => {
+      loadingIndicator(false);
+    });
+
+    const { loading: newValue2 } = result.current;
+    expect(newValue2).toBe(false);
   });
 
   test("payload, onChangeHandler, principal", () => {
