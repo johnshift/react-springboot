@@ -1,12 +1,18 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "./constants";
-import { initState, toastReducer } from "./reducer";
+import {
+  toastClose,
+  toastError,
+  toastLoading,
+  toastLonger,
+  toastTimeout,
+} from "./toastSlice";
+import { ToastMsgError } from "./types";
 
 const useToast = () => {
-  const [{ show, msg, severity }, dispatch] = useReducer(
-    toastReducer,
-    initState
-  );
+  const { show, msg, severity } = useAppSelector((state) => state.toast);
+  const dispatch = useAppDispatch();
 
   const [durations, setDurations] = useState({
     dismiss: 4000,
@@ -19,15 +25,15 @@ const useToast = () => {
 
     if (msg === TOAST_MSG_LOADING) {
       delay = setTimeout(() => {
-        dispatch({ type: "long" });
+        dispatch(toastLonger());
       }, durations.loading);
     } else if (msg === TOAST_MSG_LONGER) {
       delay = setTimeout(() => {
-        dispatch({ type: "timeout" });
+        dispatch(toastTimeout());
       }, durations.loading);
     } else {
       delay = setTimeout(() => {
-        dispatch({ type: "close" });
+        dispatch(toastClose());
       }, durations.dismiss);
     }
 
@@ -40,17 +46,14 @@ const useToast = () => {
     show,
     msg,
     severity,
-    toastClose: () => {
-      dispatch({ type: "close" });
-    },
-    toastError: (errMsg: string) => {
-      dispatch({ type: "error", payload: errMsg });
-    },
+    toastClose: () => dispatch(toastClose()),
+    toastError: (errMsg: ToastMsgError) =>
+      dispatch(toastError({ msg: errMsg })),
+    toastLoading: () => dispatch(toastLoading()),
+    toastLonger: () => dispatch(toastLonger()),
+    toastTimeout: () => dispatch(toastTimeout()),
     toastSetDuration: (dismiss: number, loading: number) => {
       setDurations({ dismiss, loading });
-    },
-    toastLoading: () => {
-      dispatch({ type: "loading" });
     },
   };
 };

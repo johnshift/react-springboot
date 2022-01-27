@@ -1,31 +1,18 @@
+import { Snackbar } from "@mui/material";
 import { SyntheticEvent } from "react";
-
-import CustomAlert from "./CustomAlert";
-import Snackbar from "@mui/material/Snackbar";
-import { AlertColor } from "@mui/material/Alert";
 import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "./constants";
+import CustomAlert from "./CustomAlert";
+import useToast from "./useToast";
 
-interface Props {
-  show: boolean;
-  msg: string;
-  severity: AlertColor;
-  onExited: () => void;
-  ignoreClickAway?: boolean;
-}
+const Toast = ({ ignoreClickAway = true }) => {
+  const { show, msg, severity, toastClose } = useToast();
 
-const Toast = ({
-  show,
-  msg,
-  severity,
-  onExited,
-  ignoreClickAway = true,
-}: Props) => {
   const onClose = (_event: SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway" && ignoreClickAway) {
       return;
     }
 
-    onExited();
+    toastClose();
   };
 
   const isLoading = msg === TOAST_MSG_LOADING || msg === TOAST_MSG_LONGER;
@@ -36,7 +23,7 @@ const Toast = ({
       key={msg}
       open={show}
       onClose={onCloseFn}
-      TransitionProps={{ onExited }}
+      TransitionProps={{ onExited: toastClose }}
       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
     >
       <CustomAlert onClose={onCloseFn} severity={severity}>
