@@ -1,3 +1,5 @@
-export const sleep = async (delay = 300) => {
-  await new Promise((r) => setTimeout(r, delay));
+const sleep = (delay = 300) => {
+  return new Promise((r) => setTimeout(r, delay));
 };
+
+export default sleep;

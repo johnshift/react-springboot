@@ -13,6 +13,10 @@ export const AppWrapper: React.FC = ({ children }) => (
   <Provider store={AppStore}>{children}</Provider>
 );
 
+// const renderW = (ui: ReactElement) => {
+//   return <AppWrapper>{ui}</AppWrapper>;
+// };
+
 const renderW = (ui: ReactElement) => {
   const { rerender, ...result } = rtlRender(
     // <Provider store={AppStore}>{ui}</Provider>
