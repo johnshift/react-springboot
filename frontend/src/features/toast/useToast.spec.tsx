@@ -4,6 +4,7 @@ import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "./constants";
 import useToast from "./useToast";
 import { initialState } from "./toastSlice";
 import { AppWrapper } from "../../utils/test-utils/renderW";
+import { LOGIN_MSG_OK } from "../login/constants";
 
 describe("useToast", () => {
   test("initial state", () => {
@@ -45,29 +46,29 @@ describe("useToast", () => {
     expect(msg).toEqual(errMsg);
   });
 
-  // test("toastSuccess", async () => {
-  //   const { result } = renderHook(() => useToast(), { wrapper: AppWrapper });
+  test("toastSuccess", async () => {
+    const { result } = renderHook(() => useToast(), { wrapper: AppWrapper });
 
-  //   const { toastSuccess } = result.current;
+    const { toastSuccess } = result.current;
 
-  //   const successMsg = "SUCCESS";
+    const successMsg = LOGIN_MSG_OK;
 
-  //   hookAct(() => {
-  //     toastSuccess(successMsg);
-  //   });
+    hookAct(() => {
+      toastSuccess(successMsg);
+    });
 
-  //   const { msg } = result.current;
-  //   expect(msg).toEqual(successMsg);
-  // });
+    const { msg } = result.current;
+    expect(msg).toEqual(successMsg);
+  });
 
   test("toastLoading", async () => {
     const { result } = renderHook(() => useToast(), { wrapper: AppWrapper });
 
-    const { toastLoading, toastSetDuration } = result.current;
+    const { toastLoading, toastSetDurations } = result.current;
 
     hookAct(() => {
       // setDurations for shorter waiting time
-      toastSetDuration(300, 300);
+      toastSetDurations(300, 300);
       toastLoading();
     });
 
@@ -78,11 +79,11 @@ describe("useToast", () => {
   test("toastLonger", async () => {
     const { result } = renderHook(() => useToast(), { wrapper: AppWrapper });
 
-    const { toastLonger, toastSetDuration } = result.current;
+    const { toastLonger, toastSetDurations } = result.current;
 
     hookAct(() => {
       // setDurations for shorter waiting time
-      toastSetDuration(300, 300);
+      toastSetDurations(300, 300);
       toastLonger();
     });
 
@@ -93,11 +94,11 @@ describe("useToast", () => {
   test("toastTimeout", async () => {
     const { result } = renderHook(() => useToast(), { wrapper: AppWrapper });
 
-    const { toastTimeout, toastSetDuration } = result.current;
+    const { toastTimeout, toastSetDurations } = result.current;
 
     hookAct(() => {
       // setDurations for shorter waiting time
-      toastSetDuration(300, 300);
+      toastSetDurations(300, 300);
       toastTimeout();
     });
 
@@ -109,11 +110,11 @@ describe("useToast", () => {
     jest.useFakeTimers();
     const { result } = renderHook(() => useToast(), { wrapper: AppWrapper });
 
-    const { toastLoading, toastSetDuration } = result.current;
+    const { toastLoading, toastSetDurations } = result.current;
 
     hookAct(() => {
       // setDurations for shorter waiting time
-      toastSetDuration(300, 300);
+      toastSetDurations(300, 300);
       toastLoading();
     });
 

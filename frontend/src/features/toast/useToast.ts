@@ -6,9 +6,10 @@ import {
   toastError,
   toastLoading,
   toastLonger,
+  toastSuccess,
   toastTimeout,
 } from "./toastSlice";
-import { ToastMsgError } from "./types";
+import { ToastMsgError, ToastMsgSuccess } from "./types";
 
 const useToast = () => {
   const { show, msg, severity } = useAppSelector((state) => state.toast);
@@ -47,12 +48,14 @@ const useToast = () => {
     msg,
     severity,
     toastClose: () => dispatch(toastClose()),
+    toastSuccess: (successMsg: ToastMsgSuccess) =>
+      dispatch(toastSuccess({ msg: successMsg })),
     toastError: (errMsg: ToastMsgError) =>
       dispatch(toastError({ msg: errMsg })),
     toastLoading: () => dispatch(toastLoading()),
     toastLonger: () => dispatch(toastLonger()),
     toastTimeout: () => dispatch(toastTimeout()),
-    toastSetDuration: (dismiss: number, loading: number) => {
+    toastSetDurations: (dismiss: number, loading: number) => {
       setDurations({ dismiss, loading });
     },
   };
