@@ -1,4 +1,4 @@
-import { ChangeEvent, ChangeEventHandler, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import useToast from "../toast/useToast";
 import {
   MSG_SOMETHING_WENT_WRONG,
@@ -8,7 +8,7 @@ import {
 import sleep from "../../utils/sleep";
 import apiLogin from "./apiLogin";
 import { LOGIN_MSG_INCORRECT, LOGIN_MSG_OK } from "./constants";
-import { Payload } from "./types";
+import { LoginPayload } from "./types";
 import { ToastMsgError } from "../toast/types";
 
 export const useLoginForm = () => {
@@ -16,7 +16,7 @@ export const useLoginForm = () => {
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [payload, setPayload] = useState<Payload>({
+  const [payload, setPayload] = useState<LoginPayload>({
     principal: "",
     password: "",
   });
