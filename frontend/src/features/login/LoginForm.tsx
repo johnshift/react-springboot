@@ -11,7 +11,7 @@ import {
   Link as MuiLink,
   Button,
 } from "@mui/material";
-import Skeleton from "../../components/skeleton";
+import Skeleton from "../../common/components/skeleton";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
