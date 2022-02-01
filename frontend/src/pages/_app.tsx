@@ -14,6 +14,7 @@ import { Provider } from "react-redux";
 import store from "../store";
 
 import Toast from "../features/toast";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -23,6 +24,8 @@ const clientSideEmotionCache = createEmotionCache();
 
 const lightTheme = createTheme(lightThemeOptions);
 
+const queryClient = new QueryClient();
+
 const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
@@ -31,9 +34,11 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
         <Provider store={store}>
-          <Component {...pageProps} />
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
 
-          <Toast />
+            <Toast />
+          </QueryClientProvider>
         </Provider>
       </ThemeProvider>
     </CacheProvider>
