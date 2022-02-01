@@ -52,7 +52,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		log.debug("username = {}", username);
 		User user = userRepository.findByUsername(username)
 			.orElseThrow(UserException::notFound);
-		log.debug("user = {}", user);
+		log.debug("found user by username= {}", user);
+
+		return UserDTO.of(user);
+	}
+
+	@Override
+	public UserDTO findByVeil(String veil) {
+		log.debug("veil = {}", veil);
+
+		User user = userRepository.findByVeil(veil)
+			.orElseThrow(UserException::notFound);
+		log.debug("found user by veil = {}", user);
 
 		return UserDTO.of(user);
 	}
@@ -95,5 +106,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 		return dtos;
 	}
+
 
 }
