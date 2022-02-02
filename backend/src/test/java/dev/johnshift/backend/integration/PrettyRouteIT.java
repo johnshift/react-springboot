@@ -48,7 +48,8 @@ public class PrettyRouteIT {
 			.exchange()
 			.expectStatus().isOk()
 			.expectBody()
-			.jsonPath("$.name").isEqualTo(name)
+			.jsonPath("$.name").isEqualTo(null)
+			.jsonPath("$.description").isEqualTo(null)
 			.jsonPath("$.type").isEqualTo("NOT_FOUND");
 
 	}
@@ -63,7 +64,8 @@ public class PrettyRouteIT {
 			.exchange()
 			.expectStatus().isOk()
 			.expectBody()
-			.jsonPath("$.name").isEqualTo(name)
+			.jsonPath("$.name").isEqualTo("Demo User")
+			.jsonPath("$.description").isEqualTo(null)
 			.jsonPath("$.type").isEqualTo("PROFILE");
 
 	}
@@ -79,6 +81,7 @@ public class PrettyRouteIT {
 			.expectStatus().isOk()
 			.expectBody()
 			.jsonPath("$.name").isEqualTo(name)
+			.jsonPath("$.description").isEqualTo(null)
 			.jsonPath("$.type").isEqualTo("VEIL");
 
 	}
