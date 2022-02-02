@@ -1,27 +1,25 @@
 import PageLoader from "../common/components/loaders/PageLoader";
+import SomethingWentWrong from "../common/components/page-template/SomethingWentWrong";
 import usePrettyRoute from "../features/pretty-route/usePrettyRoute";
+import ProfilePage from "../features/profile";
+import NotFoundPage from "./404";
 
 const PrettyRoute = () => {
-  const { type, prettyRoute, isLoading, error } = usePrettyRoute();
+  const { type, isLoading, error } = usePrettyRoute();
 
   if (isLoading) {
     return <PageLoader />;
   }
 
   if (error) {
-    return <h1>Something went wrong :(</h1>;
+    return <SomethingWentWrong />;
   }
 
-  if (type === "NOT_FOUND") {
-    return <h1>NOT FOUND :(</h1>;
+  if (type === "PROFILE") {
+    return <ProfilePage name="John Ballesteros" />;
   }
 
-  return (
-    <div>
-      <p>prettyRoute = {prettyRoute} </p>
-      <p>type = {type} </p>
-    </div>
-  );
+  return <NotFoundPage />;
 };
 
 export default PrettyRoute;
