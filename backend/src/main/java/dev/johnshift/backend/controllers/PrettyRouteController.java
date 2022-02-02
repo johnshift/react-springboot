@@ -8,7 +8,6 @@ import dev.johnshift.backend.domains.dtos.PrettyRouteDTO;
 import dev.johnshift.backend.domains.dtos.UserDTO;
 import dev.johnshift.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/v1/pretty-route")
@@ -21,18 +20,23 @@ public class PrettyRouteController {
 	public PrettyRouteDTO handlePrettyRoute(@PathVariable String name) {
 
 		PrettyRouteDTO dto = new PrettyRouteDTO();
-		dto.setName(name);
 
 		// try find user by username
 		try {
-			userService.findByUsername(name);
+			UserDTO user = userService.findByUsername(name);
 			dto.setType("PROFILE");
+			dto.setName(user.getName());
+			dto.setDescription(user.getDescription());
 		} catch (Exception e) {
 
 			// try find user by veil
 			try {
-				userService.findByVeil(name);
+				UserDTO user = userService.findByVeil(name);
 				dto.setType("VEIL");
+
+				// for veil profiles, name = veil name
+				dto.setName(name);
+				dto.setDescription(user.getDescription());
 
 			} catch (Exception e2) {
 				dto.setType("NOT_FOUND");

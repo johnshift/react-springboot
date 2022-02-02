@@ -6,4 +6,5 @@ import lombok.Data;
 public class PrettyRouteDTO {
 	private String name;
 	private String type;
+	private String description;
 }
