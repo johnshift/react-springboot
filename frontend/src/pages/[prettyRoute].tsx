@@ -5,7 +5,7 @@ import ProfilePage from "../features/profile";
 import NotFoundPage from "./404";
 
 const PrettyRoute = () => {
-  const { type, isLoading, error } = usePrettyRoute();
+  const { type, isLoading, error, name, description } = usePrettyRoute();
 
   if (isLoading) {
     return <PageLoader />;
@@ -16,7 +16,7 @@ const PrettyRoute = () => {
   }
 
   if (type === "PROFILE") {
-    return <ProfilePage name="John Ballesteros" />;
+    return <ProfilePage name={name} description={description} />;
   }
 
   return <NotFoundPage />;

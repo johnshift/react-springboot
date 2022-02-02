@@ -16,6 +16,9 @@ const usePrettyRoute = () => {
   const [error, setError] = useState("");
   const [type, setType] = useState<PrettyRouteType>("NOT_FOUND");
 
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
   useEffect(() => {
     if (router.isReady) {
       axios
@@ -23,7 +26,14 @@ const usePrettyRoute = () => {
           BACKEND_API_URL + "/pretty-route/" + prettyRoute
         )
         .then((res) => {
-          setType(res.data.type);
+          const {
+            type: _type,
+            name: _name,
+            description: _description,
+          } = res.data;
+          setType(_type);
+          setName(_name);
+          setDescription(_description || "Click to edit description");
         })
         .catch(() => {
           setError(MSG_SOMETHING_WENT_WRONG);
@@ -38,6 +48,8 @@ const usePrettyRoute = () => {
     type,
     isLoading,
     error,
+    name,
+    description,
   };
 };
 
