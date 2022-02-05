@@ -17,8 +17,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import dev.johnshift.backend.domains.dtos.AfterLoginDTO;
 import dev.johnshift.backend.domains.dtos.ExceptionDTO;
 import dev.johnshift.backend.domains.dtos.JwtLoginDTO;
+import dev.johnshift.backend.domains.dtos.UserDTO;
+import dev.johnshift.backend.domains.models.AppUserDetails;
+import dev.johnshift.backend.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -27,9 +31,11 @@ import static dev.johnshift.backend.constants.SecurityConstants.JWT_SECURE_KEY;
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationManager authenticationManager;
+	private final UserService userService;
 
-	public JwtLoginFilter(AuthenticationManager authenticationManager) {
+	public JwtLoginFilter(AuthenticationManager authenticationManager, UserService userService) {
 		this.authenticationManager = authenticationManager;
+		this.userService = userService;
 
 		this.setFilterProcessesUrl("/api/v1/login");
 	}
@@ -70,7 +76,20 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
 		response.addHeader("Authorization", "Bearer " + token);
 
-		// super.successfulAuthentication(request, response, chain, authResult);
+		String username = ((AppUserDetails) authResult.getPrincipal()).getUsername();
+		UserDTO user = userService.findByUsername(username);
+
+		AfterLoginDTO resp = new AfterLoginDTO();
+		resp.setName(user.getName());
+		resp.setDescription(user.getDescription());
+		resp.setUsername(user.getUsername());
+		resp.setVerified(user.isVerified());
+
+		String jsonPayload = new ObjectMapper().writeValueAsString(resp);
+
+		response.setStatus(HttpStatus.OK.value());
+		response.setContentType("application/json");
+		response.getWriter().write(jsonPayload);
 	}
 
 	@Override

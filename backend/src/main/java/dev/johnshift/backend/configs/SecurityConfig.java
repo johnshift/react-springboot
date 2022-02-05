@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import dev.johnshift.backend.filters.JwtLoginFilter;
 import dev.johnshift.backend.filters.JwtVerifyFilter;
 import dev.johnshift.backend.filters.LogFilter;
+import dev.johnshift.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -23,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final CorsConfigurationSource corsConfigurationSource;
 	private final DaoAuthenticationProvider daoAuthenticationProvider;
+	private final UserService userService;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -37,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 			.addFilterAfter(new LogFilter(), ChannelProcessingFilter.class)
 
-			.addFilter(new JwtLoginFilter(authenticationManager()))
+			.addFilter(new JwtLoginFilter(authenticationManager(), userService))
 			.addFilterAfter(new JwtVerifyFilter(), JwtLoginFilter.class)
 
 			.cors()
