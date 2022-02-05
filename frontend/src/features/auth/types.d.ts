@@ -1,4 +1,4 @@
-interface UserSlice {
+interface AuthSlice {
   name: string | null;
   username: string | null;
   description: string | null;

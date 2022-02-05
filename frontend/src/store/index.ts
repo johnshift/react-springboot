@@ -1,16 +1,44 @@
-import { configureStore } from "@reduxjs/toolkit";
+/// <reference types="redux-persist" />
+
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { toastSlice } from "../features/toast/toastSlice";
-import { userSlice } from "../features/user/userSlice";
+import { authSlice } from "../features/auth/authSlice";
+
+import storage from "redux-persist/lib/storage";
+import {
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  persistStore,
+} from "redux-persist";
+
+const reducers = combineReducers({
+  toast: toastSlice.reducer,
+  auth: authSlice.reducer,
+});
+
+const persistConfig = {
+  key: "root",
+  storage,
+};
 
 const store = configureStore({
-  reducer: {
-    toast: toastSlice.reducer,
-    user: userSlice.reducer,
-  },
+  reducer: persistReducer(persistConfig, reducers),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export default store;
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

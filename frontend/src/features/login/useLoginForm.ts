@@ -11,7 +11,7 @@ import { LOGIN_MSG_INCORRECT, LOGIN_MSG_OK } from "./constants";
 import { LoginPayload } from "./types";
 import { ToastMsgError } from "../toast/types";
 import { useAppDispatch } from "../../store";
-import { afterLogin } from "../user/userSlice";
+import { afterLogin } from "../auth/authSlice";
 
 export const useLoginForm = ({ onClose }: { onClose: () => void }) => {
   const [showPassword, setShowPassword] = useState(false);
