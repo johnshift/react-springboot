@@ -3,6 +3,7 @@ import Link from "next/link";
 import useDisclosure from "../common/hooks/useDisclosure";
 import LoginFormDialog from "../features/login/LoginFormDialog";
 import useToast from "../features/toast/useToast";
+import { useAppSelector } from "../store";
 
 const Home = () => {
   const { toastLoading } = useToast();
@@ -12,6 +13,10 @@ const Home = () => {
     close: closeLogin,
     open: openLogin,
   } = useDisclosure();
+
+  const { name, description, username, verified } = useAppSelector(
+    (state) => state.user
+  );
 
   return (
     <div>
@@ -42,11 +47,22 @@ const Home = () => {
       <br />
       <button onClick={toastLoading}>toast loading home-page</button>
 
-      <div style={{ position: "fixed", top: 10, right: 10 }}>
+      <div style={{ position: "fixed", bottom: 10, right: 10 }}>
         <Button variant="contained" onClick={openLogin}>
           show login
         </Button>
       </div>
+
+      <br />
+      <br />
+      <br />
+      <div>
+        <p>name = {name}</p>
+        <p>description = {description}</p>
+        <p>username = {username}</p>
+        <p>isVerified = {verified.toString()}</p>
+      </div>
+
       <LoginFormDialog open={showLogin} onClose={closeLogin} />
     </div>
   );

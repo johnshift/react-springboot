@@ -24,7 +24,7 @@ const LoginFormDialog = ({ open, onClose }: Props) => {
         },
       }}
     >
-      <LoginForm />
+      <LoginForm onClose={onClose} />
     </Dialog>
   );
 };

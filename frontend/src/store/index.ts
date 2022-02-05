@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { toastSlice } from "../features/toast/toastSlice";
+import { userSlice } from "../features/user/userSlice";
 
 const store = configureStore({
   reducer: {
     toast: toastSlice.reducer,
+    user: userSlice.reducer,
   },
 });
 

@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export const initialState: UserSlice = {
-  name: "",
-  description: "",
-  username: "",
-  isVerified: false,
+  name: null,
+  description: null,
+  username: null,
+  verified: false,
   isLoggedIn: false,
 };
 
@@ -15,14 +15,14 @@ export const userSlice = createSlice({
     afterLogin: (
       state,
       {
-        payload: { name, description, username, isVerified },
+        payload: { name, description, username, verified },
       }: PayloadAction<AfterLoginAction>
     ) => ({
       ...state,
       name,
-      description,
+      description: description || "Click to edit description",
       username,
-      isVerified,
+      verified,
       isLoggedIn: true,
     }),
   },

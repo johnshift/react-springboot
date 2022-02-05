@@ -6,7 +6,7 @@ const SomethingWentWrong = () => {
       sx={{
         display: "grid",
         placeItems: "center",
-        height: "100vh",
+        minHeight: "100vh",
       }}
     >
       <h1>Something went wrong :(</h1>

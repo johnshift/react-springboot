@@ -1,14 +1,14 @@
 interface UserSlice {
-  name: string;
-  username: string;
-  description: string;
-  isVerified: boolean;
+  name: string | null;
+  username: string | null;
+  description: string | null;
+  verified: boolean;
   isLoggedIn: boolean;
 }
 
 interface AfterLoginAction {
-  name: string;
-  username: string;
-  description: string;
-  isVerified: boolean;
+  name: string | null;
+  username: string | null;
+  description: string | null;
+  verified: boolean;
 }
