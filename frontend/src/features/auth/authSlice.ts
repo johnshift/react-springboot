@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const initialState: UserSlice = {
+export const initialState: AuthSlice = {
   name: null,
   description: null,
   username: null,
@@ -8,7 +8,7 @@ export const initialState: UserSlice = {
   isLoggedIn: false,
 };
 
-export const userSlice = createSlice({
+export const authSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
@@ -25,7 +25,8 @@ export const userSlice = createSlice({
       verified,
       isLoggedIn: true,
     }),
+    logout: () => ({ ...initialState }),
   },
 });
 
-export const { afterLogin } = userSlice.actions;
+export const { afterLogin, logout } = authSlice.actions;

@@ -17,11 +17,12 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import { Provider } from "react-redux";
-import store from "../store";
+import store, { persistor } from "../store";
 
 import Toast from "../features/toast";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Nav from "../common/components/nav";
+import { PersistGate } from "redux-persist/integration/react";
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -41,15 +42,17 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
         <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <Nav />
-            <Container maxWidth="md">
-              {/* <Box sx={{ paddingX: "30px" }}> */}
-              <Component {...pageProps} />
-              {/* </Box> */}
-            </Container>
-            <Toast />
-          </QueryClientProvider>
+          <PersistGate loading={null} persistor={persistor}>
+            <QueryClientProvider client={queryClient}>
+              <Nav />
+              <Container maxWidth="md">
+                {/* <Box sx={{ paddingX: "30px" }}> */}
+                <Component {...pageProps} />
+                {/* </Box> */}
+              </Container>
+              <Toast />
+            </QueryClientProvider>
+          </PersistGate>
         </Provider>
       </ThemeProvider>
     </CacheProvider>
