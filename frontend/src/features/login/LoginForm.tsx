@@ -33,7 +33,7 @@ const LoginFormSkeleton = () => {
   );
 };
 
-const LoginForm = () => {
+const LoginForm = ({ onClose }: { onClose: () => void }) => {
   const {
     loading,
     hasError,
@@ -42,7 +42,7 @@ const LoginForm = () => {
     showPassword,
     togglePassword,
     handleSubmit,
-  } = useLoginForm();
+  } = useLoginForm({ onClose });
 
   return (
     <>

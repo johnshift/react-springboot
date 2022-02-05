@@ -10,8 +10,10 @@ import apiLogin from "./apiLogin";
 import { LOGIN_MSG_INCORRECT, LOGIN_MSG_OK } from "./constants";
 import { LoginPayload } from "./types";
 import { ToastMsgError } from "../toast/types";
+import { useAppDispatch } from "../../store";
+import { afterLogin } from "../user/userSlice";
 
-export const useLoginForm = () => {
+export const useLoginForm = ({ onClose }: { onClose: () => void }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,6 +24,8 @@ export const useLoginForm = () => {
   });
 
   const { toastLoading, toastError, toastSuccess } = useToast();
+
+  const dispatch = useAppDispatch();
 
   const onChangeHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -90,10 +94,14 @@ export const useLoginForm = () => {
 
     loadingIndicator(true);
     await Promise.all([apiLogin(payload), sleep(300)]).then(
-      ([[success, msg]]) => {
+      ([[success, msg, afterLoginResp]]) => {
         loadingIndicator(false);
         if (success) {
           toastSuccess(LOGIN_MSG_OK);
+          dispatch(afterLogin(afterLoginResp as AfterLoginAction));
+
+          // close login dialog
+          onClose();
         } else {
           setHasError(msg !== MSG_SOMETHING_WENT_WRONG);
           toastError(msg as ToastMsgError);
