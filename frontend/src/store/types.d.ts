@@ -1,0 +1,3 @@
+interface GlobalSlice {
+  showLoginModal: boolean;
+}

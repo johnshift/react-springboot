@@ -16,10 +16,12 @@ import {
   REGISTER,
   persistStore,
 } from "redux-persist";
+import { globalSlice } from "./globalSlice";
 
 const reducers = combineReducers({
   toast: toastSlice.reducer,
   userInfo: userInfoSlice.reducer,
+  global: globalSlice.reducer,
 });
 
 const persistConfig = {

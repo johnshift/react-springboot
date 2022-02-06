@@ -4,10 +4,35 @@ import {
   Toolbar,
   Typography,
   Link as MuiLink,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  FormGroup,
+  FormControlLabel,
+  Switch,
+  Divider,
 } from "@mui/material";
+
+import MenuIcon from "@mui/icons-material/Menu";
+
 import Link from "next/link";
+import SearchBar from "../../../features/search/SearchBar";
+import useNav from "./useNav";
+
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
 
 const Nav = () => {
+  const {
+    anchorEl,
+    handleOpenMenu,
+    handleCloseMenu,
+    isLoggedIn,
+    logout,
+    showLoginForm,
+  } = useNav();
+
   return (
     <AppBar color="default">
       <Container maxWidth="md">
@@ -25,6 +50,63 @@ const Nav = () => {
               </MuiLink>
             </Link>
           </Typography>
+
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{ paddingX: "10px" }}>
+              <SearchBar />
+            </Box>
+            <IconButton onClick={handleOpenMenu}>
+              <MenuIcon fontSize="large" />
+            </IconButton>
+
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{ vertical: "top", horizontal: "left" }}
+              open={Boolean(anchorEl)}
+              onClose={handleCloseMenu}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              sx={{
+                mt: "-5px",
+              }}
+            >
+              <MenuItem>
+                <FormGroup>
+                  <FormControlLabel control={<Switch />} label="Dark Mode" />
+                </FormGroup>
+              </MenuItem>
+              <Divider />
+              {isLoggedIn ? (
+                <MenuItem onClick={logout}>
+                  <IconButton
+                    size="small"
+                    aria-label="go to profile"
+                    color="inherit"
+                    sx={{ mr: 1 }}
+                  >
+                    <LogoutIcon />
+                  </IconButton>
+                  Logout
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={showLoginForm}>
+                  <IconButton
+                    size="small"
+                    aria-label="go to profile"
+                    color="inherit"
+                    sx={{ mr: 1 }}
+                  >
+                    <LoginIcon />
+                  </IconButton>
+                  Login
+                </MenuItem>
+              )}
+            </Menu>
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>
