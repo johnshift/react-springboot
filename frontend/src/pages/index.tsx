@@ -1,7 +1,7 @@
 import { Button, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 import useDisclosure from "../common/hooks/useDisclosure";
-import { logout } from "../features/auth/authSlice";
+import { clearUserInfo } from "../features/userInfo/userInfoSlice";
 import LoginFormDialog from "../features/login/LoginFormDialog";
 import useToast from "../features/toast/useToast";
 import { useAppDispatch, useAppSelector } from "../store";
@@ -16,7 +16,7 @@ const Home = () => {
   } = useDisclosure();
 
   const { name, description, username, verified, isLoggedIn } = useAppSelector(
-    (state) => state.auth
+    (state) => state.userInfo
   );
   const dispatch = useAppDispatch();
 
@@ -51,7 +51,7 @@ const Home = () => {
 
       <div style={{ position: "fixed", bottom: 10, right: 10 }}>
         {isLoggedIn ? (
-          <Button variant="contained" onClick={() => dispatch(logout())}>
+          <Button variant="contained" onClick={() => dispatch(clearUserInfo())}>
             logout
           </Button>
         ) : (
