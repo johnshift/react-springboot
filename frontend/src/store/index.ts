@@ -3,7 +3,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { toastSlice } from "../features/toast/toastSlice";
-import { authSlice } from "../features/auth/authSlice";
+import { userInfoSlice } from "../features/userInfo/userInfoSlice";
 
 import storage from "redux-persist/lib/storage";
 import {
@@ -19,12 +19,14 @@ import {
 
 const reducers = combineReducers({
   toast: toastSlice.reducer,
-  auth: authSlice.reducer,
+  userInfo: userInfoSlice.reducer,
 });
 
 const persistConfig = {
   key: "root",
   storage,
+  // only userInfo will be persisted
+  whitelist: ["userInfo"],
 };
 
 const store = configureStore({

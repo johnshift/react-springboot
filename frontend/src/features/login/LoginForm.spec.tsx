@@ -53,7 +53,8 @@ afterAll(() => server.close());
 
 describe("LoginForm", () => {
   test("component visibility", () => {
-    renderW(<LoginForm />);
+    const onClose = jest.fn();
+    renderW(<LoginForm onClose={onClose} />);
 
     const title = screen.getByText("veils");
     const principalField = screen.getByLabelText(/^username or email$/i);
@@ -89,7 +90,8 @@ describe("LoginForm", () => {
   });
 
   test("toggle password visibility", async () => {
-    renderW(<LoginForm />);
+    const onClose = jest.fn();
+    renderW(<LoginForm onClose={onClose} />);
 
     const passwordField = screen.getByLabelText(/^password$/i);
     const togglePasswordBtn = screen.getByRole("button", {
@@ -104,10 +106,11 @@ describe("LoginForm", () => {
   });
 
   test("empty principal", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -131,10 +134,11 @@ describe("LoginForm", () => {
   });
 
   test("empty password", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -158,10 +162,11 @@ describe("LoginForm", () => {
   });
 
   test("short principal", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -186,10 +191,11 @@ describe("LoginForm", () => {
   });
 
   test("short password", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -214,10 +220,11 @@ describe("LoginForm", () => {
   });
 
   test("long principal", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -245,10 +252,11 @@ describe("LoginForm", () => {
   });
 
   test("long password", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -276,10 +284,11 @@ describe("LoginForm", () => {
   });
 
   test("neat-uri principal", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -304,10 +313,11 @@ describe("LoginForm", () => {
   });
 
   test("invalid email", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -332,10 +342,11 @@ describe("LoginForm", () => {
   });
 
   test("network error", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -363,10 +374,11 @@ describe("LoginForm", () => {
   });
 
   test("incorrect login", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
@@ -402,10 +414,11 @@ describe("LoginForm", () => {
   });
 
   test("successful login + token persist", async () => {
+    const onClose = jest.fn();
     // render w/ toast
     renderW(
       <>
-        <LoginForm />
+        <LoginForm onClose={onClose} />
         <Toast />
       </>
     );
