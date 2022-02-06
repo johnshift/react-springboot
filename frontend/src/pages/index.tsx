@@ -1,23 +1,18 @@
 import { Button, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
-import useDisclosure from "../common/hooks/useDisclosure";
-import { clearUserInfo } from "../features/userInfo/userInfoSlice";
+
 import LoginFormDialog from "../features/login/LoginFormDialog";
 import useToast from "../features/toast/useToast";
 import { useAppDispatch, useAppSelector } from "../store";
+import { closeLoginModal } from "../store/globalSlice";
 
 const Home = () => {
   const { toastLoading } = useToast();
 
-  const {
-    show: showLogin,
-    close: closeLogin,
-    open: openLogin,
-  } = useDisclosure();
-
   const { name, description, username, verified, isLoggedIn } = useAppSelector(
     (state) => state.userInfo
   );
+  const { showLoginModal } = useAppSelector((state) => state.global);
   const dispatch = useAppDispatch();
 
   return (
@@ -49,7 +44,7 @@ const Home = () => {
       <br />
       <button onClick={toastLoading}>toast loading home-page</button>
 
-      <div style={{ position: "fixed", bottom: 10, right: 10 }}>
+      {/* <div style={{ position: "fixed", bottom: 10, right: 10 }}>
         {isLoggedIn ? (
           <Button variant="contained" onClick={() => dispatch(clearUserInfo())}>
             logout
@@ -59,7 +54,7 @@ const Home = () => {
             show login
           </Button>
         )}
-      </div>
+      </div> */}
 
       <br />
       <br />
@@ -72,7 +67,10 @@ const Home = () => {
         <p>isLoggedIn = {isLoggedIn.toString()}</p>
       </div>
 
-      <LoginFormDialog open={showLogin} onClose={closeLogin} />
+      <LoginFormDialog
+        open={showLoginModal}
+        onClose={() => dispatch(closeLoginModal())}
+      />
     </div>
   );
 };
