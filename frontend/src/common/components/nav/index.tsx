@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
 
 import Link from "next/link";
 import SearchBar from "../../../features/search/SearchBar";
@@ -52,7 +53,7 @@ const Nav = () => {
           </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Box sx={{ paddingX: "10px" }}>
+            <Box sx={{ paddingX: "10px", display: { xs: "none", sm: "flex" } }}>
               <SearchBar />
             </Box>
             <IconButton onClick={handleOpenMenu}>
@@ -74,12 +75,6 @@ const Nav = () => {
                 mt: "-5px",
               }}
             >
-              <MenuItem>
-                <FormGroup>
-                  <FormControlLabel control={<Switch />} label="Dark Mode" />
-                </FormGroup>
-              </MenuItem>
-              <Divider />
               {isLoggedIn ? (
                 <MenuItem onClick={logout}>
                   <IconButton
@@ -105,6 +100,26 @@ const Nav = () => {
                   Login
                 </MenuItem>
               )}
+
+              <Divider />
+
+              <MenuItem>
+                <FormGroup>
+                  <FormControlLabel control={<Switch />} label="Dark Mode" />
+                </FormGroup>
+              </MenuItem>
+
+              <MenuItem sx={{ display: { xs: "block", sm: "none" } }}>
+                <IconButton
+                  size="small"
+                  aria-label="search"
+                  color="inherit"
+                  sx={{ mr: 1 }}
+                >
+                  <SearchIcon />
+                </IconButton>
+                Search
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
