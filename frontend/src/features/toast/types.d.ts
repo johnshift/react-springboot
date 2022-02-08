@@ -8,9 +8,10 @@ export type ToastMsgLoading =
 
 export type ToastMsgError =
   | typeof MSG_SOMETHING_WENT_WRONG
-  | typeof LOGIN_MSG_INCORRECT;
+  | typeof LOGIN_MSG_INCORRECT
+  | string;
 
-export type ToastMsgSuccess = typeof LOGIN_MSG_OK;
+export type ToastMsgSuccess = typeof LOGIN_MSG_OK | string;
 
 export interface ToastSlice {
   show: boolean;

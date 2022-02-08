@@ -45,7 +45,7 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
           <PersistGate loading={null} persistor={persistor}>
             <QueryClientProvider client={queryClient}>
               <Nav />
-              <Container maxWidth="md">
+              <Container maxWidth="md" sx={{ marginTop: "75px" }}>
                 {/* <Box sx={{ paddingX: "30px" }}> */}
                 <Component {...pageProps} />
                 {/* </Box> */}

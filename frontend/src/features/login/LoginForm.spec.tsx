@@ -62,7 +62,7 @@ describe("LoginForm", () => {
     const togglePasswordBtn = screen.getByRole("button", {
       name: "toggle password visibility",
     });
-    const signupLink = screen.getByRole("link", {
+    const registerLink = screen.getByRole("link", {
       name: /create an account/i,
     });
     const loginBtn = screen.getByRole("button", { name: /^login$/i });
@@ -81,9 +81,9 @@ describe("LoginForm", () => {
     // show password btn
     expect(togglePasswordBtn).toBeInTheDocument();
 
-    // signup link
-    expect(signupLink).toBeInTheDocument();
-    expect(signupLink).toHaveAttribute("href", "/signup");
+    // register link
+    expect(registerLink).toBeInTheDocument();
+    expect(registerLink).toHaveAttribute("href", "/register");
 
     // login btn
     expect(loginBtn).toBeInTheDocument();
