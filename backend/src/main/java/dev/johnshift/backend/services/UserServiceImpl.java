@@ -56,6 +56,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
+	public UserDTO findByEmail(String email) {
+
+		log.debug("email = {}", email);
+		User user = userRepository.findByEmail(
+			email)
+			.orElseThrow(UserException::notFound);
+		log.debug("found user by email = {}", user);
+
+		return UserDTO.of(user);
+	}
+
+	@Override
 	public UserDTO findByVeil(String veil) {
 		log.debug("veil = {}", veil);
 

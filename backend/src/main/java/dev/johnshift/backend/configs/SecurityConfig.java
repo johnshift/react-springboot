@@ -51,6 +51,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET, "/api/v1/pretty-route/**").permitAll()
 			.antMatchers(HttpMethod.GET, "/sample").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
+
+			.antMatchers(HttpMethod.GET, "/api/v1/availability/**").permitAll()
+
 			.antMatchers(HttpMethod.POST, "/api/v1/register").permitAll()
 			.antMatchers(HttpMethod.GET, "/api/v1/register/users").permitAll()
 			.antMatchers(HttpMethod.GET, "/user-only").hasRole("USER")
