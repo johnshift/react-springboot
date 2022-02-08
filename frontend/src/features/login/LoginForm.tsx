@@ -119,8 +119,8 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
                 alignItems="center"
                 pl={0.5}
               >
-                <Link href="/signup" passHref>
-                  <MuiLink underline="hover" color="inherit">
+                <Link href="/register" passHref>
+                  <MuiLink underline="hover" color="inherit" onClick={onClose}>
                     Create an account
                   </MuiLink>
                 </Link>

@@ -16,8 +16,8 @@
 		"use-encapsulation/prefer-custom-hooks": [
 			"error",
 			{
-				"block": [
-					"useMyCustomHook"
+				"allow": [
+					"useContext"
 				]
 			}
 		]
