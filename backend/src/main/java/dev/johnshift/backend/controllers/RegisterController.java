@@ -27,7 +27,7 @@ public class RegisterController {
 	private final UserService userService;
 
 	@GetMapping("/users")
-	private List<UserDTO> handleGetUsers() {
+	public List<UserDTO> handleGetUsers() {
 
 
 		return userService.getAllUsers();

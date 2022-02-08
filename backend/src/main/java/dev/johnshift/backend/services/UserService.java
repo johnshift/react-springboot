@@ -8,6 +8,8 @@ public interface UserService {
 
 	UserDTO findByUsername(String username);
 
+	UserDTO findByEmail(String email);
+
 	UserDTO findByVeil(String veil);
 
 	UserDTO register(RegisterDTO dto);
