@@ -1,5 +1,6 @@
 import { Button, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
+import { BACKEND_API_URL } from "../constants";
 
 import LoginFormDialog from "../features/login/LoginFormDialog";
 import useToast from "../features/toast/useToast";
@@ -18,6 +19,7 @@ const Home = () => {
   return (
     <div>
       <h1>Home Page</h1>
+      <p>BACKEND API = {BACKEND_API_URL}</p>
       <Link href="/demo" passHref>
         <MuiLink underline="hover" color="inherit">
           /demo
