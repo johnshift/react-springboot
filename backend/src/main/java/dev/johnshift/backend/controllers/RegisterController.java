@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import static dev.johnshift.backend.constants.ValidationConstants.*;
 import static dev.johnshift.backend.exceptions.UserException.*;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -119,7 +120,7 @@ public class RegisterController {
 		}
 
 		// username-veil conflict
-		if (dto.getUsername() == dto.getVeil()) {
+		if (Objects.equals(dto.getUsername(), dto.getVeil())) {
 			throw new UserException(USERNAME_VEIL_CONFLICT, HttpStatus.BAD_REQUEST);
 		}
 	}
