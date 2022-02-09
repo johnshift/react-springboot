@@ -2,6 +2,7 @@ package dev.johnshift.backend.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Service;
 import dev.johnshift.backend.domains.dtos.RegisterDTO;
 import dev.johnshift.backend.domains.dtos.UserDTO;
 import dev.johnshift.backend.domains.entities.User;
+import dev.johnshift.backend.domains.entities.Verification;
 import dev.johnshift.backend.domains.models.AppUserDetails;
 import dev.johnshift.backend.exceptions.UserException;
 import dev.johnshift.backend.repositories.UserRepository;
+import dev.johnshift.backend.repositories.VerificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService, UserDetailsService {
 	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
+	private final VerificationRepository verificationRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String principal) throws UsernameNotFoundException {
@@ -121,5 +125,36 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return dtos;
 	}
 
+	@Override
+	public void saveVerification(UUID token, int userId) {
 
+		Verification verification = new Verification();
+		verification.setToken(token);
+		verification.setUserId(userId);
+
+		verificationRepository.save(verification);
+
+	}
+
+	@Override
+	public void confirmVerification(String token) {
+
+		// find match for token
+		log.debug("finding token match");
+		Verification verification = verificationRepository.findById(UUID.fromString(token))
+			.orElseThrow(UserException::invalidVerification);
+
+		// find match for id
+		log.debug("finding user_id match");
+		User user = userRepository.findById(verification.getUserId())
+			.orElseThrow(UserException::invalidVerification);
+
+		// update is_verified to true
+		user.setVerified(true);
+		userRepository.save(user);
+
+		// delete entry in verification
+		verificationRepository.delete(verification);
+
+	}
 }

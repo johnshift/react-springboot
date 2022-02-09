@@ -1,14 +1,17 @@
 package dev.johnshift.backend.controllers;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import dev.johnshift.backend.domains.dtos.RegisterDTO;
 import dev.johnshift.backend.domains.dtos.UserDTO;
+import dev.johnshift.backend.events.RegisterCompleteEvent;
 import dev.johnshift.backend.exceptions.UserException;
 import dev.johnshift.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import java.util.List;
 public class RegisterController {
 
 	private final UserService userService;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@GetMapping("/users")
 	public List<UserDTO> handleGetUsers() {
@@ -130,6 +134,17 @@ public class RegisterController {
 		UserDTO savedUser = userService.register(dto);
 		log.debug("savedUser = " + savedUser);
 
+		eventPublisher.publishEvent(new RegisterCompleteEvent(
+			savedUser.getName(),
+			savedUser.getEmail(),
+			savedUser.getId()));
+
 		return savedUser;
+	}
+
+	@PostMapping("/verification/{token}")
+	public void handleVerification(@PathVariable String token) {
+		log.debug("verification token = " + token);
+		userService.confirmVerification(token);
 	}
 }
