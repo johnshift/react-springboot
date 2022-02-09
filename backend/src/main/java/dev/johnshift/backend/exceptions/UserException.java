@@ -28,6 +28,8 @@ public class UserException extends RuntimeException {
 	public static final String DESCRIPTION_REQUIRED = "Profile description is required";
 	public static final String VEIL_DESCRIPTION_REQUIRED = "Veil description is required";
 
+	public static final String USERNAME_VEIL_CONFLICT = "Username and Veil should be different";
+
 	public static final String INVALID_VERIFICATION = "Invalid Verification";
 
 	private final HttpStatus status;
