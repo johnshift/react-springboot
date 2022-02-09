@@ -37,4 +37,8 @@ public class RegisterDTO {
 	// @Size(max = MAX_VEIL_LENGTH, message = UserException.VEIL_TOO_LONG)
 	// @Pattern(regexp = NEAT_URI_REGEXP, message = UserException.VEIL_INVALID_FORMAT)
 	private String veil;
+
+	private String description;
+
+	private String veilDescription;
 }

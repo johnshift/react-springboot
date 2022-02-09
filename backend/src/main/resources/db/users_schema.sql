@@ -7,5 +7,6 @@ create table users (
 	name text not null,
 	veil text not null unique,
 	is_verified boolean not null,
-	description text
+	description text not null,
+	veil_description text not null
 );

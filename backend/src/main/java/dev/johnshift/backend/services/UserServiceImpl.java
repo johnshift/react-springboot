@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import dev.johnshift.backend.domains.dtos.RegisterDTO;
 import dev.johnshift.backend.domains.dtos.UserDTO;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
+	private final PasswordEncoder passwordEncoder;
 	private final UserRepository userRepository;
 
 	@Override
@@ -84,9 +86,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		User newUser = new User();
 		newUser.setUsername(dto.getUsername());
 		newUser.setEmail(dto.getEmail());
-		newUser.setPassword(dto.getPassword());
+		newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
 		newUser.setName(dto.getName());
 		newUser.setVeil(dto.getVeil());
+		newUser.setDescription(dto.getDescription());
+		newUser.setVeilDescription(dto.getVeilDescription());
 
 		User user = userRepository.save(newUser);
 

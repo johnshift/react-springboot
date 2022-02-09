@@ -29,12 +29,13 @@ const RegisterForm = () => {
     onChangeHandler,
     registerState,
     setRegisterState,
+    register,
   } = useRegister();
 
   const steps = [
     {
       label: "Login Details",
-      sub: "Username/Email can be used to login",
+      sub: "Provide Username and Email",
       content: (
         <LoginDetails
           showPassword={toggleState.password}
@@ -50,17 +51,7 @@ const RegisterForm = () => {
     {
       label: "Veil Profile",
       sub: "Create your anonymous profile",
-      content: (
-        <VeilDetails
-          showVeil={toggleState.veil}
-          toggleVeil={() => toggleField("veil")}
-        />
-      ),
-    },
-    {
-      label: "Confirm Account",
-      sub: "Enter confirmation code",
-      content: <ConfirmDetails />,
+      content: <VeilDetails />,
     },
   ];
 
@@ -71,6 +62,20 @@ const RegisterForm = () => {
       const passwordOK = registerState.password.isValid;
 
       if (usernameOK && emailOK && passwordOK) {
+        return false;
+      }
+    } else if (activeStep === 1) {
+      const firstnameOK = registerState.firstname.isValid;
+      const lastnameOK = registerState.lastname.isValid;
+
+      if (firstnameOK && lastnameOK && payload.desc.trim().length !== 0) {
+        return false;
+      }
+    } else if (activeStep === 2) {
+      const veilOK = registerState.veil.isValid;
+      const veilNoConflict = payload.username !== payload.veil;
+
+      if (veilOK && veilNoConflict && payload.veildesc.trim().length !== 0) {
         return false;
       }
     }
@@ -109,13 +114,27 @@ const RegisterForm = () => {
                   <Button
                     disabled={checkCantProceed()}
                     variant="contained"
-                    onClick={() => handleStep(true)}
+                    onClick={async () => {
+                      if (activeStep === 2) {
+                        register();
+                        return;
+                      }
+
+                      if (activeStep === 3) {
+                        alert("todo");
+                        return;
+                      }
+
+                      handleStep(true);
+                    }}
                     sx={{ mt: 1, mr: 1 }}
                   >
-                    {index === steps.length - 1 ? "Finish" : "Continue"}
+                    {index === steps.length - 1
+                      ? "Complete Registration"
+                      : "Continue"}
                   </Button>
                   <Button
-                    disabled={index === 0}
+                    disabled={index === 0 || index === 3}
                     onClick={() => handleStep(false)}
                     sx={{ mt: 1, mr: 1 }}
                   >

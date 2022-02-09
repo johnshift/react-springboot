@@ -20,6 +20,7 @@ const useNav = () => {
   const logout = () => {
     handleCloseMenu();
     dispatch(clearUserInfo());
+    localStorage.removeItem("authorization");
   };
   const showLoginForm = () => {
     handleCloseMenu();

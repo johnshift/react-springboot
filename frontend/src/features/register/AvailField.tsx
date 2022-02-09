@@ -1,6 +1,7 @@
 import {
   FormControl,
   FormHelperText,
+  IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
@@ -9,14 +10,18 @@ import {
 import CheckIcon from "@mui/icons-material/Check";
 import LoopIcon from "@mui/icons-material/Loop";
 import ErrorIcon from "@mui/icons-material/Error";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { useValidated } from "./useValidated";
 
 interface Props {
   label: string;
+  type?: "text" | "password";
+  toggle?: null | (() => void);
 }
 
-const ValidatedField = ({ label }: Props) => {
+const ValidatedField = ({ label, type = "text", toggle = null }: Props) => {
   const sLabel = label.toLowerCase();
   const elId = `register-${label.toLowerCase()}`;
 
@@ -42,6 +47,7 @@ const ValidatedField = ({ label }: Props) => {
         value={payload[sLabel as keyof RegisterPayload]}
         onChange={onChangeHandler}
         onBlur={onBlur}
+        type={type}
         endAdornment={
           started ? (
             <InputAdornment position="end">
@@ -59,6 +65,14 @@ const ValidatedField = ({ label }: Props) => {
                     },
                   }}
                 />
+              ) : toggle ? (
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={toggle}
+                  edge="end"
+                >
+                  {type === "text" ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
               ) : isValid ? (
                 <CheckIcon color="success" />
               ) : (

@@ -42,6 +42,8 @@ public class RegisterController {
 		String password = dto.getPassword();
 		String name = dto.getName();
 		String veil = dto.getVeil();
+		String description = dto.getDescription();
+		String veilDescription = dto.getVeilDescription();
 
 		// required
 		if (StringUtils.isBlank(username) || StringUtils.isEmpty(username)) {
@@ -58,6 +60,12 @@ public class RegisterController {
 		}
 		if (StringUtils.isBlank(veil) || StringUtils.isEmpty(veil)) {
 			throw new UserException(VEIL_REQUIRED, HttpStatus.BAD_REQUEST);
+		}
+		if (StringUtils.isBlank(description) || StringUtils.isEmpty(description)) {
+			throw new UserException(DESCRIPTION_REQUIRED, HttpStatus.BAD_REQUEST);
+		}
+		if (StringUtils.isBlank(veilDescription) || StringUtils.isEmpty(veilDescription)) {
+			throw new UserException(VEIL_DESCRIPTION_REQUIRED, HttpStatus.BAD_REQUEST);
 		}
 
 		// username

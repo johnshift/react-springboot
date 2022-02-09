@@ -25,6 +25,9 @@ public class UserException extends RuntimeException {
 	public static final String VEIL_TOO_LONG = "Veil name is too long";
 	public static final String VEIL_INVALID = "Invalid Veil name format";
 
+	public static final String DESCRIPTION_REQUIRED = "Profile description is required";
+	public static final String VEIL_DESCRIPTION_REQUIRED = "Veil description is required";
+
 	public static final String INVALID_VERIFICATION = "Invalid Verification";
 
 	private final HttpStatus status;

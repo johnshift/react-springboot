@@ -39,13 +39,14 @@ export const useValidated = (field: keyof RegisterState) => {
       setStarted(true);
     }
     try {
-      console.log("try called");
       const _isValid = await mutateAsync(`${field}/${value}`);
       setRegisterState((prev) => ({
         ...prev,
         [field]: {
           isValid: _isValid,
-          msg: `"${value}" is ${_isValid ? "" : "not"} available`,
+          msg: `${field[0].toUpperCase() + field.slice(1)} is ${
+            _isValid ? "" : "not"
+          } available`,
           msgColor: _isValid ? "green" : "red",
         },
       }));

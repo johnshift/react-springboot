@@ -1,1 +1,1 @@
-INSERT INTO users (id, username, email, password, name, veil, is_verified) VALUES (99999, 'demo', 'demo@example.com', '$2a$10$c4JbjbzXEIwC2fVqUIDzaen2qIUGuK7L8lq2LQpvnu2kNbrMwaa1G', 'Demo User', 'anonymous1', false);
+INSERT INTO users (id, username, email, password, name, veil, is_verified, description, veil_description) VALUES (99999, 'demo', 'demo@example.com', '$2a$10$c4JbjbzXEIwC2fVqUIDzaen2qIUGuK7L8lq2LQpvnu2kNbrMwaa1G', 'Demo User', 'anonymous1', false, 'Profile Description ...', 'Veil Description ...');
