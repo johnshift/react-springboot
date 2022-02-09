@@ -49,6 +49,12 @@ public class RegisterIT {
 	private final String validPassword = "demo123";
 	private final String validName = "Demo User";
 	private final String validVeil = "anonymous1";
+	private final String validDescription = "Profile Description";
+	private final String validVeilDescription = "Veil Description";
+
+	// required description
+	// required veilDescription
+	// username conflict veil
 
 	// required username
 	@Test
@@ -141,6 +147,49 @@ public class RegisterIT {
 			.jsonPath("$.message").isEqualTo(UserException.VEIL_REQUIRED);
 	}
 
+	// required description
+	@Test
+	void descriptionRequired_badRequest() {
+
+		RegisterDTO dto = new RegisterDTO();
+		dto.setUsername(validUsername);
+		dto.setEmail(validEmail);
+		dto.setPassword(validPassword);
+		dto.setName(validName);
+		dto.setVeil(validVeil);
+
+		webTestClient.post()
+			.uri(API_URI)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(BodyInserters.fromValue(dto))
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectBody()
+			.jsonPath("$.message").isEqualTo(UserException.DESCRIPTION_REQUIRED);
+	}
+
+	// required veil description
+	@Test
+	void veilDescriptionRequired_badRequest() {
+
+		RegisterDTO dto = new RegisterDTO();
+		dto.setUsername(validUsername);
+		dto.setEmail(validEmail);
+		dto.setPassword(validPassword);
+		dto.setName(validName);
+		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+
+		webTestClient.post()
+			.uri(API_URI)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(BodyInserters.fromValue(dto))
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectBody()
+			.jsonPath("$.message").isEqualTo(UserException.VEIL_DESCRIPTION_REQUIRED);
+	}
+
 	// short username
 	@Test
 	void shortUsername_badRequest() {
@@ -151,6 +200,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName(validName);
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -172,6 +223,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName(validName);
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -193,6 +246,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName(validName);
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -214,6 +269,8 @@ public class RegisterIT {
 		dto.setPassword("12345");
 		dto.setName(validName);
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -235,6 +292,8 @@ public class RegisterIT {
 		dto.setPassword("asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfx");
 		dto.setName(validName);
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -256,6 +315,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName("f u");
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -277,6 +338,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName("asdfasdfasdfasdfasdfasdfasdfasdfasdfx");
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -298,6 +361,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName("1sdf");
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -319,6 +384,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName(validName);
 		dto.setVeil("abc");
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -340,6 +407,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName(validName);
 		dto.setVeil("asdfasdfasdfasdfasdfasdfasdfasdfasdfx");
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -361,6 +430,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName(validName);
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -382,6 +453,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName(validName);
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)
@@ -403,6 +476,8 @@ public class RegisterIT {
 		dto.setPassword(validPassword);
 		dto.setName(validName);
 		dto.setVeil(validVeil);
+		dto.setDescription(validDescription);
+		dto.setVeilDescription(validVeilDescription);
 
 		webTestClient.post()
 			.uri(API_URI)

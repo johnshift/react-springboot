@@ -113,6 +113,11 @@ public class RegisterController {
 		if (!(dto.getVeil().matches(NEAT_URI_REGEXP))) {
 			throw new UserException(VEIL_INVALID, HttpStatus.BAD_REQUEST);
 		}
+
+		// username-veil conflict
+		if (dto.getUsername() == dto.getVeil()) {
+			throw new UserException(USERNAME_VEIL_CONFLICT, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@PostMapping
