@@ -36,7 +36,7 @@ public class PrettyRouteController {
 
 				// for veil profiles, name = veil name
 				dto.setName(name);
-				dto.setDescription(user.getDescription());
+				dto.setDescription(user.getVeilDescription());
 
 			} catch (Exception e2) {
 				dto.setType("NOT_FOUND");
