@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 
-import ConfirmDetails from "./ConfirmDetails";
 import LoginDetails from "./LoginDetails";
 import ProfileDetails from "./ProfileDetails";
 import RegisterContext from "./RegisterContext";
@@ -30,6 +29,8 @@ const RegisterForm = () => {
     registerState,
     setRegisterState,
     register,
+    isLoading,
+    setIsLoading,
   } = useRegister();
 
   const steps = [
@@ -97,6 +98,8 @@ const RegisterForm = () => {
         onChangeHandler,
         registerState,
         setRegisterState,
+        isLoading,
+        setIsLoading,
       }}
     >
       <Stepper activeStep={activeStep} orientation="vertical">
@@ -112,7 +115,7 @@ const RegisterForm = () => {
               <Box sx={{ mb: 2 }}>
                 <div>
                   <Button
-                    disabled={checkCantProceed()}
+                    disabled={isLoading || checkCantProceed()}
                     variant="contained"
                     onClick={async () => {
                       if (activeStep === 2) {
