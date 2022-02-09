@@ -1,4 +1,12 @@
+import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
+import { useAppDispatch } from "../../store";
+import sleep from "../../utils/sleep";
+import apiLogin from "../login/apiLogin";
+import { LoginPayload } from "../login/types";
+import useToast from "../toast/useToast";
+import { afterLogin } from "../userInfo/userInfoSlice";
+import apiRegister from "./apiRegister";
 
 const useRegister = () => {
   const [started, setStarted] = useState(false);
@@ -24,7 +32,8 @@ const useRegister = () => {
     username: "",
     email: "",
     password: "",
-    name: "",
+    firstname: "",
+    lastname: "",
     desc: "",
     veil: "",
     veildesc: "",
@@ -42,17 +51,22 @@ const useRegister = () => {
       msgColor: "",
     },
     password: {
-      isValid: true,
+      isValid: false,
       msg: "",
       msgColor: "",
     },
-    name: {
-      isValid: true,
+    firstname: {
+      isValid: false,
+      msg: "",
+      msgColor: "",
+    },
+    lastname: {
+      isValid: false,
       msg: "",
       msgColor: "",
     },
     desc: {
-      isValid: true,
+      isValid: false,
       msg: "",
       msgColor: "",
     },
@@ -62,7 +76,7 @@ const useRegister = () => {
       msgColor: "",
     },
     veildesc: {
-      isValid: true,
+      isValid: false,
       msg: "",
       msgColor: "",
     },
@@ -78,6 +92,30 @@ const useRegister = () => {
     });
   };
 
+  const { toastSuccess, toastError } = useToast();
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const register = async () => {
+    await Promise.all([apiRegister(payload), sleep(300)]).then(
+      async ([[success, msg]]) => {
+        if (success) {
+          toastSuccess(msg);
+          handleStep(true);
+          const [, , afterLoginResp] = await apiLogin({
+            principal: payload.username,
+            password: payload.password,
+          } as LoginPayload);
+          dispatch(afterLogin(afterLoginResp as AfterLoginAction));
+          router.push("/");
+        } else {
+          toastError(msg);
+        }
+      }
+    );
+  };
+
   return {
     started,
     setStarted,
@@ -90,6 +128,7 @@ const useRegister = () => {
     onChangeHandler,
     registerState,
     setRegisterState,
+    register,
   };
 };
 

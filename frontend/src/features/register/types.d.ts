@@ -2,7 +2,8 @@ interface RegisterPayload {
   username: string;
   email: string;
   password: string;
-  name: string;
+  firstname: string;
+  lastname: string;
   desc: string;
   veil: string;
   veildesc: string;

@@ -37,6 +37,9 @@ public class User {
 	@Column(name = "description")
 	private String description;
 
+	@Column(name = "veil_description")
+	private String veilDescription;
+
 	@Column(name = "is_verified")
 	private boolean isVerified;
 }

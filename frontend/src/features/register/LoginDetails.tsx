@@ -11,7 +11,7 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import Availability from "./ValidatedField";
+import AvailField from "./AvailField";
 import { ChangeEvent, useContext } from "react";
 import RegisterContext from "./RegisterContext";
 
@@ -26,13 +26,15 @@ const LoginDetails = ({ showPassword, togglePassword }: Props) => {
 
   return (
     <Stack spacing={3} sx={{ my: 2 }}>
-      <Availability label="Username" />
-      <Availability label="Email" />
+      <AvailField label="Username" />
+      <AvailField label="Email" />
 
       <FormControl
         fullWidth
         variant="outlined"
-        error={!registerState.password.isValid && payload.password.length !== 0}
+        error={
+          !registerState.password.isValid && registerState.password.msg !== ""
+        }
       >
         <InputLabel htmlFor="register-password">Password</InputLabel>
         <OutlinedInput
@@ -47,7 +49,16 @@ const LoginDetails = ({ showPassword, togglePassword }: Props) => {
               password: value,
             });
 
-            if (value.length < 6) {
+            if (value.length === 0) {
+              setRegisterState({
+                ...registerState,
+                password: {
+                  isValid: false,
+                  msg: "Password is required",
+                  msgColor: "red",
+                },
+              });
+            } else if (value.length < 6) {
               setRegisterState({
                 ...registerState,
                 password: {
