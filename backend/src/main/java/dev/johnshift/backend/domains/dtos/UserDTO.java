@@ -13,6 +13,7 @@ public class UserDTO {
 	private String name;
 	private String veil;
 	private String description;
+	private String veilDescription;
 	private boolean isVerified;
 
 	public static UserDTO of(User user) {
@@ -26,6 +27,7 @@ public class UserDTO {
 		dto.setVeil(user.getVeil());
 		dto.setDescription(user.getDescription());
 		dto.setVerified(user.isVerified());
+		dto.setVeilDescription(user.getVeilDescription());
 
 		return dto;
 	}
