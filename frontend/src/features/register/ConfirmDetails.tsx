@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Stack, TextField } from "@mui/material";
+import { FormControl, Stack, TextField } from "@mui/material";
 
 const ConfirmDetails = () => {
   return (

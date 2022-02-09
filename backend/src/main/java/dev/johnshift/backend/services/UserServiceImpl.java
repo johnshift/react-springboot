@@ -117,6 +117,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 			dto.setVeil(user.getVeil());
 			dto.setDescription(user.getDescription());
 			dto.setVerified(user.isVerified());
+			dto.setVeilDescription(user.getVeilDescription());
 
 			dtos.add(dto);
 
