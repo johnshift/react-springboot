@@ -6,7 +6,9 @@ interface IRegisterContext {
   toggleState: ToggleState;
   payload: RegisterPayload;
   registerState: RegisterState;
+  isLoading: boolean;
 
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
   setStarted: Dispatch<SetStateAction<boolean>>;
   toggleField: (field: ToggledField) => void;
   handleStep: (isNext: boolean) => void;

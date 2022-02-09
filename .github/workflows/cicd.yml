@@ -110,7 +110,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: frontend DEV
-      url: ${{ steps.deploy.outputs.preview-url }}
+      # url: ${{ steps.deploy.outputs.preview-url }}
+      url: https://veils-dev.vercel.app
     outputs:
       preview-url: ${{ steps.deploy.outputs.preview-url }}
     steps:

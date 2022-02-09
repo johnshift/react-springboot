@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useMutation } from "react-query";
 import { BACKEND_API_URL, MSG_SOMETHING_WENT_WRONG } from "../../constants";
 import RegisterContext from "./RegisterContext";
@@ -26,12 +26,18 @@ export const useValidated = (field: keyof RegisterState) => {
     // setAvailabilityState,
     registerState,
     setRegisterState,
+    setIsLoading: registerSetIsLoading,
   } = useContext(RegisterContext);
   const value = payload[field];
 
   const { isLoading, mutateAsync } = useMutation(apiAvailability);
 
+  useEffect(() => {
+    registerSetIsLoading(isLoading);
+  }, [isLoading, registerSetIsLoading]);
+
   const onBlur = async () => {
+    registerSetIsLoading(true);
     if (!value) {
       return;
     }
@@ -59,6 +65,8 @@ export const useValidated = (field: keyof RegisterState) => {
           msgColor: "red",
         },
       }));
+    } finally {
+      registerSetIsLoading(false);
     }
   };
 

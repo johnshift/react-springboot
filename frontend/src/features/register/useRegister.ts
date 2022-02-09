@@ -28,6 +28,8 @@ const useRegister = () => {
     });
   };
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [payload, setPayload] = useState({
     username: "",
     email: "",
@@ -92,14 +94,17 @@ const useRegister = () => {
     });
   };
 
-  const { toastSuccess, toastError } = useToast();
+  const { toastLoading, toastSuccess, toastError } = useToast();
 
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const register = async () => {
+    setIsLoading(true);
+    toastLoading();
     await Promise.all([apiRegister(payload), sleep(300)]).then(
       async ([[success, msg]]) => {
+        setIsLoading(false);
         if (success) {
           toastSuccess(msg);
           handleStep(true);
@@ -129,6 +134,8 @@ const useRegister = () => {
     registerState,
     setRegisterState,
     register,
+    isLoading,
+    setIsLoading,
   };
 };
 
