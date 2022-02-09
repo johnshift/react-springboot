@@ -169,6 +169,7 @@ jobs:
           #       The "HD_" string will be stripped when the app starts.
           #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.
           HD_FRONTEND_URL: https://veils-dev.vercel.app
+          HD_JAVA_MAIL_APP_PASSWORD: ${{ secrets.JAVA_MAIL_APP_PASSWORD }}
 
   e2e-tests:
     name: End-to-End Tests
