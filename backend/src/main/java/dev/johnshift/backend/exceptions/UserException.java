@@ -47,4 +47,8 @@ public class UserException extends RuntimeException {
 		return new UserException("User not found", HttpStatus.NOT_FOUND);
 	}
 
+	public static final UserException invalidVerification() {
+		return new UserException(INVALID_VERIFICATION, HttpStatus.NOT_FOUND);
+	}
+
 }
