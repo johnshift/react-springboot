@@ -17,10 +17,25 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import PersonIcon from "@mui/icons-material/Person";
 
-import { useCallback, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import useToast from "../toast/useToast";
+import SelectEmoji from "./SelectEmoji";
 
-const CreatePostField = () => {
+const CreatePostField = ({
+  postBody,
+  setPostBody,
+  setCursorPos,
+}: {
+  postBody: string;
+  setPostBody: Dispatch<SetStateAction<string>>;
+  setCursorPos: Dispatch<SetStateAction<number>>;
+}) => {
   return (
     <TextField
       label="Create Post"
@@ -31,19 +46,46 @@ const CreatePostField = () => {
       sx={{ mb: 2 }}
       focused
       color="secondary"
+      value={postBody}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+        setPostBody(e.currentTarget.value);
+        setCursorPos(e.target.selectionStart as number);
+      }}
+      onBlur={(e) => {
+        setCursorPos(e.target.selectionStart as number);
+      }}
+      onClick={(e: unknown) => {
+        setCursorPos(
+          (e as ChangeEvent<HTMLInputElement>).target.selectionStart as number
+        );
+      }}
     />
   );
 };
 
-const CreatePostOptions = () => {
+const CreatePostOptions = ({
+  postBody,
+  setPostBody,
+  cursorPos,
+}: {
+  postBody: string;
+  setPostBody: Dispatch<SetStateAction<string>>;
+  cursorPos: number;
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"));
 
   const size = isMobile ? "medium" : "large";
 
+  const [openEmoji, setOpenEmoji] = useState(false);
+
   return (
     <>
-      <IconButton aria-label="select" size={size}>
+      <IconButton
+        aria-label="select emoji"
+        size={size}
+        onClick={() => setOpenEmoji(true)}
+      >
         <FavoriteIcon fontSize="inherit" />
       </IconButton>
       <IconButton aria-label="mention" size={size}>
@@ -55,6 +97,13 @@ const CreatePostOptions = () => {
       <IconButton aria-label="schedule" size={size}>
         <ScheduleIcon fontSize="inherit" />
       </IconButton>
+      <SelectEmoji
+        open={openEmoji}
+        onClose={() => setOpenEmoji(false)}
+        postBody={postBody}
+        setPostBody={setPostBody}
+        cursorPos={cursorPos}
+      />
     </>
   );
 };
@@ -91,6 +140,10 @@ const CreatePostAction = () => {
 };
 
 const CreatePost = () => {
+  const [postBody, setPostBody] = useState("");
+
+  const [cursorPos, setCursorPos] = useState(0);
+
   return (
     <Paper sx={{ width: "clamp(300px, 100%, 480px)" }}>
       <Box
@@ -100,11 +153,19 @@ const CreatePost = () => {
           p: 2,
         }}
       >
-        <CreatePostField />
+        <CreatePostField
+          postBody={postBody}
+          setPostBody={setPostBody}
+          setCursorPos={setCursorPos}
+        />
         <Divider />
         <Box sx={{ display: "flex", justifyContent: "space-between", pt: 2 }}>
           <Box>
-            <CreatePostOptions />
+            <CreatePostOptions
+              postBody={postBody}
+              setPostBody={setPostBody}
+              cursorPos={cursorPos}
+            />
           </Box>
           <Box
             sx={{
