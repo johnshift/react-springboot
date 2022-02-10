@@ -17,7 +17,8 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import PersonIcon from "@mui/icons-material/Person";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import useToast from "../toast/useToast";
 
 const CreatePostField = () => {
   return (
@@ -58,12 +59,31 @@ const CreatePostOptions = () => {
   );
 };
 const CreatePostAction = () => {
-  const [asVeil, setAsVeil] = useState(false);
+  const [asVeil, setAsVeil] = useState(true);
+  const [startPostAs, setStartPostAs] = useState(false);
+  const { toastInfo } = useToast();
+
+  useEffect(() => {
+    if (startPostAs) {
+      const msg = asVeil
+        ? "Posting Anonymously"
+        : "Posting as John Ballesteros";
+      toastInfo(msg);
+    }
+  }, [asVeil]);
 
   return (
     <ButtonGroup size="large" variant="outlined" color="secondary">
-      <Button>Post</Button>
-      <Button size="medium" onClick={() => setAsVeil(!asVeil)}>
+      <Button>Post </Button>
+      <Button
+        size="medium"
+        onClick={() => {
+          if (!startPostAs) {
+            setStartPostAs(true);
+          }
+          setAsVeil(!asVeil);
+        }}
+      >
         {asVeil ? <FingerprintIcon /> : <PersonIcon />}
       </Button>
     </ButtonGroup>

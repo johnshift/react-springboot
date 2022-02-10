@@ -6,6 +6,7 @@ import {
   toastError,
   toastLoading,
   toastLonger,
+  toastInfo,
   toastSuccess,
   toastTimeout,
 } from "./toastSlice";
@@ -48,6 +49,7 @@ const useToast = () => {
     msg,
     severity,
     toastClose: () => dispatch(toastClose()),
+    toastInfo: (infoMsg: string) => dispatch(toastInfo({ msg: infoMsg })),
     toastSuccess: (successMsg: ToastMsgSuccess) =>
       dispatch(toastSuccess({ msg: successMsg })),
     toastError: (errMsg: ToastMsgError) =>
