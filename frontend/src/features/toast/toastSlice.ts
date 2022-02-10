@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { MSG_SOMETHING_WENT_WRONG } from "../../constants";
 import { TOAST_MSG_LOADING, TOAST_MSG_LONGER } from "./constants";
-import { ToastErrorAction, ToastSlice, ToastSuccessAction } from "./types";
+import { ToastMsgAction, ToastSlice } from "./types";
 
 export const initialState: ToastSlice = {
   show: false,
@@ -18,13 +18,19 @@ export const toastSlice = createSlice({
       show: false,
       msg: undefined,
     }),
-    toastSuccess: (state, action: PayloadAction<ToastSuccessAction>) => ({
+    toastInfo: (state, action: PayloadAction<ToastMsgAction>) => ({
+      ...state,
+      msg: action.payload.msg,
+      severity: "info",
+      show: true,
+    }),
+    toastSuccess: (state, action: PayloadAction<ToastMsgAction>) => ({
       ...state,
       msg: action.payload.msg,
       severity: "success",
       show: true,
     }),
-    toastError: (state, action: PayloadAction<ToastErrorAction>) => ({
+    toastError: (state, action: PayloadAction<ToastMsgAction>) => ({
       ...state,
       msg: action.payload.msg,
       severity: "error",
@@ -53,6 +59,7 @@ export const toastSlice = createSlice({
 
 export const {
   toastClose,
+  toastInfo,
   toastSuccess,
   toastError,
   toastLoading,

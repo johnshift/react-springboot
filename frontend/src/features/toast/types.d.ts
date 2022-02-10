@@ -8,21 +8,16 @@ export type ToastMsgLoading =
 
 export type ToastMsgError =
   | typeof MSG_SOMETHING_WENT_WRONG
-  | typeof LOGIN_MSG_INCORRECT
-  | string;
+  | typeof LOGIN_MSG_INCORRECT;
 
-export type ToastMsgSuccess = typeof LOGIN_MSG_OK | string;
+export type ToastMsgSuccess = typeof LOGIN_MSG_OK;
 
 export interface ToastSlice {
   show: boolean;
-  msg: ToastMsgLoading | ToastMsgError | ToastMsgSuccess | undefined;
-  severity: "success" | "error" | "warning";
+  msg: ToastMsgLoading | ToastMsgError | ToastMsgSuccess | string | undefined;
+  severity: "success" | "error" | "warning" | "info";
 }
 
-export interface ToastErrorAction {
-  msg: ToastMsgError;
-}
-
-export interface ToastSuccessAction {
-  msg: ToastMsgSuccess;
+interface ToastMsgAction {
+  msg: ToastMsgError | ToastMsgSuccess | string;
 }
