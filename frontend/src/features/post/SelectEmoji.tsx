@@ -388,8 +388,10 @@ const SelectEmoji = ({
               key={emoji.label}
               color="inherit"
               onClick={() => {
-                const before = postBody.substring(0, cursorPos);
-                const after = postBody.substring(cursorPos, postBody.length);
+                const before = postBody.trim().substring(0, cursorPos);
+                const after = postBody
+                  .trim()
+                  .substring(cursorPos, postBody.length);
                 setPostBody(`${before} ${emoji.symbol} ${after}`);
                 onClose();
               }}

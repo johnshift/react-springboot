@@ -27,6 +27,44 @@ import {
 import useToast from "../toast/useToast";
 import SelectEmoji from "./SelectEmoji";
 
+import { MentionsInput, Mention, MentionItem } from "react-mentions";
+import classNames from "../../styles/mentions.module.css";
+import { useRef } from "react";
+const users = [
+  {
+    id: "walter",
+    display: "Walter White",
+  },
+  {
+    id: "jesse",
+    display: "Jesse Pinkman",
+  },
+  {
+    id: "gus",
+    display: 'Gustavo "Gus" Fring',
+  },
+  {
+    id: "saul",
+    display: "Saul Goodman",
+  },
+  {
+    id: "hank",
+    display: "Hank Schrader",
+  },
+  {
+    id: "skyler",
+    display: "Skyler White",
+  },
+  {
+    id: "mike",
+    display: "Mike Ehrmantraut",
+  },
+  {
+    id: "lydia",
+    display: "Lydìã Rôdarté-Qüayle",
+  },
+];
+
 const CreatePostField = ({
   postBody,
   setPostBody,
@@ -36,30 +74,49 @@ const CreatePostField = ({
   setPostBody: Dispatch<SetStateAction<string>>;
   setCursorPos: Dispatch<SetStateAction<number>>;
 }) => {
+  const [mentions, setMentions] = useState<MentionItem[]>([]);
+
+  const ref = useRef({} as HTMLInputElement);
+
+  const onChangeHandler = (
+    event: { target: { value: string } },
+    newValue: string,
+    newPlainTextValue: string,
+    _mentions: MentionItem[]
+  ) => {
+    console.log("newValue: ", newValue);
+    console.log("newPlainTextValue: ", newPlainTextValue);
+    setMentions(_mentions);
+    setCursorPos((ref.current.selectionStart as number) + mentions.length * 2);
+    return setPostBody(event.target.value);
+  };
+
   return (
-    <TextField
-      label="Create Post"
-      placeholder="Something you want to share?"
-      multiline
-      rows={4}
-      // fullWidth
-      sx={{ mb: 2 }}
-      focused
-      color="secondary"
+    <MentionsInput
       value={postBody}
-      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-        setPostBody(e.currentTarget.value);
-        setCursorPos(e.target.selectionStart as number);
-      }}
+      onChange={onChangeHandler}
+      className="mentions"
+      classNames={classNames}
+      placeholder="use @ to mention"
+      inputRef={ref}
       onBlur={(e) => {
-        setCursorPos(e.target.selectionStart as number);
+        setCursorPos((e.target.selectionStart as number) + mentions.length * 2);
       }}
       onClick={(e: unknown) => {
         setCursorPos(
-          (e as ChangeEvent<HTMLInputElement>).target.selectionStart as number
+          ((e as ChangeEvent<HTMLInputElement>).target
+            .selectionStart as number) +
+            mentions.length * 2
         );
       }}
-    />
+    >
+      <Mention
+        markup="^__display__^"
+        trigger="@"
+        data={users}
+        className={classNames.mentions__mention}
+      />
+    </MentionsInput>
   );
 };
 
