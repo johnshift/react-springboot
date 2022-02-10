@@ -29,7 +29,6 @@ import SelectEmoji from "./SelectEmoji";
 
 import { MentionsInput, Mention, MentionItem } from "react-mentions";
 import classNames from "../../styles/mentions.module.css";
-import { useRef } from "react";
 const users = [
   {
     id: "walter",
@@ -76,8 +75,6 @@ const CreatePostField = ({
 }) => {
   const [mentions, setMentions] = useState<MentionItem[]>([]);
 
-  const ref = useRef({} as HTMLInputElement);
-
   const onChangeHandler = (
     event: { target: { value: string } },
     newValue: string,
@@ -87,7 +84,6 @@ const CreatePostField = ({
     console.log("newValue: ", newValue);
     console.log("newPlainTextValue: ", newPlainTextValue);
     setMentions(_mentions);
-    setCursorPos((ref.current.selectionStart as number) + mentions.length * 2);
     return setPostBody(event.target.value);
   };
 
@@ -98,7 +94,6 @@ const CreatePostField = ({
       className="mentions"
       classNames={classNames}
       placeholder="use @ to mention"
-      inputRef={ref}
       onBlur={(e) => {
         setCursorPos((e.target.selectionStart as number) + mentions.length * 2);
       }}
@@ -164,7 +159,7 @@ const CreatePostOptions = ({
     </>
   );
 };
-const CreatePostAction = () => {
+const CreatePostAction = ({ postBody }: { postBody: string }) => {
   const [asVeil, setAsVeil] = useState(true);
   const [startPostAs, setStartPostAs] = useState(false);
   const { toastInfo } = useToast();
@@ -180,7 +175,7 @@ const CreatePostAction = () => {
 
   return (
     <ButtonGroup size="large" variant="outlined" color="secondary">
-      <Button>Post </Button>
+      <Button onClick={() => console.log("postBody =", postBody)}>Post </Button>
       <Button
         size="medium"
         onClick={() => {
@@ -230,7 +225,7 @@ const CreatePost = () => {
               justifyContent: "end",
             }}
           >
-            <CreatePostAction />
+            <CreatePostAction postBody={postBody} />
           </Box>
         </Box>
       </Box>
