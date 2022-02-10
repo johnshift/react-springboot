@@ -4,6 +4,7 @@ import SidebarLayout from "../common/components/layouts/SidebarLayout";
 import { BACKEND_API_URL } from "../constants";
 
 import LoginFormDialog from "../features/login/LoginFormDialog";
+import CreatePost from "../features/post/CreatePost";
 import useToast from "../features/toast/useToast";
 import { useAppDispatch, useAppSelector } from "../store";
 import { closeLoginModal } from "../store/globalSlice";
@@ -19,6 +20,12 @@ const Home = () => {
 
   return (
     <SidebarLayout>
+      <CreatePost />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <h1>Home Page</h1>
       <p>BACKEND API = {BACKEND_API_URL}</p>
       <Link href="/demo" passHref>

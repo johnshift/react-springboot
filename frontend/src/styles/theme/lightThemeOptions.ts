@@ -7,7 +7,7 @@ const lightThemeOptions: ThemeOptions = {
       main: "#b71c1c",
     },
     secondary: {
-      main: "#d32f2f",
+      main: "#757575",
     },
   },
   shape: {

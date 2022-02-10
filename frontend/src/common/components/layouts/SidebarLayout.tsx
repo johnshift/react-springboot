@@ -12,28 +12,29 @@ import {
   MenuList,
   Paper,
   Typography,
+  Avatar,
 } from "@mui/material";
 
-import PersonIcon from "@mui/icons-material/Person";
-import BlurOnIcon from "@mui/icons-material/BlurOn";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import FingerprintIcon from "@mui/icons-material/Fingerprint";
 
 const UpperSidebar = () => (
   <Box sx={{ color: "#757575" }}>
     <MenuItem sx={{ height: "70px" }}>
       <ListItemIcon>
-        <PersonIcon fontSize="large" />
+        {/* <PersonIcon fontSize="large" /> */}
+        <Avatar alt="John Ballesteros">JB</Avatar>
       </ListItemIcon>
       <ListItemText sx={{ paddingLeft: 2 }}>
-        <Typography variant="h6">Profile</Typography>
+        <Typography variant="h6">John Ballesteros</Typography>
       </ListItemText>
     </MenuItem>
     <MenuItem sx={{ height: "70px" }}>
       <ListItemIcon>
-        <BlurOnIcon fontSize="large" />
+        <FingerprintIcon fontSize="large" />
       </ListItemIcon>
       <ListItemText sx={{ paddingLeft: 2 }}>
-        <Typography variant="h6">Veil</Typography>
+        <Typography variant="h6">Veil Profile</Typography>
       </ListItemText>
     </MenuItem>
   </Box>
@@ -41,13 +42,13 @@ const UpperSidebar = () => (
 
 const RecentActivities = () => (
   <>
-    <Accordion defaultExpanded>
+    <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ height: "70px" }}>
         <Typography variant="h6" color="#757575">
           Recent Activity
         </Typography>
       </AccordionSummary>
-      <AccordionDetails>
+      <AccordionDetails sx={{ maxHeight: "200px", overflow: "auto" }}>
         <Typography>
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </Typography>
@@ -64,13 +65,13 @@ const RecentActivities = () => (
 
 const ConfirmRequests = () => (
   <Box>
-    <Accordion defaultExpanded>
+    <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ height: "70px" }}>
         <Typography variant="h6" color="#757575">
           Confirm Requests
         </Typography>
       </AccordionSummary>
-      <AccordionDetails>
+      <AccordionDetails sx={{ maxHeight: "200px", overflow: "auto" }}>
         <Typography>
           Lorem ipsum dolor sit amet consectetur adipisicing elit.
         </Typography>
@@ -107,25 +108,51 @@ interface Props {
 
 const SidebarLayout = ({ children }: Props) => {
   return (
-    <Grid container>
-      <Grid
-        item
-        sm={4}
-        sx={{
-          paddingX: 2,
-          // border: "1px solid red",
-          display: {
-            xs: "none",
-            sm: "block",
-          },
-        }}
-      >
-        <Sidebar />
+    <>
+      <Grid container>
+        <Grid
+          item
+          sx={{
+            width: "260px",
+            // border: "1px solid red",
+            display: {
+              xs: "none",
+              sm: "block",
+            },
+            position: "fixed",
+          }}
+        >
+          <Sidebar />
+        </Grid>
+        <Grid
+          item
+          sm={5}
+          md={4}
+          sx={{
+            paddingX: 2,
+            // border: "1px solid red",
+            display: {
+              xs: "none",
+              sm: "block",
+            },
+          }}
+        />
+        <Grid
+          item
+          sm={7}
+          md={8}
+          sx={{
+            // border: "1px solid green",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          {children}
+        </Grid>
       </Grid>
-      <Grid item sm={8}>
-        {children}
-      </Grid>
-    </Grid>
+    </>
   );
 };
 

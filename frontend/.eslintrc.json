@@ -13,14 +13,14 @@
 				]
 			}
 		],
-		"use-encapsulation/prefer-custom-hooks": [
-			"error",
-			{
-				"allow": [
-					"useContext"
-				]
-			}
-		]
+		// "use-encapsulation/prefer-custom-hooks": [
+		// 	"error",
+		// 	{
+		// 		"allow": [
+		// 			"useContext"
+		// 		]
+		// 	}
+		// ]
 	}
 	
 }
