@@ -9,6 +9,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  backend-dev:
+    if: github.event.pull_request.merged
+    name: Backend PRODUCTION
+    runs-on: ubuntu-latest
+    environment:
+      name: backend PRODUCTION
+      url: https://veils.herokuapp.com
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract-branch.outputs.branch }}
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_app_name: veils-dev
+          appdir: backend
+          branch: ${{ steps.extract-branch.outputs.branch }}
+        env:
+          # note: "HD_" is needed to specify what to include in the deployed heroku app.
+          #       However, it is only needed to differentiate from other environment variables.
+          #       The "HD_" string will be stripped when the app starts.
+          #       Therefore you need to use "FRONTEND_URL" when accessing from inside the app.
+          HD_FRONTEND_URL: https://veils-dev.vercel.app
+          HD_JAVA_MAIL_APP_PASSWORD: ${{ secrets.JAVA_MAIL_APP_PASSWORD }}
+
   frontend-production:
     if: github.event.pull_request.merged
     name: Frontend PRODUCTION
@@ -56,4 +88,4 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           scope: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-args: "--prod"
+          vercel-args: "--prod -b NEXT_PUBLIC_BACKEND_API_URL=https://veils.herokuapp.com/api/v1"
