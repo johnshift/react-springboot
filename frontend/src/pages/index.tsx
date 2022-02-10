@@ -1,5 +1,6 @@
 import { Button, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
+import SidebarLayout from "../common/components/layouts/SidebarLayout";
 import { BACKEND_API_URL } from "../constants";
 
 import LoginFormDialog from "../features/login/LoginFormDialog";
@@ -17,7 +18,7 @@ const Home = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <div>
+    <SidebarLayout>
       <h1>Home Page</h1>
       <p>BACKEND API = {BACKEND_API_URL}</p>
       <Link href="/demo" passHref>
@@ -46,18 +47,6 @@ const Home = () => {
       <br />
       <button onClick={toastLoading}>toast loading home-page</button>
 
-      {/* <div style={{ position: "fixed", bottom: 10, right: 10 }}>
-        {isLoggedIn ? (
-          <Button variant="contained" onClick={() => dispatch(clearUserInfo())}>
-            logout
-          </Button>
-        ) : (
-          <Button variant="contained" onClick={openLogin}>
-            show login
-          </Button>
-        )}
-      </div> */}
-
       <br />
       <br />
       <br />
@@ -73,7 +62,7 @@ const Home = () => {
         open={showLoginModal}
         onClose={() => dispatch(closeLoginModal())}
       />
-    </div>
+    </SidebarLayout>
   );
 };
 
