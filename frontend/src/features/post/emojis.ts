@@ -1,14 +1,3 @@
-import {
-  Box,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
-import { Dispatch, SetStateAction } from "react";
-
 export const emojis = [
   {
     symbol: "🙂",
@@ -351,58 +340,3 @@ export const emojis = [
     label: "woman gesturing NO",
   },
 ];
-
-interface Props {
-  open: boolean;
-  onClose: () => void;
-  postBody: string;
-  setPostBody: Dispatch<SetStateAction<string>>;
-  cursorPos: number;
-}
-
-const SelectEmoji = ({
-  open,
-  onClose,
-  postBody,
-  setPostBody,
-  cursorPos,
-}: Props) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.only("xs"));
-
-  const gridTemplate = `repeat(${isMobile ? "4" : "5"}, 1fr)`;
-
-  return (
-    <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Select Emoji</DialogTitle>
-      <DialogContent>
-        <Box
-          display="grid"
-          gridTemplateColumns={gridTemplate}
-          gap={2}
-          sx={{ maxHeight: "300px", overflow: "auto" }}
-        >
-          {emojis.map((emoji) => (
-            <IconButton
-              aria-label={emoji.label}
-              key={emoji.label}
-              color="inherit"
-              onClick={() => {
-                const before = postBody.trim().substring(0, cursorPos);
-                const after = postBody
-                  .trim()
-                  .substring(cursorPos, postBody.length);
-                setPostBody(`${before} ${emoji.symbol} ${after}`);
-                onClose();
-              }}
-            >
-              {emoji.symbol}
-            </IconButton>
-          ))}
-        </Box>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
-export default SelectEmoji;

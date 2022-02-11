@@ -1,5 +1,5 @@
 .mentions {
-  margin: 1em 0;
+  margin-bottom: 15px;
 }
 
 .mentions--singleLine .mentions__control {
@@ -22,7 +22,7 @@
   letter-spacing: 0.00938em;
   box-sizing: border-box;
 
-  /* height: 100px; */
+  min-height: 120px;
 }
 .mentions--multiLine .mentions__highlighter {
   border: 1px solid transparent;
@@ -49,12 +49,12 @@
 }
 
 .mentions__suggestions__item {
-  padding: 5px 15px;
+  padding: 15px 15px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .mentions__suggestions__item--focused {
-  background-color: #cee4e5;
+  background-color: #e0e0e0;
 }
 
 .mentions__mention {

@@ -12,7 +12,7 @@
 					"!@mui/material/test-utils/*"
 				]
 			}
-		],
+		]
 		// "use-encapsulation/prefer-custom-hooks": [
 		// 	"error",
 		// 	{
