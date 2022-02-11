@@ -12,6 +12,7 @@ import {
 
 import { MentionItem, SuggestionDataItem } from "react-mentions";
 
+export type PostVisibility = "Only Self" | "Circle" | "Public";
 interface ICreatePostContext {
   postBody: string;
   setPostBody: Dispatch<SetStateAction<string>>;
@@ -29,6 +30,9 @@ interface ICreatePostContext {
   setMentions: Dispatch<SetStateAction<MentionItem[]>>;
   mentionsHint: SuggestionDataItem[];
 
+  visibility: PostVisibility;
+  setVisibility: Dispatch<SetStateAction<PostVisibility>>;
+
   isMobile: boolean;
 }
 
@@ -44,6 +48,7 @@ export function CreatePostProvider({ children }: { children: ReactNode }) {
   const [cursorPos, setCursorPos] = useState(0);
 
   const [asVeil, setAsVeil] = useState(false);
+  const [visibility, setVisibility] = useState<PostVisibility>("Public");
 
   const [mentions, setMentions] = useState<MentionItem[]>([]);
   const [mentionsHint] = useState<ICreatePostContext["mentionsHint"]>([
@@ -80,6 +85,8 @@ export function CreatePostProvider({ children }: { children: ReactNode }) {
         setMentions,
         mentionsHint,
         isMobile,
+        visibility,
+        setVisibility,
       }}
     >
       {children}
