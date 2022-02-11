@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   Box,
@@ -16,15 +16,23 @@ import {
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import TagFacesIcon from "@mui/icons-material/TagFaces";
 import useCreatePost from "./CreatePostContext";
-import { emojis } from "./emojis";
 import { MentionItem } from "react-mentions";
+import { emojis as Emojis } from "./emojis";
 
 interface DialogDisclosure {
   open: boolean;
   onClose: () => void;
 }
 
-const EmojiDialog = ({ open, onClose }: DialogDisclosure) => {
+const EmojiDialog = ({
+  open,
+  onClose,
+  emojis,
+}: {
+  open: boolean;
+  onClose: () => void;
+  emojis: typeof Emojis;
+}) => {
   const { isMobile, cursorPos, setCursorPos, postBody, setPostBody } =
     useCreatePost();
   const gridTemplate = `repeat(${isMobile ? "4" : "5"}, 1fr)`;
@@ -67,8 +75,15 @@ const EmojiDialog = ({ open, onClose }: DialogDisclosure) => {
     </Dialog>
   );
 };
+const MemoizedEmojiDialog = React.memo(EmojiDialog);
 
-const MentionDialog = ({ open, onClose }: DialogDisclosure) => {
+const MentionDialog = ({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) => {
   const {
     mentions,
     setMentions,
@@ -161,7 +176,11 @@ const CreatePostOptions = () => {
       <IconButton aria-label="schedule" size={iconSize}>
         <ScheduleIcon fontSize="inherit" />
       </IconButton>
-      <EmojiDialog open={openEmoji} onClose={() => setOpenEmoji(false)} />
+      <MemoizedEmojiDialog
+        open={openEmoji}
+        onClose={() => setOpenEmoji(false)}
+        emojis={Emojis}
+      />
       <MentionDialog
         open={openMentions}
         onClose={() => setOpenMentions(false)}
