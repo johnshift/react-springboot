@@ -1,10 +1,12 @@
-import { Button, Link as MuiLink } from "@mui/material";
+import { Link as MuiLink } from "@mui/material";
 import Link from "next/link";
+import { useRef } from "react";
 import SidebarLayout from "../common/components/layouts/SidebarLayout";
 import { BACKEND_API_URL } from "../constants";
 
 import LoginFormDialog from "../features/login/LoginFormDialog";
 import CreatePost from "../features/post/CreatePost";
+import { CreatePostProvider } from "../features/post/CreatePostContext";
 import useToast from "../features/toast/useToast";
 import { useAppDispatch, useAppSelector } from "../store";
 import { closeLoginModal } from "../store/globalSlice";
@@ -18,15 +20,25 @@ const Home = () => {
   const { showLoginModal } = useAppSelector((state) => state.global);
   const dispatch = useAppDispatch();
 
+  const ref = useRef<HTMLTextAreaElement>(null);
+
   return (
     <SidebarLayout>
-      <CreatePost />
+      <CreatePostProvider>
+        <CreatePost />
+      </CreatePostProvider>
       <br />
       <br />
       <br />
       <br />
       <br />
       <h1>Home Page</h1>
+      <textarea
+        ref={ref}
+        placeholder="fuck you"
+        onChange={() => console.log("ref.current =", ref.current)}
+      />
+      <button onClick={() => ref.current?.focus()}>focus textarea</button>
       <p>BACKEND API = {BACKEND_API_URL}</p>
       <Link href="/demo" passHref>
         <MuiLink underline="hover" color="inherit">
