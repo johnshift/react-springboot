@@ -5,24 +5,28 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   IconButton,
+  InputLabel,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   SvgIcon,
 } from "@mui/material";
 
-import ScheduleIcon from "@mui/icons-material/Schedule";
 import TagFacesIcon from "@mui/icons-material/TagFaces";
-import useCreatePost from "./CreatePostContext";
+
+import PublicIcon from "@mui/icons-material/Public";
+import GroupsIcon from "@mui/icons-material/Groups";
+import VpnLockIcon from "@mui/icons-material/VpnLock";
+
+import useCreatePost, { PostVisibility } from "./CreatePostContext";
 import { MentionItem } from "react-mentions";
 import { emojis as Emojis } from "./emojis";
-
-interface DialogDisclosure {
-  open: boolean;
-  onClose: () => void;
-}
 
 const EmojiDialog = ({
   open,
@@ -146,13 +150,65 @@ const MentionDialog = ({
   );
 };
 
+const PostVisibilityDialog = ({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) => {
+  const { visibility, setVisibility } = useCreatePost();
+
+  const handleSelect = (e: SelectChangeEvent) => {
+    setVisibility(e.target.value as PostVisibility);
+    onClose();
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
+      // fullWidth
+      // sx={{ maxWidth: "300px" }}
+    >
+      {/* <DialogTitle>Set Post Visibility</DialogTitle> */}
+      <DialogContent>
+        <br />
+        <FormControl fullWidth sx={{ minWidth: "200px" }}>
+          <InputLabel id="set-visibility">Select Visibility</InputLabel>
+          <Select
+            labelId="set-visibility"
+            id="set-visibility-select"
+            label="Select Visibility"
+            value={visibility}
+            onChange={handleSelect}
+          >
+            <MenuItem value="Public">Public</MenuItem>
+            <MenuItem value="Circle">Circle</MenuItem>
+            <MenuItem value="Only Self">Only Self</MenuItem>
+          </Select>
+        </FormControl>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const CreatePostOptions = () => {
-  const { isMobile } = useCreatePost();
+  const { isMobile, visibility } = useCreatePost();
 
   const [openEmoji, setOpenEmoji] = useState(false);
   const [openMentions, setOpenMentions] = useState(false);
+  const [openVisibility, setOpenVisibility] = useState(false);
 
   const iconSize = isMobile ? "medium" : "large";
+
+  let visibilityIcon = <PublicIcon fontSize="inherit" />;
+  if (visibility === "Circle") {
+    visibilityIcon = <GroupsIcon fontSize="inherit" />;
+  } else if (visibility === "Only Self") {
+    visibilityIcon = <VpnLockIcon fontSize="inherit" />;
+  }
 
   return (
     <>
@@ -173,8 +229,12 @@ const CreatePostOptions = () => {
           <path d="M20 12a8 8 0 10-3.562 6.657l1.11 1.664A9.953 9.953 0 0112 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10v1.5a3.5 3.5 0 01-6.396 1.966A5 5 0 1115 8h2v5.5a1.5 1.5 0 003 0V12zm-8-3a3 3 0 100 6 3 3 0 000-6z" />
         </SvgIcon>
       </IconButton>
-      <IconButton aria-label="schedule" size={iconSize}>
-        <ScheduleIcon fontSize="inherit" />
+      <IconButton
+        aria-label="schedule"
+        size={iconSize}
+        onClick={() => setOpenVisibility(true)}
+      >
+        {visibilityIcon}
       </IconButton>
       <MemoizedEmojiDialog
         open={openEmoji}
@@ -184,6 +244,10 @@ const CreatePostOptions = () => {
       <MentionDialog
         open={openMentions}
         onClose={() => setOpenMentions(false)}
+      />
+      <PostVisibilityDialog
+        open={openVisibility}
+        onClose={() => setOpenVisibility(false)}
       />
     </>
   );
