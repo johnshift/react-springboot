@@ -23,9 +23,10 @@ import TagFacesIcon from "@mui/icons-material/TagFaces";
 import PublicIcon from "@mui/icons-material/Public";
 import VpnLockIcon from "@mui/icons-material/VpnLock";
 
-import useCreatePost, { PostVisibility } from "./CreatePostContext";
+import useCreatePost from "./CreatePostContext";
 import { MentionItem } from "react-mentions";
 import { emojis as Emojis } from "./emojis";
+import { PostVisibility } from "./types";
 
 const EmojiDialog = ({
   open,

@@ -42,7 +42,7 @@ const UpperSidebar = () => (
 
 const RecentActivities = () => (
   <>
-    <Accordion>
+    <Accordion elevation={4}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ height: "70px" }}>
         <Typography variant="h6" color="#757575">
           Recent Activity
@@ -65,7 +65,7 @@ const RecentActivities = () => (
 
 const ConfirmRequests = () => (
   <Box>
-    <Accordion>
+    <Accordion elevation={4}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ height: "70px" }}>
         <Typography variant="h6" color="#757575">
           Confirm Requests
@@ -88,7 +88,7 @@ const ConfirmRequests = () => (
 
 const Sidebar = () => (
   <>
-    <Paper>
+    <Paper elevation={4}>
       <MenuList>
         <UpperSidebar />
       </MenuList>
@@ -113,7 +113,7 @@ const SidebarLayout = ({ children }: Props) => {
         <Grid
           item
           sx={{
-            width: "260px",
+            width: "280px",
             // border: "1px solid red",
             display: {
               xs: "none",
@@ -146,7 +146,10 @@ const SidebarLayout = ({ children }: Props) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
+            alignItems: "center",
             width: "100%",
+            // width: "clamp(300px, 100%, 300px)",
+            // width: "380px",
           }}
         >
           {children}

@@ -180,8 +180,8 @@ export const emojis = [
     label: "angry face with horns",
   },
   {
-    symbol: "💖",
-    label: "sparkling heart",
+    symbol: "❤️",
+    label: "heart",
   },
   {
     symbol: "💔",

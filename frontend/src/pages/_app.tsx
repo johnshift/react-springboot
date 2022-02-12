@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { AppProps } from "next/app";
 
-import "../styles/global.css";
+// import "../styles/global.css";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import {
@@ -9,7 +9,6 @@ import {
   CssBaseline,
   createTheme,
   Container,
-  Box,
 } from "@mui/material";
 import createEmotionCache from "../utils/createEmotionCache";
 import lightThemeOptions from "../styles/theme/lightThemeOptions";
@@ -22,7 +21,10 @@ import { Provider } from "react-redux";
 import store, { persistor } from "../store";
 
 import Toast from "../features/toast";
+
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+
 import Nav from "../common/components/nav";
 import { PersistGate } from "redux-persist/integration/react";
 
@@ -46,6 +48,7 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <QueryClientProvider client={queryClient}>
+              <ReactQueryDevtools initialIsOpen={false} />
               <Nav />
               <Container maxWidth="md" sx={{ marginTop: "75px" }}>
                 {/* <Box sx={{ paddingX: "30px" }}> */}

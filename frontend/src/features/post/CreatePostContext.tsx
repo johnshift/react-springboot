@@ -1,40 +1,20 @@
 import { useMediaQuery, useTheme } from "@mui/material";
+import axios, { AxiosError } from "axios";
+import { createContext, ReactNode, useContext, useState, useRef } from "react";
+import { SuggestionDataItem } from "react-mentions";
+import { useMutation } from "react-query";
+import { MSG_SOMETHING_WENT_WRONG } from "../../constants";
+import { useAppSelector } from "../../store";
+import useToast from "../toast/useToast";
+import { apiCreatePost } from "./api";
+
 import {
-  createContext,
-  ReactNode,
-  useContext,
-  useState,
-  Dispatch,
-  SetStateAction,
-  useRef,
-  RefObject,
-} from "react";
-
-import { MentionItem, SuggestionDataItem } from "react-mentions";
-
-export type PostVisibility = "Only Self" | "Circle" | "Public";
-interface ICreatePostContext {
-  postBody: string;
-  setPostBody: Dispatch<SetStateAction<string>>;
-  postBodyPlain: string;
-  setPostBodyPlain: Dispatch<SetStateAction<string>>;
-  postBodyRef: RefObject<HTMLTextAreaElement>;
-
-  cursorPos: number;
-  setCursorPos: Dispatch<SetStateAction<number>>;
-
-  asVeil: boolean;
-  setAsVeil: Dispatch<SetStateAction<boolean>>;
-
-  mentions: MentionItem[];
-  setMentions: Dispatch<SetStateAction<MentionItem[]>>;
-  mentionsHint: SuggestionDataItem[];
-
-  visibility: PostVisibility;
-  setVisibility: Dispatch<SetStateAction<PostVisibility>>;
-
-  isMobile: boolean;
-}
+  PostVisibility,
+  ICreatePostContext,
+  CreatePostResponse,
+  CreatePostRequest,
+  CreatePostParams,
+} from "./types";
 
 const CreatePostContext = createContext<ICreatePostContext>(
   {} as ICreatePostContext
@@ -50,8 +30,8 @@ export function CreatePostProvider({ children }: { children: ReactNode }) {
   const [asVeil, setAsVeil] = useState(false);
   const [visibility, setVisibility] = useState<PostVisibility>("Public");
 
-  const [mentions, setMentions] = useState<MentionItem[]>([]);
-  const [mentionsHint] = useState<ICreatePostContext["mentionsHint"]>([
+  const [mentions, setMentions] = useState<SuggestionDataItem[]>([]);
+  const [mentionsHint, setMentionsHint] = useState<SuggestionDataItem[]>([
     {
       id: "john",
       display: "John Ballesteros",
@@ -69,9 +49,38 @@ export function CreatePostProvider({ children }: { children: ReactNode }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"));
 
+  const { id: userId } = useAppSelector((state) => state.userInfo);
+
+  const { toastError } = useToast();
+
+  const createPostMutation = useMutation<
+    CreatePostResponse,
+    Error,
+    CreatePostParams
+  >(async ({ payload, jwtToken }) => apiCreatePost(payload, jwtToken), {
+    onSuccess: (data: CreatePostResponse) => {
+      return console.log("mutation onSuccess data =", data);
+    },
+    onError: (error: Error) => {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        toastError(error.response?.data.message);
+        return;
+      }
+      toastError(MSG_SOMETHING_WENT_WRONG);
+    },
+  });
+
+  const createPost = () => {
+    createPostMutation.mutate({
+      payload: { userId, postBody, asVeil, mentions },
+      jwtToken: localStorage.getItem("authorization") as string,
+    });
+  };
+
   return (
     <CreatePostContext.Provider
       value={{
+        // isLoading,
         postBody,
         setPostBody,
         postBodyPlain,
@@ -84,9 +93,11 @@ export function CreatePostProvider({ children }: { children: ReactNode }) {
         mentions,
         setMentions,
         mentionsHint,
+        setMentionsHint,
         isMobile,
         visibility,
         setVisibility,
+        createPost,
       }}
     >
       {children}

@@ -30,7 +30,10 @@ export const useValidated = (field: keyof RegisterState) => {
   } = useContext(RegisterContext);
   const value = payload[field];
 
-  const { isLoading, mutateAsync } = useMutation(apiAvailability);
+  const { isLoading, mutateAsync } = useMutation(
+    [field, value],
+    apiAvailability
+  );
 
   useEffect(() => {
     registerSetIsLoading(isLoading);
