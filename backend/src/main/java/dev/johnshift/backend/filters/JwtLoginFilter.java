@@ -80,6 +80,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 		UserDTO user = userService.findByUsername(username);
 
 		AfterLoginDTO resp = new AfterLoginDTO();
+		resp.setId(user.getId());
 		resp.setName(user.getName());
 		resp.setDescription(user.getDescription());
 		resp.setUsername(user.getUsername());
