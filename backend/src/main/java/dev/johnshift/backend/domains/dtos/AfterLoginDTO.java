@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AfterLoginDTO {
+	private int id;
 	private String name;
 	private String description;
 	private String username;
