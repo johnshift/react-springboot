@@ -1,15 +1,25 @@
 import { Box, Divider, Paper } from "@mui/material";
 
-import { IPostContext } from "./types";
+import { IPost } from "./types";
 import PostHeader from "./PostHeader";
 import { PostContext } from "./PostContext";
 import PostBody from "./PostBody";
 import PostFeedback from "./PostFeedback";
 import PostActions from "./PostActions";
+import PostComments from "./PostComments";
+import { useState } from "react";
 
-const Post = (props: IPostContext) => {
+const Post = (props: IPost) => {
+  const [showComments, setShowComments] = useState(false);
+
   return (
-    <PostContext.Provider value={{ ...props }}>
+    <PostContext.Provider
+      value={{
+        ...props,
+        showComments,
+        setShowComments,
+      }}
+    >
       <Paper
         elevation={4}
         sx={{
@@ -21,23 +31,21 @@ const Post = (props: IPostContext) => {
             // border: "1px solid green",
             display: "flex",
             flexDirection: "column",
-            p: 2,
-            pb: 1,
+            px: 2,
+            pt: 2,
           }}
         >
           <PostHeader />
           <PostBody />
           <Divider />
-          <Box
-            sx={{
-              // border: "1px solid red",
-              flexDirection: "column",
-            }}
-          >
-            <PostFeedback />
-            <Divider />
-            <PostActions />
-          </Box>
+
+          <PostFeedback />
+
+          <Divider />
+
+          <PostActions />
+
+          {showComments && <PostComments />}
         </Box>
       </Paper>
     </PostContext.Provider>
