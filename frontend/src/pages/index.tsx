@@ -21,7 +21,7 @@ const Home = () => {
         <CreatePost />
       </CreatePostProvider>
 
-      <Post body={rawMsg} />
+      <Post body={rawMsg} id={0} name={""} ts={""} visibility={"PUBLIC"} />
 
       <LoginFormDialog
         open={showLoginModal}

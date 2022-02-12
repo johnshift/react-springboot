@@ -19,12 +19,16 @@ export interface CreatePostResponse {
   msg: string;
 }
 
-export interface IPostContext {
+export interface IPost {
   id: number;
   name: string;
   ts: string;
   body: string;
   visibility: "PUBLIC" | "CIRCLE" | "ONLY_SELF";
+}
+export interface IPostContext {
+  showComments: boolean;
+  setShowComments: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface ICreatePostContext {
