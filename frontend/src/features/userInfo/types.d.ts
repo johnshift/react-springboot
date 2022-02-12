@@ -1,4 +1,5 @@
 interface UserInfoSlice {
+  id: number | null;
   name: string | null;
   username: string | null;
   description: string | null;
@@ -7,6 +8,7 @@ interface UserInfoSlice {
 }
 
 interface AfterLoginAction {
+  id: number | null;
   name: string | null;
   username: string | null;
   description: string | null;

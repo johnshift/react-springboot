@@ -8,7 +8,7 @@ import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import PersonIcon from "@mui/icons-material/Person";
 
 const CreatePostAction = () => {
-  const { asVeil, setAsVeil, postBody } = useCreatePost();
+  const { asVeil, setAsVeil, createPost } = useCreatePost();
   const { toastInfo } = useToast();
 
   const handlePostAs = useCallback(() => {
@@ -19,7 +19,7 @@ const CreatePostAction = () => {
 
   return (
     <ButtonGroup size="large" variant="outlined" color="secondary">
-      <Button>Post</Button>
+      <Button onClick={createPost}>Post</Button>
       <Button size="medium" onClick={handlePostAs}>
         {asVeil ? <FingerprintIcon /> : <PersonIcon />}
       </Button>

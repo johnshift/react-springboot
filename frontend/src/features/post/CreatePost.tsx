@@ -17,7 +17,14 @@ const CreatePost = () => {
 
   return (
     <>
-      <Paper sx={{ width: "clamp(300px, 100%, 480px)" }}>
+      <Paper
+        elevation={4}
+        sx={{
+          width: "clamp(300px, 100%, 500px)",
+          // width: "100%",
+          mb: 3,
+        }}
+      >
         <Box
           sx={{
             display: "flex",

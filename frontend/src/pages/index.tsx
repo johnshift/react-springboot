@@ -1,81 +1,27 @@
-import { Link as MuiLink } from "@mui/material";
-import Link from "next/link";
-import { useRef } from "react";
 import SidebarLayout from "../common/components/layouts/SidebarLayout";
-import { BACKEND_API_URL } from "../constants";
 
 import LoginFormDialog from "../features/login/LoginFormDialog";
 import CreatePost from "../features/post/CreatePost";
 import { CreatePostProvider } from "../features/post/CreatePostContext";
-import useToast from "../features/toast/useToast";
 import { useAppDispatch, useAppSelector } from "../store";
 import { closeLoginModal } from "../store/globalSlice";
 
-const Home = () => {
-  const { toastLoading } = useToast();
+import Post from "../features/post/Post";
 
-  const { name, description, username, verified, isLoggedIn } = useAppSelector(
-    (state) => state.userInfo
-  );
+const Home = () => {
   const { showLoginModal } = useAppSelector((state) => state.global);
   const dispatch = useAppDispatch();
 
-  const ref = useRef<HTMLTextAreaElement>(null);
+  const rawMsg =
+    "^my lab^ i love you 🥰 🥰 🥰\n\nRemember I'm always here  ... \n\nWhenever you're ✨horny✨ \n\n👅 💦 👍";
 
   return (
     <SidebarLayout>
       <CreatePostProvider>
         <CreatePost />
       </CreatePostProvider>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <h1>Home Page</h1>
-      <textarea
-        ref={ref}
-        placeholder="fuck you"
-        onChange={() => console.log("ref.current =", ref.current)}
-      />
-      <button onClick={() => ref.current?.focus()}>focus textarea</button>
-      <p>BACKEND API = {BACKEND_API_URL}</p>
-      <Link href="/demo" passHref>
-        <MuiLink underline="hover" color="inherit">
-          /demo
-        </MuiLink>
-      </Link>
-      <br />
-      <br />
-      <br />
-      <Link href="/anonymous1" passHref>
-        <MuiLink underline="hover" color="inherit">
-          /anonymous1
-        </MuiLink>
-      </Link>
-      <br />
-      <br />
-      <br />
-      <Link href="/asdf" passHref>
-        <MuiLink underline="hover" color="inherit">
-          /asdf
-        </MuiLink>
-      </Link>
-      <br />
-      <br />
-      <br />
-      <button onClick={toastLoading}>toast loading home-page</button>
 
-      <br />
-      <br />
-      <br />
-      <div>
-        <p>name = {name}</p>
-        <p>description = {description}</p>
-        <p>username = {username}</p>
-        <p>isVerified = {verified.toString()}</p>
-        <p>isLoggedIn = {isLoggedIn.toString()}</p>
-      </div>
+      <Post body={rawMsg} />
 
       <LoginFormDialog
         open={showLoginModal}
