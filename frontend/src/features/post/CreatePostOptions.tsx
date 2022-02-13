@@ -25,7 +25,7 @@ import VpnLockIcon from "@mui/icons-material/VpnLock";
 
 import useCreatePost from "./CreatePostContext";
 import { MentionItem } from "react-mentions";
-import { emojis as Emojis } from "./emojis";
+import { emojis as Emojis } from "../../common/components/emoji-popover/emojis";
 import { PostVisibility } from "./types";
 
 const EmojiDialog = ({

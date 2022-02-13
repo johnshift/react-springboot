@@ -1,12 +1,12 @@
-import { Box, Button, Chip, IconButton, Popover } from "@mui/material";
+import { Box, Chip, IconButton } from "@mui/material";
 
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TagFacesIcon from "@mui/icons-material/TagFaces";
 import { MouseEvent, useState } from "react";
 
-import { emojis } from "./emojis";
 import { usePostContext } from "./PostContext";
+import EmojiPopover from "../../common/components/emoji-popover";
 
 const Mentions = () => (
   <Box
@@ -79,36 +79,10 @@ const PostActions = () => {
           component="button"
           onClick={clickReact}
         />
-        <Popover
-          open={Boolean(reactAnchorEl)}
-          onClose={() => setReactAnchorEl(null)}
+        <EmojiPopover
           anchorEl={reactAnchorEl}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-        >
-          <Box
-            display="grid"
-            gridTemplateColumns="repeat(5, 1fr)"
-            gap={2}
-            sx={{ maxHeight: "300px" }}
-          >
-            {emojis.map((emoji) => (
-              <IconButton
-                aria-label={emoji.label}
-                key={emoji.label}
-                color="inherit"
-              >
-                {emoji.symbol}
-              </IconButton>
-            ))}
-          </Box>
-        </Popover>
+          onClose={() => setReactAnchorEl(null)}
+        />
       </Box>
     </Box>
   );
