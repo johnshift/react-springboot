@@ -1,4 +1,4 @@
-export const timeSince = (ts: string): string => {
+export const timeSince = (ts: string, shorthand = false): string => {
   const created = new Date(ts);
   const now = new Date();
 
@@ -10,9 +10,12 @@ export const timeSince = (ts: string): string => {
 
   let interval = Math.floor(seconds / 60);
 
-  const prettyDate = (str: string) => {
+  const prettyDate = (str: "min" | "hour" | "day") => {
     const num = Math.floor(interval);
-    return `${num} ${str}${num !== 1 ? "s" : ""} ago`;
+
+    return `${num} ${shorthand ? str.charAt(0) : str}${num !== 1 ? "s" : ""} ${
+      shorthand ? "" : "ago"
+    }`;
   };
   if (interval < 60) {
     return prettyDate("min");
@@ -37,6 +40,9 @@ export const timeSince = (ts: string): string => {
     day: "2-digit",
     year: interval === 0 ? undefined : "numeric",
   } as Intl.DateTimeFormatOptions;
+  if (shorthand) {
+    return `${interval}y`;
+  }
 
   return created.toLocaleDateString("en-US", dateOptions);
 };

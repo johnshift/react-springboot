@@ -3,6 +3,7 @@ import { Mention, MentionItem, MentionsInput } from "react-mentions";
 import useCreatePost from "./CreatePostContext";
 
 import classNames from "../../styles/mentions.module.css";
+import MentionsField from "../../common/components/mentions/MentionsField";
 
 const CreatePostField = () => {
   const {
@@ -31,27 +32,19 @@ const CreatePostField = () => {
   };
 
   return (
-    <MentionsInput
-      className="mentions"
+    <MentionsField
+      mentionsHint={mentionsHint}
       placeholder={
         "Share something anonymously! \n\nUse '@' to tag someone.\nYou can also schedule the post."
       }
-      classNames={classNames}
-      value={postBody}
+      body={postBody}
       inputRef={postBodyRef}
       onChange={onChange}
       onClick={handleCursorPos}
       onKeyUp={handleCursorPos}
       onBlur={handleCursorPos}
-    >
-      <Mention
-        trigger="@"
-        markup="^__display__^"
-        className={classNames.mentions__mention}
-        data={mentionsHint}
-        appendSpaceOnAdd
-      />
-    </MentionsInput>
+      fixedHeight
+    />
   );
 };
 
