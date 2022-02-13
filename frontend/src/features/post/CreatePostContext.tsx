@@ -1,5 +1,5 @@
 import { useMediaQuery, useTheme } from "@mui/material";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { createContext, ReactNode, useContext, useState, useRef } from "react";
 import { SuggestionDataItem } from "react-mentions";
 import { useMutation } from "react-query";
@@ -12,7 +12,6 @@ import {
   PostVisibility,
   ICreatePostContext,
   CreatePostResponse,
-  CreatePostRequest,
   CreatePostParams,
 } from "./types";
 

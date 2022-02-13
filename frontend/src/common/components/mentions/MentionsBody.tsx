@@ -14,11 +14,14 @@ const MentionsBody = ({ body, isPostBody = false }: Props) => {
   return (
     <MentionsInput classNames={classNames} value={body} className="mentions">
       <Mention
-        trigger="@"
+        trigger=""
         markup="^__display__^"
         className={classNames.mentions__mention}
         data={[] as SuggestionDataItem[]}
         appendSpaceOnAdd
+        // displayTransform={(id: string, display: string) => {
+        //   return `<a href='/${display}'>${display}</a>`;
+        // }}
       />
     </MentionsInput>
   );

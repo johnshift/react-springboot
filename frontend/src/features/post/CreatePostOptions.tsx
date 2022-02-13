@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { MouseEvent, useState } from "react";
 import {
   Avatar,
   Box,
@@ -27,59 +27,7 @@ import useCreatePost from "./CreatePostContext";
 import { MentionItem } from "react-mentions";
 import { emojis as Emojis } from "../../common/components/emoji-popover/emojis";
 import { PostVisibility } from "./types";
-
-const EmojiDialog = ({
-  open,
-  onClose,
-  emojis,
-}: {
-  open: boolean;
-  onClose: () => void;
-  emojis: typeof Emojis;
-}) => {
-  const { isMobile, cursorPos, setCursorPos, postBody, setPostBody } =
-    useCreatePost();
-  const gridTemplate = `repeat(${isMobile ? "4" : "5"}, 1fr)`;
-
-  return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Select Emoji</DialogTitle>
-      <DialogContent>
-        <Box
-          display="grid"
-          gridTemplateColumns={gridTemplate}
-          gap={2}
-          sx={{ maxHeight: "300px" }}
-        >
-          {emojis.map((emoji) => (
-            <IconButton
-              aria-label={emoji.label}
-              key={emoji.label}
-              color="inherit"
-              onClick={() => {
-                const cleanBefore = postBody.substring(0, cursorPos);
-                const beforeMentionsCount =
-                  (cleanBefore.match(/\^/g) || []).length / 2;
-                const rawPos = cursorPos + beforeMentionsCount * 2;
-
-                const before = postBody.substring(0, rawPos);
-                const after = postBody.substring(rawPos, postBody.length);
-
-                const newBody = `${before}${emoji.symbol}${after}`;
-                setPostBody(newBody);
-                setCursorPos(cursorPos + 2);
-                onClose();
-              }}
-            >
-              {emoji.symbol}
-            </IconButton>
-          ))}
-        </Box>
-      </DialogContent>
-    </Dialog>
-  );
-};
-const MemoizedEmojiDialog = React.memo(EmojiDialog);
+import EmojiPopover from "../../common/components/emoji-popover";
 
 const MentionDialog = ({
   open,
@@ -195,9 +143,15 @@ const PostVisibilityDialog = ({
 };
 
 const CreatePostOptions = () => {
-  const { isMobile, visibility } = useCreatePost();
+  const {
+    isMobile,
+    visibility,
+    cursorPos,
+    setCursorPos,
+    postBody,
+    setPostBody,
+  } = useCreatePost();
 
-  const [openEmoji, setOpenEmoji] = useState(false);
   const [openMentions, setOpenMentions] = useState(false);
   const [openVisibility, setOpenVisibility] = useState(false);
 
@@ -216,12 +170,33 @@ const CreatePostOptions = () => {
     visibilityIcon = <VpnLockIcon fontSize="inherit" />;
   }
 
+  const [emojiAnchorEl, setEmojiAnchorEl] = useState<HTMLButtonElement | null>(
+    null
+  );
+  const onClickSelectEmoji = (e: MouseEvent<HTMLButtonElement>) => {
+    setEmojiAnchorEl(e.currentTarget);
+  };
+  const onEmojiClick = (selectedEmoji: string) => {
+    const cleanBefore = postBody.substring(0, cursorPos);
+    const beforeMentionsCount = (cleanBefore.match(/\^/g) || []).length / 2;
+    const rawPos = cursorPos + beforeMentionsCount * 2;
+
+    const before = postBody.substring(0, rawPos);
+    const after = postBody.substring(rawPos, postBody.length);
+
+    const newBody = `${before}${selectedEmoji}${after}`;
+    setPostBody(newBody);
+    setCursorPos(cursorPos + 2);
+    setEmojiAnchorEl(null);
+  };
+
   return (
     <>
       <IconButton
         aria-label="select emoji"
         size={iconSize}
-        onClick={() => setOpenEmoji(true)}
+        // onClick={() => setOpenEmoji(true)}
+        onClick={onClickSelectEmoji}
       >
         <TagFacesIcon fontSize="inherit" />
       </IconButton>
@@ -242,10 +217,13 @@ const CreatePostOptions = () => {
       >
         {visibilityIcon}
       </IconButton>
-      <MemoizedEmojiDialog
-        open={openEmoji}
-        onClose={() => setOpenEmoji(false)}
-        emojis={Emojis}
+
+      <EmojiPopover
+        anchorEl={emojiAnchorEl}
+        onClose={() => setEmojiAnchorEl(null)}
+        onEmojiClick={onEmojiClick}
+        vertical="top"
+        horizontal="left"
       />
       <MentionDialog
         open={openMentions}

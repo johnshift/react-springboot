@@ -8,10 +8,17 @@ interface Props {
   horizontal?: PopoverOrigin["horizontal"];
 
   onClose: () => void;
+  onEmojiClick: (selectedEmoji: string) => void;
 }
 
 const EmojiPopover = (props: Props) => {
-  const { anchorEl, onClose, vertical = "top", horizontal = "right" } = props;
+  const {
+    anchorEl,
+    onClose,
+    vertical = "top",
+    horizontal = "right",
+    onEmojiClick,
+  } = props;
 
   return (
     <Popover
@@ -38,6 +45,7 @@ const EmojiPopover = (props: Props) => {
             aria-label={emoji.label}
             key={emoji.label}
             color="inherit"
+            onClick={() => onEmojiClick(emoji.symbol)}
           >
             {emoji.symbol}
           </IconButton>
