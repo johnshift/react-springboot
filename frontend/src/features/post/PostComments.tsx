@@ -101,6 +101,7 @@ const Comment = ({ comment }: { comment: typeof comments[number] }) => {
             underline="none"
             fontWeight="bold"
             onClick={onClick as any}
+            sx={{ ":hover": { textDecoration: "underline" } }}
           >
             React
           </MuiLink>
@@ -110,6 +111,7 @@ const Comment = ({ comment }: { comment: typeof comments[number] }) => {
             color="#66676B"
             underline="none"
             fontWeight="bold"
+            sx={{ ":hover": { textDecoration: "underline" } }}
           >
             Reply
           </MuiLink>
@@ -118,7 +120,7 @@ const Comment = ({ comment }: { comment: typeof comments[number] }) => {
             variant="body2"
             color="#757575"
             underline="none"
-            // fontSize="12px"
+            sx={{ ":hover": { textDecoration: "underline" } }}
           >
             2y
           </MuiLink>
@@ -129,6 +131,7 @@ const Comment = ({ comment }: { comment: typeof comments[number] }) => {
         vertical="bottom"
         horizontal="left"
         onClose={() => setAnchorEl(null)}
+        onEmojiClick={() => null}
       />
     </Box>
   );

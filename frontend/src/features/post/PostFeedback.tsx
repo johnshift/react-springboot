@@ -1,7 +1,6 @@
-import { Box, Chip } from "@mui/material";
+import { Box, Chip, Link as MuiLink } from "@mui/material";
 
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
-import InsertCommentIcon from "@mui/icons-material/InsertComment";
 
 const Votes = () => (
   <Box
@@ -19,61 +18,43 @@ const Votes = () => (
       icon={<LocalFireDepartmentIcon />}
       sx={{ border: "transparent" }}
     />
-    {/* <LocalFireDepartmentIcon color="inherit" sx={{ mr: "3px" }} />
-        <Typography variant="caption">69 votes </Typography> */}
   </Box>
 );
 
 const Reactions = () => (
-  <Box
-    sx={
-      {
-        // border: "1px solid green"
-      }
-    }
-  >
+  <Box>
     <Chip
-      label="😆 11"
+      label="💕🍆💦"
       clickable
       variant="outlined"
       sx={{ border: "transparent" }}
     />
-    <Chip
-      label="👍 9"
-      clickable
-      variant="outlined"
-      sx={{ border: "transparent" }}
-    />
-    <Chip
-      label="❤️ 6"
-      clickable
-      variant="outlined"
-      sx={{ border: "transparent" }}
-    />
-    <Chip
-      label="🍆 4"
-      clickable
-      variant="outlined"
-      sx={{ border: "transparent" }}
-    />
-    <Chip
-      label="💦 3"
-      clickable
-      variant="outlined"
-      sx={{ border: "transparent" }}
-    />
+    <MuiLink
+      component="button"
+      variant="body2"
+      color="#66676B"
+      underline="none"
+      // fontWeight="bold"
+      sx={{ ":hover": { textDecoration: "underline" } }}
+    >
+      mylab, grapeapple and 33 others
+    </MuiLink>
   </Box>
 );
 
 const PostFeedback = () => {
   return (
-    <Box sx={{ display: "flex", color: "#757575", py: "5px" }}>
+    <Box
+      sx={{
+        display: "flex",
+        color: "#757575",
+        py: "5px",
+        justifyContent: "space-between",
+      }}
+    >
       <Votes />
-      <Box sx={{ flexGrow: 1 }} />
-      <Reactions />
 
-      {/* <Box sx={{ border: "1px solid red", flexGrow: 2 }} />
-      <Box sx={{ border: "1px solid green", flexGrow: 1 }} /> */}
+      <Reactions />
     </Box>
   );
 };

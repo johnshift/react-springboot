@@ -1,8 +1,7 @@
-import { Mention, MentionItem, MentionsInput } from "react-mentions";
+import { MentionItem } from "react-mentions";
 
 import useCreatePost from "./CreatePostContext";
 
-import classNames from "../../styles/mentions.module.css";
 import MentionsField from "../../common/components/mentions/MentionsField";
 
 const CreatePostField = () => {
