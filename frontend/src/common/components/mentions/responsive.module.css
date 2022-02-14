@@ -1,0 +1,32 @@
+.mentions--multiLine .mentions__control {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 0.00938em;
+  box-sizing: border-box;
+}
+.mentions--multiLine .mentions__highlighter {
+  border: 1px solid transparent;
+  padding: 10px;
+  line-height: 1.5;
+}
+.mentions--multiLine .mentions__input {
+  border: 1px solid silver;
+  outline: 0;
+  padding: 10px;
+
+  line-height: 1.5;
+  color: #757575;
+  border-radius: 10px;
+}
+
+.mentions__mention {
+  position: relative;
+  z-index: 1;
+  color: #b71c1c;
+  text-shadow: 1px 1px 1px rgba(183, 28, 28, 0.1),
+    1px -1px 1px rgba(183, 28, 28, 0.1), -1px 1px 1px rgba(183, 28, 28, 0.1),
+    -1px -1px 1px rgba(183, 28, 28, 0.1);
+  pointer-events: none;
+  background-color: rgba(183, 28, 28, 0.1);
+}

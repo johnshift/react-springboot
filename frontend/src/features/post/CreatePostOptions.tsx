@@ -1,7 +1,6 @@
 import { MouseEvent, useState } from "react";
 import {
   Avatar,
-  Box,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -25,7 +24,6 @@ import VpnLockIcon from "@mui/icons-material/VpnLock";
 
 import useCreatePost from "./CreatePostContext";
 import { MentionItem } from "react-mentions";
-import { emojis as Emojis } from "../../common/components/emoji-popover/emojis";
 import { PostVisibility } from "./types";
 import EmojiPopover from "../../common/components/emoji-popover";
 
@@ -146,6 +144,7 @@ const CreatePostOptions = () => {
   const {
     isMobile,
     visibility,
+    rawPos,
     cursorPos,
     setCursorPos,
     postBody,
@@ -177,17 +176,18 @@ const CreatePostOptions = () => {
     setEmojiAnchorEl(e.currentTarget);
   };
   const onEmojiClick = (selectedEmoji: string) => {
-    const cleanBefore = postBody.substring(0, cursorPos);
-    const beforeMentionsCount = (cleanBefore.match(/\^/g) || []).length / 2;
-    const rawPos = cursorPos + beforeMentionsCount * 2;
-
     const before = postBody.substring(0, rawPos);
     const after = postBody.substring(rawPos, postBody.length);
+    console.log(`before = "${before}"`);
+    console.log(`after = "${after}"`);
 
     const newBody = `${before}${selectedEmoji}${after}`;
+    console.log("newBody =", newBody);
     setPostBody(newBody);
     setCursorPos(cursorPos + 2);
     setEmojiAnchorEl(null);
+
+    // if before a mention, insert emoji 2 spaces to the right
   };
 
   return (
