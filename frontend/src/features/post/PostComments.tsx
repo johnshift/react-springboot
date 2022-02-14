@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, SetStateAction, useRef, useState } from "react";
 import {
   Avatar,
   Badge,
@@ -15,6 +15,8 @@ import MentionsField from "../../common/components/mentions/MentionsField";
 import getInitials from "../../lib/getInitials";
 import EmojiPopover from "../../common/components/emoji-popover";
 import { AnyAction } from "@reduxjs/toolkit";
+import MentionsBodyX from "../../common/components/mentions/MentionsBodyX";
+import { SuggestionDataItem } from "react-mentions";
 
 const comments = [
   {
@@ -74,7 +76,7 @@ const Comment = ({ comment }: { comment: typeof comments[number] }) => {
           }}
         >
           <Typography sx={{ fontWeight: "bold" }}>{comment.name}</Typography>
-          <MentionsBody body={comment.comment} />
+          <MentionsBodyX body={comment.comment} isComment />
           <Paper
             sx={{
               position: "absolute",
@@ -145,25 +147,60 @@ const Comments = () => (
   </>
 );
 
-const CommentInput = () => (
-  <Box
-    sx={{
-      p: 2,
-      display: "flex",
-      // border: "1px solid blue",
-      alignItems: "center",
-    }}
-  >
-    <Box sx={{ pr: 2 }}>
-      <Avatar alt="John Ballesteros" sx={{ width: 36, height: 36 }}>
-        JB
-      </Avatar>
+const CommentInput = () => {
+  const [body, setBody] = useState("");
+  const [, setBodyPlain] = useState("");
+
+  const [cursorPos, setCursorPos] = useState(0);
+
+  const [, setMentions] = useState([] as SuggestionDataItem[]);
+  const [mentionsHint] = useState([
+    {
+      id: "john",
+      display: "John Ballesteros",
+    },
+    {
+      id: "nikka",
+      display: "Nikka Melgar",
+    },
+    {
+      id: "XXX",
+      display: "XXX",
+    },
+  ]);
+
+  const ref = useRef(null);
+
+  return (
+    <Box
+      sx={{
+        p: 2,
+        display: "flex",
+        // border: "1px solid blue",
+        alignItems: "center",
+      }}
+    >
+      <Box sx={{ pr: 2 }}>
+        <Avatar alt="John Ballesteros" sx={{ width: 36, height: 36 }}>
+          JB
+        </Avatar>
+      </Box>
+      <Box sx={{ width: "100%" }}>
+        <MentionsField
+          placeholder="Write a comment ..."
+          body={body}
+          setBody={setBody}
+          setBodyPlain={setBodyPlain}
+          setMentions={setMentions}
+          mentionsHint={mentionsHint}
+          cursorPos={cursorPos}
+          setCursorPos={setCursorPos}
+          fieldRef={ref}
+        />
+      </Box>
     </Box>
-    <Box sx={{ width: "100%" }}>
-      <MentionsField placeholder="Write a comment ..." />
-    </Box>
-  </Box>
-);
+  );
+};
 
 const PostComments = () => {
   return (
