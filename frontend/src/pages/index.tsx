@@ -13,7 +13,7 @@ const Home = () => {
   const dispatch = useAppDispatch();
 
   const rawMsg =
-    "^my lab^ i love you 🥰 🥰 🥰\n\nRemember I'm always here  ... \n\nWhenever you're ✨horny✨ \n\n👅 💦 👍";
+    "@[my lab](my-lab) i love you 🥰 🥰 🥰\n\nRemember I'm always here  ... \n\nWhenever you're ✨horny✨ \n\n👅 💦 👍";
 
   return (
     <SidebarLayout>

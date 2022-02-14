@@ -1,16 +1,17 @@
-import { Box } from "@mui/material";
+import { Box, Link as MuiLink } from "@mui/material";
 
 import { usePostContext } from "./PostContext";
-import MentionsBody from "../../common/components/mentions/MentionsBody";
+import { Fragment } from "react";
+import useMentionsMetadata from "../../common/components/mentions/useMentionsMetadata";
+import MentionsBodyX from "../../common/components/mentions/MentionsBodyX";
 
 const PostBody = () => {
   const { body } = usePostContext();
 
-  return (
-    <Box sx={{ mb: 1 }}>
-      <MentionsBody body={body} isPostBody />
-    </Box>
-  );
+  const metadata = useMentionsMetadata(body);
+  console.log("metadata =", metadata);
+
+  return <MentionsBodyX body={body} />;
 };
 
 export default PostBody;
