@@ -37,8 +37,8 @@ export interface ICreatePostContext {
   setPostBody: Dispatch<SetStateAction<string>>;
   postBodyPlain: string;
   setPostBodyPlain: Dispatch<SetStateAction<string>>;
-  postBodyRef: RefObject<HTMLTextAreaElement>;
 
+  rawPos: number;
   cursorPos: number;
   setCursorPos: Dispatch<SetStateAction<number>>;
 
@@ -54,6 +54,8 @@ export interface ICreatePostContext {
   setVisibility: Dispatch<SetStateAction<PostVisibility>>;
 
   isMobile: boolean;
+
+  fieldRef: RefObject<HTMLTextAreaElement>;
 
   createPost: () => void;
 }

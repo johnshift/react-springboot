@@ -1,6 +1,13 @@
 import { useMediaQuery, useTheme } from "@mui/material";
 import axios from "axios";
-import { createContext, ReactNode, useContext, useState, useRef } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+  useRef,
+  useMemo,
+} from "react";
 import { SuggestionDataItem } from "react-mentions";
 import { useMutation } from "react-query";
 import { MSG_SOMETHING_WENT_WRONG } from "../../constants";
@@ -20,9 +27,11 @@ const CreatePostContext = createContext<ICreatePostContext>(
 );
 
 export function CreatePostProvider({ children }: { children: ReactNode }) {
-  const [postBody, setPostBody] = useState("");
+  const [postBody, setPostBody] = useState(
+    "asdfdsf sadfasfd @[XXX](XXX) sdf @[pak](pak) sdlfj"
+  );
   const [postBodyPlain, setPostBodyPlain] = useState("");
-  const postBodyRef = useRef<HTMLTextAreaElement>(null);
+  const fieldRef = useRef<HTMLTextAreaElement>(null);
 
   const [cursorPos, setCursorPos] = useState(0);
 
@@ -76,6 +85,54 @@ export function CreatePostProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const rawPos = useMemo(() => {
+    const SPLIT_PATTERN = /(@\[[^\]]+\]\([^)]+\))/;
+    const MENTION_PATTERN = /(?:@\[([^\]]+)\]\(([^)]+)\))/;
+    const parts = postBody.split(SPLIT_PATTERN);
+
+    const cleanParts = [];
+    for (const s of parts) {
+      if (!s.startsWith("@")) {
+        cleanParts.push(s);
+        continue;
+      }
+
+      const match = s.match(MENTION_PATTERN);
+      if (!match || match.length < 3) {
+        cleanParts.push(s);
+        continue;
+      }
+
+      const [, name] = match;
+      cleanParts.push(name);
+    }
+
+    const rawCumLen = parts.map(
+      (
+        (sum) => (value: string) =>
+          (sum += value.length)
+      )(0)
+    );
+
+    const cleanCumLen = cleanParts.map(
+      (
+        (sum) => (value: string) =>
+          (sum += value.length)
+      )(0)
+    );
+
+    let el = 0;
+    for (let i = 0; i < cleanCumLen.length; i++) {
+      if (cursorPos <= cleanCumLen[i]) {
+        el = i;
+        break;
+      }
+    }
+    const offset = rawCumLen[el] - cleanCumLen[el];
+
+    return cursorPos + offset;
+  }, [cursorPos, postBody]);
+
   return (
     <CreatePostContext.Provider
       value={{
@@ -84,7 +141,8 @@ export function CreatePostProvider({ children }: { children: ReactNode }) {
         setPostBody,
         postBodyPlain,
         setPostBodyPlain,
-        postBodyRef,
+        fieldRef,
+        rawPos,
         cursorPos,
         setCursorPos,
         asVeil,

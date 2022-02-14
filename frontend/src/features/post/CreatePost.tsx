@@ -1,20 +1,10 @@
 import { Box, Divider, Paper } from "@mui/material";
-import { useEffect } from "react";
+
 import CreatePostAction from "./CreatePostAction";
-import useCreatePost from "./CreatePostContext";
 import CreatePostField from "./CreatePostField";
 import CreatePostOptions from "./CreatePostOptions";
 
 const CreatePost = () => {
-  const { postBodyRef, setCursorPos } = useCreatePost();
-
-  // update cursorPos everytime postBody changes
-  useEffect(() => {
-    if (postBodyRef.current) {
-      setCursorPos(postBodyRef.current.selectionStart);
-    }
-  }, [postBodyRef, setCursorPos]);
-
   return (
     <>
       <Paper

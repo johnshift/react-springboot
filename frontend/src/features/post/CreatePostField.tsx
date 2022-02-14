@@ -1,7 +1,4 @@
-import { MentionItem } from "react-mentions";
-
 import useCreatePost from "./CreatePostContext";
-
 import MentionsField from "../../common/components/mentions/MentionsField";
 
 const CreatePostField = () => {
@@ -9,40 +6,27 @@ const CreatePostField = () => {
     postBody,
     setPostBody,
     setPostBodyPlain,
-    postBodyRef,
     mentionsHint,
     setMentions,
+    cursorPos,
     setCursorPos,
+    fieldRef,
   } = useCreatePost();
-
-  const onChange = (
-    event: { target: { value: string } },
-    _newValue: string,
-    _newPlainTextValue: string,
-    _mentions: MentionItem[]
-  ) => {
-    setMentions(_mentions);
-    setPostBodyPlain(_newPlainTextValue);
-    return setPostBody(_newValue);
-  };
-
-  const handleCursorPos = (e: any) => {
-    setCursorPos((e.target as HTMLTextAreaElement).selectionStart);
-  };
 
   return (
     <MentionsField
-      mentionsHint={mentionsHint}
       placeholder={
         "Share something anonymously! \n\nUse '@' to tag someone.\nYou can also schedule the post."
       }
       body={postBody}
-      inputRef={postBodyRef}
-      onChange={onChange}
-      onClick={handleCursorPos}
-      onKeyUp={handleCursorPos}
-      onBlur={handleCursorPos}
+      setBody={setPostBody}
+      setBodyPlain={setPostBodyPlain}
+      mentionsHint={mentionsHint}
+      cursorPos={cursorPos}
+      setCursorPos={setCursorPos}
+      setMentions={setMentions}
       fixedHeight
+      fieldRef={fieldRef}
     />
   );
 };

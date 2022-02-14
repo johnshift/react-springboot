@@ -16,6 +16,7 @@ const MentionsBody = ({ body, isPostBody = false }: Props) => {
       <Mention
         trigger=""
         markup="^__display__^"
+        // markup="@[__display__](__id__)"
         className={classNames.mentions__mention}
         data={[] as SuggestionDataItem[]}
         appendSpaceOnAdd
