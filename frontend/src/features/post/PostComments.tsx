@@ -1,9 +1,7 @@
-import { MouseEvent, SetStateAction, useRef, useState } from "react";
+import { MouseEvent, useRef, useState } from "react";
 import {
   Avatar,
-  Badge,
   Box,
-  Chip,
   Divider,
   Link as MuiLink,
   Paper,
@@ -12,11 +10,9 @@ import {
 } from "@mui/material";
 import MentionsBody from "../../common/components/mentions/MentionsBody";
 import MentionsField from "../../common/components/mentions/MentionsField";
-import getInitials from "../../lib/getInitials";
 import EmojiPopover from "../../common/components/emoji-popover";
-import { AnyAction } from "@reduxjs/toolkit";
-import MentionsBodyX from "../../common/components/mentions/MentionsBodyX";
 import { SuggestionDataItem } from "react-mentions";
+import getInitials from "../../lib/getInitials";
 
 const comments = [
   {
@@ -76,7 +72,7 @@ const Comment = ({ comment }: { comment: typeof comments[number] }) => {
           }}
         >
           <Typography sx={{ fontWeight: "bold" }}>{comment.name}</Typography>
-          <MentionsBodyX body={comment.comment} isComment />
+          <MentionsBody body={comment.comment} isComment />
           <Paper
             sx={{
               position: "absolute",

@@ -1,17 +1,10 @@
-import { Box, Link as MuiLink } from "@mui/material";
-
 import { usePostContext } from "./PostContext";
-import { Fragment } from "react";
-import useMentionsMetadata from "../../common/components/mentions/useMentionsMetadata";
-import MentionsBodyX from "../../common/components/mentions/MentionsBodyX";
+import MentionsBody from "../../common/components/mentions/MentionsBody";
 
 const PostBody = () => {
-  const { body } = usePostContext();
+  const { body, isMobile } = usePostContext();
 
-  const metadata = useMentionsMetadata(body);
-  console.log("metadata =", metadata);
-
-  return <MentionsBodyX body={body} />;
+  return <MentionsBody body={body} isMobile={isMobile} />;
 };
 
 export default PostBody;
