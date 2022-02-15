@@ -36,7 +36,6 @@ const Comment = ({ comment }: { comment: typeof comments[number] }) => {
   return (
     <Box
       sx={{
-        px: 2,
         pb: 2,
         display: "flex",
       }}
@@ -59,7 +58,7 @@ const Comment = ({ comment }: { comment: typeof comments[number] }) => {
       >
         <Box
           sx={{
-            minWidth: "240px",
+            minWidth: "220px",
             display: "block",
             flexDirection: "column",
             color: "#757575",
@@ -170,7 +169,7 @@ const CommentInput = () => {
   return (
     <Box
       sx={{
-        p: 2,
+        py: 2,
         display: "flex",
         // border: "1px solid blue",
         alignItems: "center",
