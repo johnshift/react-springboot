@@ -1,14 +1,15 @@
 import { useCallback } from "react";
 import { Button, ButtonGroup } from "@mui/material";
 
-import useToast from "../toast/useToast";
-import useCreatePost from "./CreatePostContext";
-
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import PersonIcon from "@mui/icons-material/Person";
 
-const CreatePostAction = () => {
-  const { asVeil, setAsVeil, createPost } = useCreatePost();
+import useToast from "../../toast/useToast";
+
+import { useCreatePostCtx } from ".";
+
+const Submit = () => {
+  const { asVeil, setAsVeil, createPost } = useCreatePostCtx();
   const { toastInfo } = useToast();
 
   const handlePostAs = useCallback(() => {
@@ -27,4 +28,4 @@ const CreatePostAction = () => {
   );
 };
 
-export default CreatePostAction;
+export default Submit;
