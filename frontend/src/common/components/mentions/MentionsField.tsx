@@ -22,7 +22,7 @@ interface Props {
   setMentions: Dispatch<SetStateAction<SuggestionDataItem[]>>;
   fixedHeight?: boolean;
 
-  fieldRef: RefObject<HTMLTextAreaElement>;
+  // fieldRef: RefObject<HTMLTextAreaElement>;
 }
 
 const MentionsFieldX = (props: Props) => {
@@ -38,7 +38,7 @@ const MentionsFieldX = (props: Props) => {
     setCursorPos,
     setMentions,
     fixedHeight = false,
-    fieldRef,
+    // fieldRef,
   } = props;
 
   const classNames = fixedHeight ? fixedClassNames : responsiveClassNames;
@@ -77,7 +77,7 @@ const MentionsFieldX = (props: Props) => {
       onKeyUp={handleCursorPos}
       onBlur={handleCursorPos}
       onChange={onChange}
-      inputRef={fieldRef}
+      // inputRef={fieldRef}
     >
       <Mention
         trigger="@"

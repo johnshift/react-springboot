@@ -1,4 +1,6 @@
 import { Box } from "@mui/material";
+import CreatePost from "../features/post/create-post";
+import { CreatePostProvider } from "../features/post/create-post/Context";
 const Center = ({ children }: { children: React.ReactNode }) => (
   <Box
     sx={{
@@ -16,7 +18,9 @@ const Center = ({ children }: { children: React.ReactNode }) => (
 const TestPage = () => {
   return (
     <Center>
-      <h1>Test Page</h1>
+      <CreatePostProvider>
+        <CreatePost />
+      </CreatePostProvider>
     </Center>
   );
 };
