@@ -3,9 +3,13 @@ import PostComponent from "./Post";
 import PostActions from "./PostActions";
 import PostBody from "./PostBody";
 import PostComments from "./PostComments";
-import PostFeedback from "./PostFeedback";
 import PostHeader from "./PostHeader";
+import PostReactions from "./PostReactions";
 import PostVotes from "./PostVotes";
+import PostVoteBtns from "./PostVoteBtns";
+import PostCommentsBtn from "./PostCommentsBtn";
+import PostShareBtn from "./PostShareBtn";
+import PostReactBtn from "./PostReactBtn";
 
 import { Post, PostContext, Reaction } from "./types";
 
@@ -17,7 +21,11 @@ export {
   PostActions,
   PostBody,
   PostComments,
-  PostFeedback,
   PostHeader,
   PostVotes,
+  PostVoteBtns,
+  PostReactions,
+  PostCommentsBtn,
+  PostShareBtn,
+  PostReactBtn,
 };

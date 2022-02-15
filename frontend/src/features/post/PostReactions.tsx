@@ -29,7 +29,6 @@ const PostReactions = () => {
     : `${reactions[0].name}, ${reactions[1].name} and ${
         reactions.length - 2
       } others`;
-  console.log("emoteInfo =", emoteInfo);
 
   return (
     <Box
