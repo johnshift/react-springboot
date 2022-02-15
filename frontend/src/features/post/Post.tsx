@@ -1,4 +1,4 @@
-import { Box, Divider, Paper } from "@mui/material";
+import { Box, Divider, Paper, useTheme, useMediaQuery } from "@mui/material";
 
 import { IPost } from "./types";
 import PostHeader from "./PostHeader";
@@ -12,12 +12,16 @@ import { useState } from "react";
 const Post = (props: IPost) => {
   const [showComments, setShowComments] = useState(false);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.only("xs"));
+
   return (
     <PostContext.Provider
       value={{
         ...props,
         showComments,
         setShowComments,
+        isMobile,
       }}
     >
       <Paper

@@ -61,7 +61,7 @@ const PostActions = () => {
         />
 
         <Chip
-          label="React"
+          label="Emote"
           variant="outlined"
           icon={<TagFacesIcon />}
           sx={{ border: "transparent" }}

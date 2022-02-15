@@ -29,6 +29,7 @@ export interface IPost {
 export interface IPostContext {
   showComments: boolean;
   setShowComments: Dispatch<SetStateAction<boolean>>;
+  isMobile: boolean;
 }
 
 export interface ICreatePostContext {

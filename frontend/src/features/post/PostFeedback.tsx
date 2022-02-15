@@ -1,6 +1,7 @@
-import { Box, Chip, Link as MuiLink } from "@mui/material";
+import { Box, Chip, Link as MuiLink, Typography } from "@mui/material";
 
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import { usePostContext } from "./PostContext";
 
 const Votes = () => (
   <Box
@@ -21,26 +22,40 @@ const Votes = () => (
   </Box>
 );
 
-const Reactions = () => (
-  <Box>
-    <Chip
-      label="💕🍆💦"
-      clickable
-      variant="outlined"
-      sx={{ border: "transparent" }}
-    />
-    <MuiLink
-      component="button"
-      variant="body2"
-      color="#66676B"
-      underline="none"
-      // fontWeight="bold"
-      sx={{ ":hover": { textDecoration: "underline" } }}
+const Reactions = () => {
+  const { isMobile } = usePostContext();
+
+  const reactionsInfo = isMobile
+    ? "16 emotes"
+    : "mylab, grapeapple and 14 others";
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        // border: "1px solid red",
+        maxWidth: "100%",
+      }}
     >
-      mylab, grapeapple and 33 others
-    </MuiLink>
-  </Box>
-);
+      <Chip
+        label="💕🍆💦"
+        clickable
+        variant="outlined"
+        sx={{ border: "transparent" }}
+      />
+      <MuiLink
+        component="button"
+        variant="body2"
+        color="#66676B"
+        underline="none"
+        // fontWeight="bold"
+        sx={{ ":hover": { textDecoration: "underline" } }}
+      >
+        <Typography sx={{ fontSize: "13px" }}>{reactionsInfo}</Typography>
+      </MuiLink>
+    </Box>
+  );
+};
 
 const PostFeedback = () => {
   return (
