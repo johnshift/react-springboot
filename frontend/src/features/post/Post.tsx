@@ -6,17 +6,22 @@ import {
   Post,
   PostHeader,
   PostBody,
-  PostActions,
   PostComments,
+  PostReactions,
   PostVotes,
+  PostVoteBtns,
+  PostCommentsBtn,
+  PostShareBtn,
+  PostReactBtn,
 } from ".";
-import PostReactions from "./PostReactions";
 
 const PostComponent = (props: Post) => {
   const [showComments, setShowComments] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const [userVote, setUserVote] = useState(0);
 
   return (
     <PostContextProvider
@@ -25,6 +30,8 @@ const PostComponent = (props: Post) => {
         showComments,
         setShowComments,
         isMobile,
+        userVote,
+        setUserVote,
       }}
     >
       <Paper
@@ -57,7 +64,19 @@ const PostComponent = (props: Post) => {
 
           <Divider />
 
-          <PostActions />
+          {/* <PostActions /> */}
+
+          <Stack
+            direction="row"
+            sx={{ justifyContent: "space-between", pt: 1.5, pb: 0.5 }}
+          >
+            <PostVoteBtns />
+            <Stack direction="row" spacing={isMobile ? 2 : 0}>
+              <PostCommentsBtn />
+              <PostShareBtn />
+              <PostReactBtn />
+            </Stack>
+          </Stack>
 
           {showComments && <PostComments />}
         </Stack>

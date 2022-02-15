@@ -5,7 +5,7 @@ import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import { usePostContext } from ".";
 
 const PostVotes = () => {
-  const { votes } = usePostContext();
+  const { votes, userVote } = usePostContext();
 
   return (
     <Box
@@ -16,7 +16,7 @@ const PostVotes = () => {
       }}
     >
       <Chip
-        label={`${votes} votes`}
+        label={`${votes + userVote} votes`}
         clickable
         variant="outlined"
         icon={<LocalFireDepartmentIcon />}
