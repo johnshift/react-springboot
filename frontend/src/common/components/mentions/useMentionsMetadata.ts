@@ -8,33 +8,40 @@ interface MentionMetadata {
 const SPLIT_PATTERN = /(@\[[^\]]+\]\([^)]+\))/;
 const MENTION_PATTERN = /(?:@\[([^\]]+)\]\(([^)]+)\))/;
 
-/**
- * @[my lab](my-lab)
- * i love you 🥰 🥰 🥰
- * <br />
- * <br />
- * Remember I'm always here ...
- * <br />
- * <br />
- * Whenever you're ✨horny✨ 👅 💦 👍
- * <br />
- * <br />
- * 👅 💦 👍
- */
+/*
+	loop parts
+
+	if starts with "@"
+		match mention-pattern
+			if match -> push part to result
+			else -> get name+url then push
+
+	else:
+		declare buf
+		loop chars of part
+			if not newline
+				append to buf
+			else 
+				push buf to result (if not empty)
+				push newline to result
+				reset buf
+		push buf to result (if not empty)
+*/
 
 export default function useMentionsMetadata(text: string): MentionMetadata[] {
   return React.useMemo(() => {
     const parts = text.split(SPLIT_PATTERN).filter((part) => part !== "");
-    console.log("parts =", parts);
 
     let result: MentionMetadata[] = [];
+
     for (const part of parts) {
       if (part.startsWith("@")) {
         const match = part.match(MENTION_PATTERN);
         if (!match || match.length < 3) {
           result.push({ text: part });
+          continue;
         }
-        const [, name, params] = match!;
+        const [, name, params] = match;
 
         result.push({ text: name, url: params });
         continue;
@@ -62,30 +69,4 @@ export default function useMentionsMetadata(text: string): MentionMetadata[] {
 
     return result;
   }, [text]);
-
-  // return React.useMemo(() => {
-  //   const parts = text.split(SPLIT_PATTERN);
-
-  //   const convertPartToMetadata = (part: string): MentionMetadata => {
-  //     // buf new Part
-
-  //     // every nextline should indicate a breakline
-
-  //     if (!part.startsWith("@")) {
-  //       return { text: part };
-  //     }
-
-  //     const match = part.match(MENTION_PATTERN);
-
-  //     if (!match || match.length < 3) {
-  //       return { text: part };
-  //     }
-
-  //     const [, name, params] = match;
-
-  //     return { text: name, url: params };
-  //   };
-
-  //   return parts.filter((part) => part !== "").map(convertPartToMetadata);
-  // }, [text]);
 }

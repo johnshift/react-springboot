@@ -28,7 +28,7 @@ const CircleIcon = ({
   </SvgIcon>
 );
 
-const OptVisibility = () => {
+const CreatePostVisibility = () => {
   const { visibility, setVisibility } = useCreatePostCtx();
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -81,4 +81,4 @@ const OptVisibility = () => {
   );
 };
 
-export default OptVisibility;
+export default CreatePostVisibility;

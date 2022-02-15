@@ -6,14 +6,14 @@ import {
 } from "./types";
 
 import { apiCreatePost } from "./api";
-import { useCreatePostCtx, CreatePostProvider } from "./Context";
+import { useCreatePostCtx, CreatePostProvider } from "./CreatePostContext";
 import CreatePost from "./CreatePost";
 
-import CreatePostInput from "./Input";
-import Submit from "./Submit";
-import OptEmoji from "./OptEmoji";
-import OptMention from "./OptMention";
-import OptVisibility from "./OptVisibility";
+import CreatePostInput from "./CreatePostInput";
+import CreatePostSubmit from "./CreatePostSubmit";
+import CreatePostEmoji from "./CreatePostEmoji";
+import CreatePostMention from "./CreatePostMention";
+import CreatePostVisibility from "./CreatePostVisibility";
 
 export default CreatePost;
 export {
@@ -21,10 +21,10 @@ export {
   useCreatePostCtx,
   CreatePostProvider,
   CreatePostInput,
-  Submit,
-  OptEmoji,
-  OptMention,
-  OptVisibility,
+  CreatePostSubmit,
+  CreatePostEmoji,
+  CreatePostMention,
+  CreatePostVisibility,
 };
 export type {
   CreatePostContext,

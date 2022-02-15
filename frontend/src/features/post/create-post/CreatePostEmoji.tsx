@@ -7,7 +7,7 @@ import EmojiPopover from "../../../common/components/emoji-popover";
 
 import { useCreatePostCtx } from ".";
 
-const OptEmoji = () => {
+const CreatePostEmoji = () => {
   const { body, setBody, cursorPos, setCursorPos, insertPos } =
     useCreatePostCtx();
 
@@ -44,4 +44,4 @@ const OptEmoji = () => {
   );
 };
 
-export default OptEmoji;
+export default CreatePostEmoji;

@@ -1,7 +1,8 @@
 import { Box, Chip, Link as MuiLink, Typography } from "@mui/material";
 
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
-import { usePostContext } from "./PostContext";
+
+import { usePostContext } from ".";
 
 const Votes = () => (
   <Box

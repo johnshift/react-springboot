@@ -1,62 +1,23 @@
-import { Dispatch, SetStateAction, RefObject } from "react";
-import { SuggestionDataItem } from "react-mentions";
+import { Dispatch, SetStateAction } from "react";
 
 export type PostVisibility = "Only Self" | "Circle" | "Public";
 
-export interface CreatePostRequest {
-  userId: number;
-  postBody: string;
-  asVeil: boolean;
-  mentions: SuggestionDataItem[];
-}
-
-export interface CreatePostParams {
-  payload: CreatePostRequest;
-  jwtToken: string;
-}
-
-export interface CreatePostResponse {
-  msg: string;
-}
-
-export interface IPost {
+export interface Post {
   id: number;
   name: string;
   ts: string;
   body: string;
-  visibility: "PUBLIC" | "CIRCLE" | "ONLY_SELF";
+  visibility: PostVisibility;
+  votes: number;
+  reactions: Reaction[];
 }
-export interface IPostContext {
+export interface PostContext {
   showComments: boolean;
   setShowComments: Dispatch<SetStateAction<boolean>>;
   isMobile: boolean;
 }
 
-export interface ICreatePostContext {
-  // isLoading: boolean;
-  postBody: string;
-  setPostBody: Dispatch<SetStateAction<string>>;
-  postBodyPlain: string;
-  setPostBodyPlain: Dispatch<SetStateAction<string>>;
-
-  rawPos: number;
-  cursorPos: number;
-  setCursorPos: Dispatch<SetStateAction<number>>;
-
-  asVeil: boolean;
-  setAsVeil: Dispatch<SetStateAction<boolean>>;
-
-  mentions: SuggestionDataItem[];
-  setMentions: Dispatch<SetStateAction<SuggestionDataItem[]>>;
-  mentionsHint: SuggestionDataItem[];
-  setMentionsHint: Dispatch<SetStateAction<SuggestionDataItem[]>>;
-
-  visibility: PostVisibility;
-  setVisibility: Dispatch<SetStateAction<PostVisibility>>;
-
-  isMobile: boolean;
-
-  fieldRef: RefObject<HTMLTextAreaElement>;
-
-  createPost: () => void;
+export interface Reaction {
+  emoji: string;
+  name: string;
 }

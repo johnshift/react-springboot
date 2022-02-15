@@ -1,4 +1,4 @@
-import { MouseEvent, useRef, useState } from "react";
+import { MouseEvent, useState } from "react";
 import {
   Avatar,
   Box,
@@ -8,9 +8,11 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+
 import MentionsBody from "../../common/components/mentions/MentionsBody";
 import MentionsField from "../../common/components/mentions/MentionsField";
 import EmojiPopover from "../../common/components/emoji-popover";
+
 import { SuggestionDataItem } from "react-mentions";
 import getInitials from "../../lib/getInitials";
 
@@ -164,8 +166,6 @@ const CommentInput = () => {
     },
   ]);
 
-  const ref = useRef(null);
-
   return (
     <Box
       sx={{
@@ -190,7 +190,6 @@ const CommentInput = () => {
           mentionsHint={mentionsHint}
           cursorPos={cursorPos}
           setCursorPos={setCursorPos}
-          fieldRef={ref}
         />
       </Box>
     </Box>

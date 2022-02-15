@@ -13,7 +13,7 @@ import getInitials from "../../../lib/getInitials";
 
 import { useCreatePostCtx, MentionsHint } from ".";
 
-const OptMention = () => {
+const CreatePostMention = () => {
   const { mentionsHint, body, setBody, cursorPos, setCursorPos, insertPos } =
     useCreatePostCtx();
 
@@ -68,4 +68,4 @@ const OptMention = () => {
   );
 };
 
-export default OptMention;
+export default CreatePostMention;

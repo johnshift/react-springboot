@@ -2,10 +2,10 @@ import { Divider, Paper, Stack } from "@mui/material";
 
 import {
   CreatePostInput,
-  OptEmoji,
-  OptMention,
-  OptVisibility,
-  Submit,
+  CreatePostEmoji,
+  CreatePostMention,
+  CreatePostVisibility,
+  CreatePostSubmit,
 } from ".";
 
 const CreatePost = () => {
@@ -36,9 +36,9 @@ const CreatePost = () => {
           }}
         >
           <Stack direction="row">
-            <OptEmoji />
-            <OptMention />
-            <OptVisibility />
+            <CreatePostEmoji />
+            <CreatePostMention />
+            <CreatePostVisibility />
           </Stack>
           <Stack
             direction="row"
@@ -46,7 +46,7 @@ const CreatePost = () => {
               justifyContent: "end",
             }}
           >
-            <Submit />
+            <CreatePostSubmit />
           </Stack>
         </Stack>
       </Stack>
