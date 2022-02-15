@@ -1,22 +1,25 @@
-import { Box, Divider, Paper, useTheme, useMediaQuery } from "@mui/material";
-
-import { IPost } from "./types";
-import PostHeader from "./PostHeader";
-import { PostContext } from "./PostContext";
-import PostBody from "./PostBody";
-import PostFeedback from "./PostFeedback";
-import PostActions from "./PostActions";
-import PostComments from "./PostComments";
 import { useState } from "react";
+import { Divider, Paper, useTheme, useMediaQuery, Stack } from "@mui/material";
 
-const Post = (props: IPost) => {
+import {
+  PostContextProvider,
+  Post,
+  PostHeader,
+  PostBody,
+  PostActions,
+  PostComments,
+  PostVotes,
+} from ".";
+import PostReactions from "./PostReactions";
+
+const PostComponent = (props: Post) => {
   const [showComments, setShowComments] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"));
 
   return (
-    <PostContext.Provider
+    <PostContextProvider
       value={{
         ...props,
         showComments,
@@ -30,11 +33,8 @@ const Post = (props: IPost) => {
           width: "clamp(300px, 100%, 500px)",
         }}
       >
-        <Box
+        <Stack
           sx={{
-            // border: "1px solid green",
-            display: "flex",
-            flexDirection: "column",
             px: 2,
             pt: 2,
           }}
@@ -43,17 +43,27 @@ const Post = (props: IPost) => {
           <PostBody />
           <Divider />
 
-          <PostFeedback />
+          <Stack
+            direction="row"
+            sx={{
+              color: "#757575",
+              py: "5px",
+              justifyContent: "space-between",
+            }}
+          >
+            <PostVotes />
+            <PostReactions />
+          </Stack>
 
           <Divider />
 
           <PostActions />
 
           {showComments && <PostComments />}
-        </Box>
+        </Stack>
       </Paper>
-    </PostContext.Provider>
+    </PostContextProvider>
   );
 };
 
-export default Post;
+export default PostComponent;

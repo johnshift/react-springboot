@@ -1,10 +1,10 @@
 import { createContext, useContext } from "react";
-import { IPost, IPostContext } from "./types";
+import { Post, PostContext as IPostContext } from "./types";
 
-export const PostContext = createContext<IPostContext & IPost>(
-  {} as IPost & IPostContext
-);
+const ctx = createContext<IPostContext & Post>({} as Post & IPostContext);
+
+export const PostContextProvider = ctx.Provider;
 
 export const usePostContext = () => {
-  return useContext(PostContext);
+  return useContext(ctx);
 };
