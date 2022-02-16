@@ -5,6 +5,7 @@ export type PostVisibility = "Only Self" | "Circle" | "Public";
 export interface Post {
   id: number;
   name: string;
+  url: string;
   ts: string;
   body: string;
   visibility: PostVisibility;
@@ -17,6 +18,9 @@ export interface PostContext {
 
   userVote: number;
   setUserVote: Dispatch<SetStateAction<number>>;
+
+  userReaction: string | undefined;
+  setUserReaction: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export interface Reaction {

@@ -17,14 +17,16 @@ import getInitials from "../../lib/getInitials";
 import useDeviceSize from "../../common/hooks/useDeviceSize";
 
 import { Reaction, usePostContext } from ".";
+import { useAppSelector } from "../../store";
 
 type EmojiCount = {
   [key: string]: number;
 };
 
 const PostReactions = () => {
-  const { reactions } = usePostContext();
-  const { isSm } = useDeviceSize();
+  const { name: profileName } = useAppSelector((state) => state.userInfo);
+  const { reactions, userReaction } = usePostContext();
+  const { isSm, deviceWidth } = useDeviceSize();
   const router = useRouter();
 
   const topThreeEmotes = useMemo(() => {
@@ -42,7 +44,14 @@ const PostReactions = () => {
       .join("");
   }, [reactions]);
 
-  const firstTwoNames = `${reactions[0].name}, ${reactions[1].name}`;
+  const reactionsFiltered = useMemo(() => {
+    return reactions.filter((reaction) => reaction.name !== profileName);
+  }, [profileName, reactions]);
+
+  const firstTwoNames = userReaction
+    ? `You, ${reactionsFiltered[0].name}`
+    : `${reactionsFiltered[0].name}, ${reactionsFiltered[1].name}`;
+
   const emoteInfo = isSm
     ? `${firstTwoNames} ...`
     : `${firstTwoNames} and ${reactions.length - 2} others`;
@@ -57,6 +66,7 @@ const PostReactions = () => {
         sx={{
           maxWidth: "100%",
           alignItems: "center",
+          py: 1,
         }}
       >
         <Chip
@@ -71,8 +81,8 @@ const PostReactions = () => {
           variant="body2"
           sx={{
             fontSize: "13px",
-            // maxWidth: isSm ? "25ch" : isLg ? "auto" : "200px",
-            maxWidth: isSm ? "23ch" : "auto",
+            maxWidth:
+              deviceWidth < 360 ? "20ch" : deviceWidth < 400 ? "25ch" : "auto",
             ":hover": { textDecoration: "underline", cursor: "pointer" },
           }}
           onClick={openDialog}
