@@ -19,6 +19,7 @@ const PostComponent = (props: Post) => {
   const [showComments, setShowComments] = useState(false);
 
   const [userVote, setUserVote] = useState(0);
+  const [userReaction, setUserReaction] = useState<string | undefined>("😍");
 
   const { isXs } = useDeviceSize();
 
@@ -30,6 +31,8 @@ const PostComponent = (props: Post) => {
         setShowComments,
         userVote,
         setUserVote,
+        userReaction,
+        setUserReaction,
       }}
     >
       <Paper
@@ -52,8 +55,9 @@ const PostComponent = (props: Post) => {
             direction="row"
             sx={{
               color: "#757575",
-              py: "5px",
+              // py: 2,
               justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
             <PostReactions />

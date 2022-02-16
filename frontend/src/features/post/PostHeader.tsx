@@ -17,7 +17,7 @@ import { timeSince } from "../../lib/timeSince";
 import getInitials from "../../lib/getInitials";
 
 const PostHeader = () => {
-  const { name, ts, visibility } = usePostContext();
+  const { name, url, ts, visibility } = usePostContext();
 
   return (
     <Box sx={{ display: "flex", color: "#757575", mb: 1 }}>
@@ -34,7 +34,7 @@ const PostHeader = () => {
           flexDirection: "column",
         }}
       >
-        <Link href="/hanscem" passHref>
+        <Link href={url} passHref>
           <MuiLink underline="hover" fontWeight="bold" color="inherit">
             {name}
           </MuiLink>

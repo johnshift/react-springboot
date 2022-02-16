@@ -1,43 +1,53 @@
 import { useState, MouseEvent } from "react";
-import { Chip, IconButton } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 
 import TagFacesIcon from "@mui/icons-material/TagFaces";
 
 import EmojiPopover from "../../common/components/emoji-popover";
-import useDeviceSize from "../../common/hooks/useDeviceSize";
+
+import { usePostContext } from ".";
 
 const PostReactBtn = () => {
-  const { deviceWidth } = useDeviceSize();
+  const { userReaction, setUserReaction } = usePostContext();
 
   const [reactAnchorEl, setReactAnchorEl] = useState<HTMLButtonElement | null>(
     null
   );
   const onClick = (e: MouseEvent<HTMLButtonElement>) => {
-    setReactAnchorEl(e.currentTarget);
+    if (userReaction) {
+      setUserReaction(undefined);
+    } else {
+      setReactAnchorEl(e.currentTarget);
+    }
+  };
+
+  const onEmojiClick = (emoji: string) => {
+    setUserReaction(emoji);
+    setReactAnchorEl(null);
   };
 
   return (
     <>
-      {/* <p>deviceWidth = {deviceWidth}</p> */}
-      {deviceWidth <= 360 ? (
-        <IconButton onClick={onClick}>
-          <TagFacesIcon />
+      {userReaction ? (
+        <IconButton
+          onClick={onClick}
+          color="secondary"
+          sx={{ fontSize: "auto" }}
+        >
+          <Typography sx={{ width: "30px", height: "30px", fontSize: "22px" }}>
+            {userReaction}
+          </Typography>
         </IconButton>
       ) : (
-        <Chip
-          label="Emote"
-          variant="outlined"
-          icon={<TagFacesIcon />}
-          sx={{ border: "transparent" }}
-          component="button"
-          onClick={onClick}
-        />
+        <IconButton onClick={onClick} sx={{ fontSize: "20px" }}>
+          <TagFacesIcon sx={{ fontSize: "30px" }} />
+        </IconButton>
       )}
 
       <EmojiPopover
         anchorEl={reactAnchorEl}
         onClose={() => setReactAnchorEl(null)}
-        onEmojiClick={() => null}
+        onEmojiClick={onEmojiClick}
       />
     </>
   );
