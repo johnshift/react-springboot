@@ -4,7 +4,7 @@ const lightThemeOptions: ThemeOptions = {
   breakpoints: {
     values: {
       xs: 0,
-      sm: 400,
+      sm: 420,
       md: 768,
       lg: 1024,
       xl: 1536,
