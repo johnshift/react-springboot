@@ -3,9 +3,9 @@ import MentionsBody from "../../common/components/mentions/MentionsBody";
 import { usePostContext } from ".";
 
 const PostBody = () => {
-  const { body, isMobile } = usePostContext();
+  const { body } = usePostContext();
 
-  return <MentionsBody body={body} isMobile={isMobile} />;
+  return <MentionsBody body={body} />;
 };
 
 export default PostBody;

@@ -14,7 +14,6 @@ export interface Post {
 export interface PostContext {
   showComments: boolean;
   setShowComments: Dispatch<SetStateAction<boolean>>;
-  isMobile: boolean;
 
   userVote: number;
   setUserVote: Dispatch<SetStateAction<number>>;

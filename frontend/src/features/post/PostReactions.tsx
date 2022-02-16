@@ -1,13 +1,15 @@
-import { Box, Chip, Link as MuiLink, Typography } from "@mui/material";
+import { Chip, Link as MuiLink, Stack, Typography } from "@mui/material";
 import { useMemo } from "react";
 import { Reaction, usePostContext } from ".";
+import useDeviceWidth from "../../common/hooks/useDeviceWidth";
 
 type EmojiCount = {
   [key: string]: number;
 };
 
 const PostReactions = () => {
-  const { isMobile, reactions } = usePostContext();
+  const { reactions } = usePostContext();
+  const { xs, mdMax, lg } = useDeviceWidth();
 
   const topThreeEmotes = useMemo(() => {
     const counts = reactions.reduce((acc, reaction: Reaction) => {
@@ -24,18 +26,17 @@ const PostReactions = () => {
       .join("");
   }, [reactions]);
 
-  const emoteInfo = isMobile
-    ? `${reactions.length} emotes`
-    : `${reactions[0].name}, ${reactions[1].name} and ${
-        reactions.length - 2
-      } others`;
+  const firstTwoNames = `${reactions[0].name}, ${reactions[1].name}`;
+  const emoteInfo = mdMax
+    ? `${firstTwoNames} ...`
+    : `${firstTwoNames} and ${reactions.length - 2} others`;
 
   return (
-    <Box
+    <Stack
+      direction="row"
       sx={{
-        display: "flex",
-        // border: "1px solid red",
         maxWidth: "100%",
+        alignItems: "center",
       }}
     >
       <Chip
@@ -43,6 +44,7 @@ const PostReactions = () => {
         clickable
         variant="outlined"
         sx={{ border: "transparent" }}
+        size="small"
       />
       <MuiLink
         component="button"
@@ -52,11 +54,17 @@ const PostReactions = () => {
         // fontWeight="bold"
         sx={{ ":hover": { textDecoration: "underline" } }}
       >
-        <Typography sx={{ fontSize: "13px" }} noWrap>
+        <Typography
+          sx={{
+            fontSize: "13px",
+            maxWidth: xs ? "160px" : lg ? "auto" : "200px",
+          }}
+          noWrap
+        >
           {emoteInfo}
         </Typography>
       </MuiLink>
-    </Box>
+    </Stack>
   );
 };
 
