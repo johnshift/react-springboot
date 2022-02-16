@@ -6,6 +6,7 @@ import VpnLockIcon from "@mui/icons-material/VpnLock";
 
 import { usePostContext } from ".";
 import { timeSince } from "../../lib/timeSince";
+import getInitials from "../../lib/getInitials";
 
 const PostHeader = () => {
   const { name, ts, visibility } = usePostContext();
@@ -14,7 +15,7 @@ const PostHeader = () => {
     <Box sx={{ display: "flex", color: "#757575", mb: 1 }}>
       <Box sx={{ pr: 2 }}>
         <Avatar alt="John Ballesteros" sx={{ width: 48, height: 48 }}>
-          JB
+          {getInitials(name)}
         </Avatar>
       </Box>
       <Box

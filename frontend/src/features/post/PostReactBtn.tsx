@@ -3,11 +3,11 @@ import { Chip, IconButton } from "@mui/material";
 
 import TagFacesIcon from "@mui/icons-material/TagFaces";
 
-import { usePostContext } from ".";
 import EmojiPopover from "../../common/components/emoji-popover";
+import useDeviceWidth from "../../common/hooks/useDeviceWidth";
 
 const PostReactBtn = () => {
-  const { isMobile } = usePostContext();
+  const { xs } = useDeviceWidth();
 
   const [reactAnchorEl, setReactAnchorEl] = useState<HTMLButtonElement | null>(
     null
@@ -18,7 +18,7 @@ const PostReactBtn = () => {
 
   return (
     <>
-      {isMobile ? (
+      {xs ? (
         <IconButton onClick={onClick}>
           <TagFacesIcon />
         </IconButton>

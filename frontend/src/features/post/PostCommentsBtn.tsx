@@ -1,6 +1,7 @@
 import { Badge, Chip, IconButton, SvgIcon } from "@mui/material";
 
 import { usePostContext } from ".";
+import useDeviceWidth from "../../common/hooks/useDeviceWidth";
 
 const CommentIcon = () => (
   <SvgIcon>
@@ -9,11 +10,12 @@ const CommentIcon = () => (
 );
 
 const PostCommentsBtn = () => {
-  const { showComments, setShowComments, isMobile } = usePostContext();
+  const { showComments, setShowComments } = usePostContext();
+  const { xs } = useDeviceWidth();
 
   return (
     <>
-      {isMobile ? (
+      {xs ? (
         <IconButton onClick={() => setShowComments(!showComments)}>
           <Badge badgeContent={4} color="secondary">
             <CommentIcon />

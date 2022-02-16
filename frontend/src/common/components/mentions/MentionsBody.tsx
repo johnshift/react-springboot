@@ -6,11 +6,10 @@ import useMentionsMetadata from "./useMentionsMetadata";
 interface Props {
   body: string;
   isComment?: boolean;
-  isMobile?: boolean;
 }
 
 const MentionsBody = (props: Props) => {
-  const { body, isComment = false, isMobile = false } = props;
+  const { body, isComment = false } = props;
 
   const metadata = useMentionsMetadata(body);
 
