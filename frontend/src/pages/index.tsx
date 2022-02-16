@@ -16,13 +16,13 @@ const Home = () => {
     "@[my lab](my-lab) i love you 🥰 🥰 🥰\n\nRemember I'm always here  ... \n\nWhenever you're ✨horny✨ \n\n👅 💦 👍";
 
   const reactions = [
-    { emoji: "🥰", name: "John Ballesteros" },
-    { emoji: "❤️", name: "Leni Robredo" },
-    { emoji: "❤️", name: "Manny Pacquiao" },
-    { emoji: "💓", name: "Isko Moreno" },
-    { emoji: "💕", name: "Ping Lacson" },
-    { emoji: "🥰", name: "R-A-S-T-A-M-A-N" },
-    { emoji: "😍", name: "BBM" },
+    { emoji: "🥰", name: "John Ballesteros", id: "hanscem" },
+    { emoji: "❤️", name: "Leni Robredo", id: "leni" },
+    { emoji: "❤️", name: "Manny Pacquiao", id: "pacquiao" },
+    { emoji: "💓", name: "Isko Moreno", id: "isko" },
+    { emoji: "💕", name: "Ping Lacson", id: "ping" },
+    { emoji: "🥰", name: "R-A-S-T-A-M-A-N", id: "rastaman" },
+    { emoji: "😍", name: "BBM", id: "bongbong" },
   ];
 
   return (

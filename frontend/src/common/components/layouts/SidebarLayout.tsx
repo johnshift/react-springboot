@@ -26,7 +26,7 @@ const UpperSidebar = () => (
         <Avatar alt="John Ballesteros">JB</Avatar>
       </ListItemIcon>
       <ListItemText sx={{ paddingLeft: 2 }}>
-        <Typography variant="h6">John Ballesteros</Typography>
+        <Typography fontSize="inherit">John Ballesteros</Typography>
       </ListItemText>
     </MenuItem>
     <MenuItem sx={{ height: "70px" }}>
@@ -34,7 +34,7 @@ const UpperSidebar = () => (
         <FingerprintIcon fontSize="large" />
       </ListItemIcon>
       <ListItemText sx={{ paddingLeft: 2 }}>
-        <Typography variant="h6">Veil Profile</Typography>
+        <Typography fontSize="inherit">Veil Profile</Typography>
       </ListItemText>
     </MenuItem>
   </Box>
@@ -113,11 +113,12 @@ const SidebarLayout = ({ children }: Props) => {
         <Grid
           item
           sx={{
-            width: "280px",
+            width: "220px",
             // border: "1px solid red",
             display: {
               xs: "none",
-              sm: "block",
+              sm: "none",
+              md: "block",
             },
             position: "fixed",
           }}
@@ -126,21 +127,22 @@ const SidebarLayout = ({ children }: Props) => {
         </Grid>
         <Grid
           item
-          sm={5}
           md={4}
+          lg={4}
           sx={{
             paddingX: 2,
             // border: "1px solid red",
             display: {
               xs: "none",
-              sm: "block",
+              sm: "none",
+              md: "block",
             },
           }}
         />
         <Grid
           item
-          sm={7}
           md={8}
+          lg={8}
           sx={{
             // border: "1px solid green",
             display: "flex",

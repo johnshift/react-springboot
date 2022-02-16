@@ -1,6 +1,15 @@
 import { ThemeOptions } from "@mui/material/styles";
 
 const lightThemeOptions: ThemeOptions = {
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 400,
+      md: 768,
+      lg: 1024,
+      xl: 1536,
+    },
+  },
   palette: {
     mode: "light",
     primary: {

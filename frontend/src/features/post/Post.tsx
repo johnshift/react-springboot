@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Divider, Paper, Stack } from "@mui/material";
+import { Box, Divider, Paper, Stack } from "@mui/material";
 
 import {
   PostContextProvider,
@@ -13,11 +13,14 @@ import {
   PostShareBtn,
   PostReactBtn,
 } from ".";
+import useDeviceSize from "../../common/hooks/useDeviceSize";
 
 const PostComponent = (props: Post) => {
   const [showComments, setShowComments] = useState(false);
 
   const [userVote, setUserVote] = useState(0);
+
+  const { isXs } = useDeviceSize();
 
   return (
     <PostContextProvider
@@ -61,11 +64,26 @@ const PostComponent = (props: Post) => {
 
           <Stack
             direction="row"
-            sx={{ justifyContent: "space-between", pt: 1.5, pb: 0.5 }}
+            sx={{
+              justifyContent: "space-between",
+              pt: 1.5,
+              pb: 0.5,
+            }}
           >
-            <PostVoteBtns />
-            <PostShareBtn />
-            <PostCommentsBtn />
+            <Box sx={{ flexGrow: 1 }}>
+              <PostVoteBtns />
+            </Box>
+            <Stack
+              direction="row"
+              sx={{
+                justifyContent: isXs ? "space-between" : "space-around",
+                flexGrow: 2,
+              }}
+              spacing={1}
+            >
+              <PostCommentsBtn />
+              <PostShareBtn />
+            </Stack>
           </Stack>
 
           {showComments && <PostComments />}
