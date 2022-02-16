@@ -1,4 +1,12 @@
-import { Avatar, Box, IconButton, SvgIcon, Typography } from "@mui/material";
+import Link from "next/link";
+import {
+  Avatar,
+  Box,
+  IconButton,
+  Link as MuiLink,
+  SvgIcon,
+  Typography,
+} from "@mui/material";
 
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PublicIcon from "@mui/icons-material/Public";
@@ -26,7 +34,13 @@ const PostHeader = () => {
           flexDirection: "column",
         }}
       >
-        <Typography sx={{ fontWeight: "bold" }}>{name}</Typography>
+        <Link href="/hanscem" passHref>
+          <MuiLink underline="hover" fontWeight="bold" color="inherit">
+            {name}
+          </MuiLink>
+        </Link>
+        {/* <Typography sx={{ fontWeight: "bold" }}>{name}</Typography> */}
+
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="caption">{timeSince(ts)}</Typography>
 

@@ -20,6 +20,7 @@ export interface PostContext {
 }
 
 export interface Reaction {
+  id: string;
   emoji: string;
   name: string;
 }

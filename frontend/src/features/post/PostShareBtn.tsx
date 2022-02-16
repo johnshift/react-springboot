@@ -1,6 +1,6 @@
-import { Chip, IconButton, SvgIcon } from "@mui/material";
+import { Button, IconButton, SvgIcon } from "@mui/material";
 
-import useDeviceWidth from "../../common/hooks/useDeviceWidth";
+import useDeviceSize from "../../common/hooks/useDeviceSize";
 
 const ShareIcon = () => (
   <SvgIcon>
@@ -10,23 +10,24 @@ const ShareIcon = () => (
 );
 
 const PostShareBtn = () => {
-  const { xs } = useDeviceWidth();
+  const { isSm } = useDeviceSize();
 
   return (
     <>
-      {xs ? (
+      {isSm ? (
         <IconButton>
           <ShareIcon />
         </IconButton>
       ) : (
-        <Chip
-          label="Share"
-          variant="outlined"
-          icon={<ShareIcon />}
-          sx={{ border: "transparent" }}
-          component="button"
-          clickable
-        />
+        <Button
+          // size="small"
+          variant="text"
+          startIcon={<ShareIcon />}
+          color="secondary"
+          sx={{ textTransform: "none" }}
+        >
+          Share
+        </Button>
       )}
     </>
   );

@@ -32,7 +32,15 @@ const PostVoteBtns = () => {
   const downvoted = userVote === -1;
 
   return (
-    <Stack direction="row" sx={{ p: 0.5, alignItems: "center" }} spacing={1}>
+    <Stack
+      direction="row"
+      sx={{
+        p: 0.5,
+        alignItems: "center",
+        // border: "1px solid red"
+      }}
+      spacing={1}
+    >
       <IconButton
         onClick={upvote}
         color={upvoted ? "primary" : "default"}
