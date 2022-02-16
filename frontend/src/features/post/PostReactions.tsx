@@ -24,7 +24,7 @@ type EmojiCount = {
 
 const PostReactions = () => {
   const { reactions } = usePostContext();
-  const { isSm, isLg } = useDeviceSize();
+  const { isSm } = useDeviceSize();
   const router = useRouter();
 
   const topThreeEmotes = useMemo(() => {
@@ -43,7 +43,7 @@ const PostReactions = () => {
   }, [reactions]);
 
   const firstTwoNames = `${reactions[0].name}, ${reactions[1].name}`;
-  const emoteInfo = !isLg
+  const emoteInfo = isSm
     ? `${firstTwoNames} ...`
     : `${firstTwoNames} and ${reactions.length - 2} others`;
 
@@ -71,7 +71,8 @@ const PostReactions = () => {
           variant="body2"
           sx={{
             fontSize: "13px",
-            maxWidth: isSm ? "160px" : isLg ? "auto" : "200px",
+            // maxWidth: isSm ? "25ch" : isLg ? "auto" : "200px",
+            maxWidth: isSm ? "23ch" : "auto",
             ":hover": { textDecoration: "underline", cursor: "pointer" },
           }}
           onClick={openDialog}

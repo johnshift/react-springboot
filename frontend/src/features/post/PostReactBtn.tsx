@@ -7,7 +7,7 @@ import EmojiPopover from "../../common/components/emoji-popover";
 import useDeviceSize from "../../common/hooks/useDeviceSize";
 
 const PostReactBtn = () => {
-  const { isSm } = useDeviceSize();
+  const { deviceWidth } = useDeviceSize();
 
   const [reactAnchorEl, setReactAnchorEl] = useState<HTMLButtonElement | null>(
     null
@@ -18,7 +18,8 @@ const PostReactBtn = () => {
 
   return (
     <>
-      {isSm ? (
+      {/* <p>deviceWidth = {deviceWidth}</p> */}
+      {deviceWidth <= 360 ? (
         <IconButton onClick={onClick}>
           <TagFacesIcon />
         </IconButton>

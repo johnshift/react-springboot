@@ -7,6 +7,7 @@ import { closeLoginModal } from "../store/globalSlice";
 import CreatePost, { CreatePostProvider } from "../features/post/create-post";
 
 import Post from "../features/post";
+import useDeviceSize from "../common/hooks/useDeviceSize";
 
 const Home = () => {
   const { showLoginModal } = useAppSelector((state) => state.global);
@@ -30,7 +31,6 @@ const Home = () => {
       <CreatePostProvider>
         <CreatePost />
       </CreatePostProvider>
-
       <Post
         body={rawMsg}
         id={0}

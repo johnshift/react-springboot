@@ -1,4 +1,4 @@
-import { Badge, Button, IconButton, SvgIcon } from "@mui/material";
+import { Badge, Button, IconButton, SvgIcon, Typography } from "@mui/material";
 
 import { usePostContext } from ".";
 import useDeviceSize from "../../common/hooks/useDeviceSize";
@@ -13,12 +13,15 @@ const CommentIcon = () => (
 const PostCommentsBtn = () => {
   const { showComments, setShowComments } = usePostContext();
 
-  const { isXs } = useDeviceSize();
+  const { deviceWidth } = useDeviceSize();
 
   return (
     <>
-      {isXs ? (
-        <IconButton onClick={() => setShowComments(!showComments)}>
+      {deviceWidth < 360 ? (
+        <IconButton
+          onClick={() => setShowComments(!showComments)}
+          sx={{ pl: 3 }}
+        >
           <Badge
             badgeContent={4}
             color="secondary"
@@ -36,14 +39,14 @@ const PostCommentsBtn = () => {
         </IconButton>
       ) : (
         <Button
-          // size="small"
+          size="small"
           variant="text"
           startIcon={<CommentIcon />}
           color="secondary"
           sx={{ textTransform: "none" }}
           onClick={() => setShowComments(!showComments)}
         >
-          5 comments
+          <Typography fontSize="small">5 comments</Typography>
         </Button>
       )}
     </>
