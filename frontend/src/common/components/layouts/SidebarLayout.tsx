@@ -4,6 +4,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Container,
   Divider,
   Grid,
   ListItemIcon,
@@ -17,6 +18,7 @@ import {
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
+import Nav from "../nav";
 
 const UpperSidebar = () => (
   <Box sx={{ color: "#757575" }}>
@@ -109,54 +111,57 @@ interface Props {
 const SidebarLayout = ({ children }: Props) => {
   return (
     <>
-      <Grid container>
-        <Grid
-          item
-          sx={{
-            width: "220px",
-            // border: "1px solid red",
-            display: {
-              xs: "none",
-              sm: "none",
-              md: "block",
-            },
-            position: "fixed",
-          }}
-        >
-          <Sidebar />
+      <Nav />
+      <Container maxWidth="md" sx={{ marginTop: "75px" }}>
+        <Grid container>
+          <Grid
+            item
+            sx={{
+              width: "220px",
+              // border: "1px solid red",
+              display: {
+                xs: "none",
+                sm: "none",
+                md: "block",
+              },
+              position: "fixed",
+            }}
+          >
+            <Sidebar />
+          </Grid>
+          <Grid
+            item
+            md={4}
+            lg={4}
+            sx={{
+              paddingX: 2,
+              // border: "1px solid red",
+              display: {
+                xs: "none",
+                sm: "none",
+                md: "block",
+              },
+            }}
+          />
+          <Grid
+            item
+            md={8}
+            lg={8}
+            sx={{
+              // border: "1px solid green",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              // width: "clamp(300px, 100%, 300px)",
+              // width: "380px",
+            }}
+          >
+            {children}
+          </Grid>
         </Grid>
-        <Grid
-          item
-          md={4}
-          lg={4}
-          sx={{
-            paddingX: 2,
-            // border: "1px solid red",
-            display: {
-              xs: "none",
-              sm: "none",
-              md: "block",
-            },
-          }}
-        />
-        <Grid
-          item
-          md={8}
-          lg={8}
-          sx={{
-            // border: "1px solid green",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            // width: "clamp(300px, 100%, 300px)",
-            // width: "380px",
-          }}
-        >
-          {children}
-        </Grid>
-      </Grid>
+      </Container>
     </>
   );
 };

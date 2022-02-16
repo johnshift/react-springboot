@@ -49,12 +49,7 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
           <PersistGate loading={null} persistor={persistor}>
             <QueryClientProvider client={queryClient}>
               <ReactQueryDevtools initialIsOpen={false} />
-              <Nav />
-              <Container maxWidth="md" sx={{ marginTop: "75px" }}>
-                {/* <Box sx={{ paddingX: "30px" }}> */}
-                <Component {...pageProps} />
-                {/* </Box> */}
-              </Container>
+              <Component {...pageProps} />
               <Toast />
             </QueryClientProvider>
           </PersistGate>
