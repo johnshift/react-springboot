@@ -7,6 +7,7 @@ public class UserException extends RuntimeException {
 	public static final String USERNAME_TOO_SHORT = "Username is too short";
 	public static final String USERNAME_TOO_LONG = "Username is too long";
 	public static final String USERNAME_INVALID = "Invalid Username format";
+	public static final String USERNAME_UNAVAILABLE = "Username is not available";
 
 	public static final String EMAIL_REQUIRED = "Email address is required";
 	public static final String EMAIL_INVALID = "Invalid email address";
@@ -24,6 +25,7 @@ public class UserException extends RuntimeException {
 	public static final String VEIL_TOO_SHORT = "Veil name is too short";
 	public static final String VEIL_TOO_LONG = "Veil name is too long";
 	public static final String VEIL_INVALID = "Invalid Veil name format";
+	public static final String VEIL_UNAVAILABLE = "Veil name is not available";
 
 	public static final String DESCRIPTION_REQUIRED = "Profile description is required";
 	public static final String VEIL_DESCRIPTION_REQUIRED = "Veil description is required";

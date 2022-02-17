@@ -123,6 +123,28 @@ public class RegisterController {
 		if (Objects.equals(dto.getUsername(), dto.getVeil())) {
 			throw new UserException(USERNAME_VEIL_CONFLICT, HttpStatus.BAD_REQUEST);
 		}
+
+		// username and veil is used as pretty-route paths
+		// reject username if a veil of same name already exists
+		try {
+
+			// search veil using username
+			userService.findByVeil(dto.getUsername());
+
+			// throw if veil found using username
+			throw new UserException(USERNAME_UNAVAILABLE, HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+
+			try {
+
+				// search username using veil
+				userService.findByUsername(dto.getVeil());
+
+				// throw if username found using veil
+				throw new UserException(VEIL_UNAVAILABLE, HttpStatus.BAD_REQUEST);
+			} catch (Exception e2) {
+			}
+		}
 	}
 
 	@PostMapping
