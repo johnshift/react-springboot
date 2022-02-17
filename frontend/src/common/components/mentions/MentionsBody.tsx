@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
-
+import Link from "next/link";
 import { Box, Link as MuiLink } from "@mui/material";
-import useMentionsMetadata from "./useMentionsMetadata";
 
+import useMentionsMetadata from "./useMentionsMetadata";
 interface Props {
   body: string;
   isComment?: boolean;
@@ -29,15 +29,15 @@ const MentionsBody = (props: Props) => {
           return <Fragment key={i}>{text}</Fragment>;
         }
         return (
-          <MuiLink
-            href={url}
-            key={i}
-            sx={{ backgroundColor: "rgba(183, 28, 28, 0.1)" }}
-            fontWeight="bold"
-            underline="none"
-          >
-            {text}
-          </MuiLink>
+          <Link href={url} key={i} passHref>
+            <MuiLink
+              sx={{ backgroundColor: "rgba(183, 28, 28, 0.1)" }}
+              fontWeight="bold"
+              underline="none"
+            >
+              {text}
+            </MuiLink>
+          </Link>
         );
       })}
     </Box>

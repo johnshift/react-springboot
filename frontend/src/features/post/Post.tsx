@@ -19,7 +19,7 @@ const PostComponent = (props: Post) => {
   const [showComments, setShowComments] = useState(false);
 
   const [userVote, setUserVote] = useState(0);
-  const [userReaction, setUserReaction] = useState<string | undefined>("😍");
+  const [userReaction, setUserReaction] = useState<string | undefined>("💦");
 
   const { isXs } = useDeviceSize();
 
@@ -39,6 +39,7 @@ const PostComponent = (props: Post) => {
         elevation={4}
         sx={{
           width: "clamp(300px, 100%, 500px)",
+          mb: 3,
         }}
       >
         <Stack

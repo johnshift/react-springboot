@@ -33,6 +33,8 @@ const CreatePostMention = () => {
     setBody(newBody);
     setCursorPos(cursorPos + mentionStr.length);
     setAnchorEl(null);
+
+    console.log("mentionBtn click -- person =", person);
   };
 
   return (

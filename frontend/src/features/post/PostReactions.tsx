@@ -92,7 +92,7 @@ const PostReactions = () => {
         </Typography>
       </Stack>
       <Dialog open={open} onClose={() => setOpen(false)}>
-        <List>
+        <List sx={{ maxHeight: "400px" }}>
           {reactions.map(({ name, emoji, id }) => (
             <ListItem
               key={name}

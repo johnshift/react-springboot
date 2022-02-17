@@ -1,10 +1,20 @@
-import { Dispatch, RefObject, SetStateAction } from "react";
+import {
+  Avatar,
+  Box,
+  ListItemAvatar,
+  ListItemText,
+  MenuItem,
+  Stack,
+  Typography,
+} from "@mui/material";
+import React, { Dispatch, RefObject, SetStateAction } from "react";
 import {
   Mention,
   MentionItem,
   MentionsInput,
   SuggestionDataItem,
 } from "react-mentions";
+import getInitials from "../../../lib/getInitials";
 
 import fixedClassNames from "./fixed.module.css";
 import responsiveClassNames from "./responsive.module.css";
@@ -65,11 +75,36 @@ const MentionsFieldX = (props: Props) => {
     endPos: number
   ) => {
     setCursorPos(cursorPos + display.length);
-    console.log("add startpos: ", startPos);
+    console.log("mentionField onAdd id =", id, " display =", display);
+  };
+
+  const renderSuggestion = (
+    suggestion: SuggestionDataItem,
+    search: string,
+    highlightedDisplay: React.ReactNode,
+    index: number,
+    focused: boolean
+  ) => {
+    console.log("suggestion =", suggestion);
+    console.log("search =", search);
+    console.log("index =", index);
+    console.log("focused =", focused);
+
+    return (
+      <MenuItem sx={{ py: 1 }} component="div">
+        <ListItemAvatar>
+          <Avatar alt={suggestion.display}>
+            {getInitials(suggestion.display as string)}
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText primary={suggestion.display} />
+      </MenuItem>
+    );
   };
 
   return (
     <MentionsInput
+      className="mentions"
       classNames={classNames}
       placeholder={placeholder}
       value={body}
@@ -86,6 +121,7 @@ const MentionsFieldX = (props: Props) => {
         data={mentionsHint}
         appendSpaceOnAdd
         onAdd={onAdd as (id: string | number, display: string) => void}
+        renderSuggestion={renderSuggestion}
       />
     </MentionsInput>
   );

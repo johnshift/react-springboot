@@ -2,6 +2,7 @@ import { Box, IconButton, Stack, SvgIcon, Typography } from "@mui/material";
 
 import { usePostContext } from ".";
 
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
@@ -39,7 +40,6 @@ const PostVoteBtns = () => {
         alignItems: "center",
         // border: "1px solid red"
       }}
-      spacing={1}
     >
       <IconButton
         onClick={upvote}
@@ -48,11 +48,15 @@ const PostVoteBtns = () => {
       >
         {upvoted ? <UpvotedIcon /> : <KeyboardArrowUpIcon />}
       </IconButton>
-      <Box>
+      <Stack direction="row" sx={{ color: "#66676B" }}>
+        <LocalFireDepartmentIcon
+          color="inherit"
+          sx={{ fontSize: "16px", mr: "3px" }}
+        />
         <Typography fontSize={"small"} noWrap>
           {votes + userVote}
         </Typography>
-      </Box>
+      </Stack>
       <IconButton
         onClick={downvote}
         color={downvoted ? "primary" : "default"}
