@@ -20,6 +20,8 @@ public class InitializeData {
 		resourceDatabasePopulator.addScript(new ClassPathResource("db/users.sql"));
 		resourceDatabasePopulator.addScript(new ClassPathResource("db/verification.sql"));
 		resourceDatabasePopulator.addScript(new ClassPathResource("db/posts.sql"));
+		resourceDatabasePopulator.addScript(new ClassPathResource("db/votes.sql"));
+		resourceDatabasePopulator.addScript(new ClassPathResource("db/reactions.sql"));
 		resourceDatabasePopulator.execute(dataSource);
 	}
 }
