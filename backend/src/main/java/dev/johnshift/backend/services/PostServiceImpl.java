@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
 		}
 
 		// TODO: implementations of the following
-		dto.setMentionIds(Collections.emptyList());
+		dto.setReactionIds(Collections.emptyList());
 		dto.setVoteIds(Collections.emptyList());
 		dto.setCommentIds(Collections.emptyList());
 
@@ -75,7 +75,7 @@ public class PostServiceImpl implements PostService {
 			}
 
 			// TODO: implementations of the following
-			dto.setMentionIds(Collections.emptyList());
+			dto.setReactionIds(Collections.emptyList());
 			dto.setCommentIds(Collections.emptyList());
 			dto.setCommentIds(Collections.emptyList());
 

@@ -48,7 +48,7 @@ public class RegisterIT {
 	private final String validEmail = "demo@example.com";
 	private final String validPassword = "demo123";
 	private final String validName = "Demo User";
-	private final String validVeil = "anonymous1";
+	private final String validVeil = "someone";
 	private final String validDescription = "Profile Description";
 	private final String validVeilDescription = "Veil Description";
 

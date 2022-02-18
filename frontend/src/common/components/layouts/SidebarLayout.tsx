@@ -42,12 +42,12 @@ const UpperSidebar = () => (
   </Box>
 );
 
-const RecentActivities = () => (
+const Notifications = () => (
   <>
     <Accordion elevation={4}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ height: "70px" }}>
         <Typography variant="h6" color="#757575">
-          Recent Activity
+          Notifications
         </Typography>
       </AccordionSummary>
       <AccordionDetails sx={{ maxHeight: "200px", overflow: "auto" }}>
@@ -96,7 +96,7 @@ const Sidebar = () => (
       </MenuList>
     </Paper>
     <Box sx={{ my: 2 }}>
-      <RecentActivities />
+      <Notifications />
     </Box>
     <Box sx={{ my: 2 }}>
       <ConfirmRequests />

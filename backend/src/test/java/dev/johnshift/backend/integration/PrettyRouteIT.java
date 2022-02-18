@@ -73,7 +73,7 @@ public class PrettyRouteIT {
 	@Test
 	void veilType_OK() {
 
-		String name = "anonymous1";
+		String name = "someone";
 
 		webTestClient.get()
 			.uri(API_URI + "/" + name)

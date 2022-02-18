@@ -11,7 +11,7 @@ public class PostDTO {
 	private String body;
 	private String owner;
 	private String route;
-	private List<Integer> mentionIds;
+	private List<Integer> reactionIds;
 	private List<Integer> voteIds;
 	private List<Integer> commentIds;
 }
